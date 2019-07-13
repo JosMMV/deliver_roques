@@ -1,16 +1,6 @@
 <template>
   <v-container>
-    <v-text-field
-      class="mx-3"
-      flat
-      label="Introduzca # de factura"
-      prepend-inner-icon="search"
-      solo-inverted
-      :value="idCommerce"
-      @input="setIdCommerce"
-      @keydown.enter="searchBill"
-    ></v-text-field>
-    <v-card v-if="isSearching">
+    <v-card>
       <v-card-title>
         Facturas
         <v-spacer></v-spacer>
@@ -44,7 +34,7 @@
         </template>
         <template v-slot:no-results>
           <v-alert :value="true" color="error" icon="warning">
-            Your search for "{{ search }}" found no results.
+            No se han encontrado resultados para "{{ search }}".
           </v-alert>
         </template>
       </v-data-table>
@@ -56,8 +46,6 @@
 import {
   mapState,
   mapMutations,
-  mapActions,
-  mapGetters,
 } from 'vuex';
 
 export default {
@@ -161,27 +149,19 @@ export default {
     };
   },
   computed: {
-    ...mapGetters('commerce', [
-      'isSearching',
-    ]),
     ...mapState('commerce', [
       'idCommerce',
-      'searching',
     ]),
   },
   methods: {
     ...mapMutations('commerce', [
       'setIdCommerce',
     ]),
-    ...mapActions('commerce', [
-      'searchBill',
-    ]),
   },
 };
 </script>
 
 <style>
-
 .v-chip.Pagado{
   background: #5e8a25;
 }
