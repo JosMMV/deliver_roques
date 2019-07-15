@@ -3,6 +3,8 @@ import Router from 'vue-router';
 import Dashboard from './views/Dashboard.vue';
 import LogIn from './views/LogIn.vue';
 import Tracking from './views/Tracking.vue';
+import GestionDePedido from './views/GestionDePedido.vue';
+
 
 Vue.use(Router);
 
@@ -24,6 +26,11 @@ export default new Router({
       path: '/tracking',
       name: 'tracking',
       component: Tracking,
+    },
+    {
+      path: '/gestion-pedido',
+      name: 'gestion-pedido',
+      component: GestionDePedido,
     },
   ],
 });

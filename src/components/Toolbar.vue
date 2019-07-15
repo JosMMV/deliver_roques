@@ -15,6 +15,14 @@
             <v-list-tile-title>Inicio</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
+        <v-list-tile to="/gestion-pedido">
+          <v-list-tile-action>
+            <v-icon>mdi-table-edit</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Gestionar Pedido</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
         <v-list-tile to="/tracking">
           <v-list-tile-action>
             <v-icon>mdi-truck-check</v-icon>

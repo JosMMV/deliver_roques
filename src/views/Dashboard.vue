@@ -16,6 +16,7 @@
         :headers="headers"
         :items="desserts"
         :search="search"
+        :rows-per-page-text="text"
         prev-icon="mdi-menu-left"
         next-icon="mdi-menu-right"
         sort-icon="mdi-menu-down"
@@ -52,6 +53,7 @@ export default {
   data() {
     return {
       search: '',
+      text: 'Filas a mostrar',
       headers: [
         {
           text: 'ID de factura',
