@@ -47,7 +47,7 @@
       <v-spacer></v-spacer>
       <v-toolbar-title v-if="!isLoggedIn">¿Eres comercio?:</v-toolbar-title>
       <v-toolbar-items>
-        <v-btn flat v-if="!isLoggedIn" to="iniciar-sesion">
+        <v-btn flat v-if="!isLoggedIn" to="/iniciar-sesion">
           <v-icon class="mr-1">mdi-fingerprint</v-icon>Iniciar Sesión
         </v-btn>
         <v-btn flat v-if="isLoggedIn" @click="logoutAndSetCurrentProject">

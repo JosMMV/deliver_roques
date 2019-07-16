@@ -45,7 +45,6 @@ import {
   mapState,
   mapMutations,
   mapActions,
-  mapGetters,
 } from 'vuex';
 import Report from '../components/Report.vue';
 
