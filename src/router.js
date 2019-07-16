@@ -4,6 +4,7 @@ import Dashboard from './views/Dashboard.vue';
 import LogIn from './views/LogIn.vue';
 import Tracking from './views/Tracking.vue';
 import GestionDePedido from './views/GestionDePedido.vue';
+import Reports from './views/Reports.vue';
 
 
 Vue.use(Router);
@@ -18,8 +19,8 @@ export default new Router({
       component: Dashboard,
     },
     {
-      path: '/login',
-      name: 'login',
+      path: '/iniciar-sesion',
+      name: 'iniciar-sesion',
       component: LogIn,
     },
     {
@@ -31,6 +32,11 @@ export default new Router({
       path: '/gestion-pedido',
       name: 'gestion-pedido',
       component: GestionDePedido,
+    },
+    {
+      path: '/reportes',
+      name: 'reportes',
+      component: Reports,
     },
   ],
 });

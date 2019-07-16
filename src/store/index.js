@@ -5,6 +5,7 @@ import authentication from './authentication';
 import tracking from './tracking';
 import commerce from './commerce';
 import order from './order';
+import report from './report';
 
 Vue.use(Vuex);
 
@@ -18,5 +19,6 @@ export default new Vuex.Store({
     tracking,
     commerce,
     order,
+    report,
   },
 });

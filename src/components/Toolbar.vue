@@ -23,6 +23,14 @@
             <v-list-tile-title>Gestionar Pedido</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
+        <v-list-tile to="/reportes">
+          <v-list-tile-action>
+            <v-icon>mdi-chart-line</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Reportes</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
         <v-list-tile to="/tracking">
           <v-list-tile-action>
             <v-icon>mdi-truck-check</v-icon>
@@ -39,7 +47,7 @@
       <v-spacer></v-spacer>
       <v-toolbar-title v-if="!isLoggedIn">¿Eres comercio?:</v-toolbar-title>
       <v-toolbar-items>
-        <v-btn flat v-if="!isLoggedIn" to="login">
+        <v-btn flat v-if="!isLoggedIn" to="iniciar-sesion">
           <v-icon class="mr-1">mdi-fingerprint</v-icon>Iniciar Sesión
         </v-btn>
         <v-btn flat v-if="isLoggedIn" @click="logoutAndSetCurrentProject">
@@ -51,7 +59,7 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations, mapActions } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 import router from '../router';
 
 export default {
@@ -72,9 +80,6 @@ export default {
   methods: {
     ...mapActions('authentication', [
       'logout',
-    ]),
-    ...mapMutations('projects', [
-      'setCurrentProject',
     ]),
     logoutAndSetCurrentProject() {
       this.logout();
