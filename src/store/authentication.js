@@ -12,7 +12,7 @@ export default {
   actions: {
     logout({ commit }) {
       commit('setToken', null); // set value of token to null
-      router.push('/login'); // then redirect to /login
+      router.push('/tracking'); // then redirect to /login
     },
     login({ commit }) {
       commit('setLoginError', null); // set value of LoginError to null

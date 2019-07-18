@@ -9,26 +9,18 @@
       <v-list dense>
         <v-list-tile to="/" v-if="isLoggedIn">
           <v-list-tile-action>
-            <v-icon>dashboard</v-icon>
+            <v-icon>receipt</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-            <v-list-tile-title>Inicio</v-list-tile-title>
+            <v-list-tile-title>Facturas</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
-        <v-list-tile to="/gestion-pedido">
+        <v-list-tile to="/orden" v-if="isLoggedIn">
           <v-list-tile-action>
-            <v-icon>mdi-table-edit</v-icon>
+            <v-icon>mdi-package-variant</span></v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-            <v-list-tile-title>Gestionar Pedido</v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
-        <v-list-tile to="/reportes">
-          <v-list-tile-action>
-            <v-icon>mdi-chart-line</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title>Reportes</v-list-tile-title>
+            <v-list-tile-title>Órdenes</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
         <v-list-tile to="/tracking">
@@ -39,11 +31,27 @@
             <v-list-tile-title>Tracking</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
+        <v-list-tile to="/gestion-pedido" v-if="isLoggedIn">
+          <v-list-tile-action>
+            <v-icon>mdi-table-edit</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Gestionar Pedido</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+        <v-list-tile to="/reportes" v-if="isLoggedIn">
+          <v-list-tile-action>
+            <v-icon>mdi-chart-line</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Reportes</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
       </v-list>
     </v-navigation-drawer>
     <v-toolbar app fixed clipped-left>
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-      <v-toolbar-title>Distribuidor</v-toolbar-title>
+      <v-toolbar-title>Distribuidor 2</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-title v-if="!isLoggedIn">¿Eres comercio?:</v-toolbar-title>
       <v-toolbar-items>
@@ -65,7 +73,7 @@ import router from '../router';
 export default {
   mounted() {
     if (!this.isLoggedIn && router.currentRoute.path === '/') {
-      return router.push('/login');
+      return router.push('/tracking');
     }
     return this;
   },
