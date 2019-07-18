@@ -21,7 +21,7 @@
     </v-snackbar>
     <v-layout align-center justify-center class="mb-4">
       <h2
-        class="font-weight-thin display-3"
+        class="font-weight-thin display-1"
         v-if="isSearching"
       >
         Editando pedido número {{ orderNumber }}
@@ -44,6 +44,7 @@
         >
           <v-card-title class="title">{{ procedure.text }}</v-card-title>
           <v-card-text class="headline font-weight-bold">
+            <img class="imagen" :src="procedure.img"/>
             <p>{{ timestamps[i].timestamp }}</p>
             <v-btn
               v-if="!!timestamps[i].timestamp"
@@ -89,18 +90,22 @@ export default {
       {
         color: 'cyan',
         text: 'Empacado',
+        img: '/package.png',
       },
       {
         color: 'green',
         text: 'Cargado',
+        img: '/serv-1.png',
       },
       {
         color: 'blue',
         text: 'En Camino',
+        img: '/411712.png',
       },
       {
         color: 'red',
         text: 'En Sucursal',
+        img: '/1337104.png',
       },
     ],
     dialog1: false,
@@ -152,5 +157,8 @@ export default {
 </script>
 
 <style>
-
+  .imagen {
+    width:20%;
+    height:auto;
+  }
 </style>
