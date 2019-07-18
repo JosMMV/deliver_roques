@@ -33,7 +33,11 @@
             </v-chip>
           </td>
            <td class="text-xs-right">
-              <v-btn color="info" small :class="`${ props.item.bill } white--text my-2 caption`">{{ props.item.bill }}</v-btn>
+              <v-btn
+                color="info"
+                small
+                :class="`${ props.item.bill } white--text my-2 caption`">{{ props.item.bill }}
+              </v-btn>
            </td>
         </template>
         <template v-slot:no-results>

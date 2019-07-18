@@ -32,7 +32,6 @@
           </td>
           <td class="text-xs-center">{{ props.item.cost }}</td>
           <td class="text-xs-center">{{ props.item.time }}</td>
-          
         </template>
         <template v-slot:no-results>
           <v-alert :value="true" color="error" icon="warning">

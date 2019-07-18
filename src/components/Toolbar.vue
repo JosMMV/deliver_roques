@@ -17,7 +17,7 @@
         </v-list-tile>
         <v-list-tile to="/orden" v-if="isLoggedIn">
           <v-list-tile-action>
-            <v-icon>mdi-package-variant</span></v-icon>
+            <v-icon>mdi-package-variant</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
             <v-list-tile-title>Órdenes</v-list-tile-title>

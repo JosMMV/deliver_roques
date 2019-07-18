@@ -44,8 +44,7 @@
         >
           <v-card-title class="title">{{ procedure.text }}</v-card-title>
           <v-card-text class="headline font-weight-bold">
-            <img v-bind:src="procedure.img" style="width:20%;height:auto;"/> 
-          </div>
+            <img class="imagen" :src="procedure.img"/>
             <p>{{ timestamps[i].timestamp }}</p>
             <v-btn
               v-if="!!timestamps[i].timestamp"
@@ -91,22 +90,22 @@ export default {
       {
         color: 'cyan',
         text: 'Empacado',
-        img: require('@/assets/package.png'),
+        img: '/package.png',
       },
       {
         color: 'green',
         text: 'Cargado',
-        img: require('@/assets/serv-1.png'),
+        img: '/serv-1.png',
       },
       {
         color: 'blue',
         text: 'En Camino',
-        img: require('@/assets/411712.png'),
+        img: '/411712.png',
       },
       {
         color: 'red',
         text: 'En Sucursal',
-        img: require('@/assets/1337104.png'),
+        img: '/1337104.png',
       },
     ],
     dialog1: false,
@@ -158,5 +157,8 @@ export default {
 </script>
 
 <style>
-
+  .imagen {
+    width:20%;
+    height:auto;
+  }
 </style>
