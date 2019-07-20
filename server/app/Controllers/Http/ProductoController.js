@@ -1,6 +1,7 @@
 'use strict'
 
 const Producto = use('App/Models/Producto');
+const ServicioAutorizacion = use('App/Services/ServicioAutorizacion');
 
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
@@ -29,7 +30,7 @@ class ProductoController {
    *
    * @param {Request} ctx.request
    */
-  async anadir ({ request }) {
+  async create ({ request }) {
     const { nombre, precio } = request.all();
     const producto = await Producto.create({
       nombre,
@@ -67,9 +68,12 @@ class ProductoController {
    *
    * @param {object} ctx
    * @param {Request} ctx.request
-   * @param {Response} ctx.response
    */
-  async destroy ({ params, request, response }) {
+  async destroy ({ params, request }) {
+    const producto = await Producto.find(params.id);
+    ServicioAutorizacion.verificarPermiso(producto);
+    await producto.delete();
+    return producto;
   }
 }
 

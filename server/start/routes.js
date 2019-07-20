@@ -24,6 +24,7 @@ Route.group(() => {
 Route.group(() => {
   Route.post('/auth/registrar', 'UserController.registrar')
   
-  Route.get('/producto/index', 'ProductoController.index')
-  Route.post('/producto/anadir', 'ProductoController.anadir')
+  Route.get('/productos', 'ProductoController.index')
+  Route.post('/productos', 'ProductoController.create')
+  Route.delete('/productos/:id', 'ProductoController.destroy')
 }).prefix('admin')
