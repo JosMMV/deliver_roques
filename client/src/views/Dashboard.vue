@@ -33,11 +33,7 @@
             </v-chip>
           </td>
            <td class="text-xs-right">
-              <v-btn
-                color="info"
-                small
-                :class="`${ props.item.bill } white--text my-2 caption`">{{ props.item.bill }}
-              </v-btn>
+              <v-icon>mdi-file-document-box-search-outline</v-icon>
            </td>
         </template>
         <template v-slot:no-results>
@@ -72,7 +68,7 @@ export default {
         { text: 'Fecha tope', value: 'dateMaximum', align: 'center' },
         { text: 'Fecha de cancelación', value: 'dateCancel', align: 'center' },
         { text: 'Estatus', value: 'status', align: 'center' },
-        { text: 'Factura', value: 'bill', align: 'center' },
+        { text: 'Ver factura', value: 'bill', align: 'center' },
       ],
       desserts: [
         {
@@ -80,90 +76,80 @@ export default {
           amount: 159,
           dateCreation: '06/05/19',
           dateMaximum: '06/06/19',
-          dateCancel: 4.0,
+          dateCancel: '06/06/19',
           status: 'Pendiente',
-          bill: 'Ver factura',
         },
         {
           id: '2',
           amount: 237,
           dateCreation: '06/05/19',
           dateMaximum: '06/06/19',
-          dateCancel: 4.3,
+          dateCancel: '06/06/19',
           status: 'Pendiente',
-          bill: 'Ver factura',
         },
         {
           id: '3',
           amount: 262,
           dateCreation: '06/05/19',
           dateMaximum: '06/06/19',
-          dateCancel: 6.0,
+          dateCancel: '06/06/19',
           status: 'Pendiente',
-          bill: 'Ver factura',
         },
         {
           id: '4',
           amount: 305,
           dateCreation: '06/05/19',
           dateMaximum: '06/06/19',
-          dateCancel: 4.3,
+          dateCancel: '06/06/19',
           status: 'Pagado',
-          bill: 'Ver factura',
         },
         {
           id: '5',
           amount: 356,
           dateCreation: '06/05/19',
           dateMaximum: '06/06/19',
-          dateCancel: 3.9,
+          dateCancel: '06/06/19',
           status: 'Pagado',
-          bill: 'Ver factura',
         },
         {
           id: '6',
           amount: 375,
           dateCreation: '06/05/19',
           dateMaximum: '06/06/19',
-          dateCancel: 0.0,
+          dateCancel: '06/06/19',
           status: 'Pagado',
-          bill: 'Ver factura',
         },
         {
           id: '7',
           amount: 392,
           dateCreation: '06/05/19',
           dateMaximum: '06/06/19',
-          dateCancel: 0,
+          dateCancel: '06/06/19',
           status: 'Pagado',
-          bill: 'Ver factura',
         },
         {
           id: '8',
           amount: 408,
           dateCreation: '06/05/19',
           dateMaximum: '06/06/19',
-          dateCancel: 6.5,
+          dateCancel: '06/06/19',
           status: 'Pagado',
-          bill: 'Ver factura',
         },
         {
           id: '9',
           amount: 452,
           dateCreation: '06/05/19',
           dateMaximum: '06/06/19',
-          dateCancel: 4.9,
+          dateCancel: '06/06/19',
           status: 'Pagado',
-          bill: 'Ver factura',
         },
         {
           id: '10',
           amount: 518,
           dateCreation: '06/05/19',
           dateMaximum: '06/06/19',
-          dateCancel: 7,
+          dateCancel: '06/06/19',
           status: 'Pagado',
-          bill: 'Ver factura',
         },
       ],
     };
@@ -184,6 +170,8 @@ export default {
 <style>
 .v-chip.Pagado{
   background: #5e8a25;
+  padding-left: 6px;
+  padding-right: 7px;
 }
 .v-chip.Pendiente{
   background: #bb2121;
