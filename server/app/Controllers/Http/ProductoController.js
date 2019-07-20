@@ -1,7 +1,7 @@
 'use strict'
 
 const Producto = use('App/Models/Producto');
-const ServicioAutorizacion = use('App/Services/ServicioAutorizacion');
+const ServicioValidacion = use('App/Services/ServicioValidacion');
 
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
@@ -21,7 +21,7 @@ class ProductoController {
    * @param {View} ctx.view
    */
   async index () {
-    return Producto.all();
+    return await Producto.all();
   }
 
   /**
@@ -48,7 +48,10 @@ class ProductoController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async show ({ params, request, response, view }) {
+  async show ({ params }) {
+    const producto = await Producto.find(params.id);
+    ServicioValidacion.verificarPermiso(producto);
+    return producto;
   }
 
   /**
@@ -59,7 +62,11 @@ class ProductoController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async update ({ params, request, response }) {
+  async update ({ params, request }) {
+    const producto = await Producto.find(params.id);
+    producto.merge(request.only('precio'));
+    await producto.save();
+    return producto;
   }
 
   /**
@@ -69,9 +76,9 @@ class ProductoController {
    * @param {object} ctx
    * @param {Request} ctx.request
    */
-  async destroy ({ params, request }) {
+  async destroy ({ params }) {
     const producto = await Producto.find(params.id);
-    ServicioAutorizacion.verificarPermiso(producto);
+    ServicioValidacion.verificarPermiso(producto);
     await producto.delete();
     return producto;
   }
