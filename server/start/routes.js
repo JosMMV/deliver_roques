@@ -25,6 +25,14 @@ Route.group(() => {
   Route.post('/auth/registrar', 'UserController.registrar')
   
   Route.get('/productos', 'ProductoController.index')
+  Route.get('/productos/:id', 'ProductoController.show')
   Route.post('/productos', 'ProductoController.create')
+  Route.patch('/productos/:id', 'ProductoController.update')
   Route.delete('/productos/:id', 'ProductoController.destroy')
+  
+  Route.get('/comercio', 'ComercioController.index')
+  Route.get('/comercio/:rif', 'ComercioController.show')
+  Route.post('/comercio', 'ComercioController.create')
+  Route.patch('/comercio/:rif', 'ComercioController.update')
+  Route.delete('/comercio/:rif', 'ComercioController.destroy')
 }).prefix('admin')

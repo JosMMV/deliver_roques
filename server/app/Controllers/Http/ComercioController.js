@@ -1,5 +1,9 @@
 'use strict'
 
+const Comercio = use('App/Models/Comercio');
+const ServicioValidacion = use('App/Services/ServicioValidacion');
+const User = use('App/Models/User');
+
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
@@ -8,85 +12,63 @@
  * Resourceful controller for interacting with comercios
  */
 class ComercioController {
-  /**
-   * Show a list of all comercios.
-   * GET comercios
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async index ({ request, response, view }) {
+  async index () {
+    return await Comercio.all();
   }
 
   /**
    * Render a form to be used for creating a new comercio.
    * GET comercios/create
    *
-   * @param {object} ctx
    * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
    */
-  async create ({ request, response, view }) {
-  }
-
-  /**
-   * Create/save a new comercio.
-   * POST comercios
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async store ({ request, response }) {
+  async create ({ request }) {
+    const { rif, nombre, correo } = request.all();
+    const usuario = await User.findBy('username', correo);
+    ServicioValidacion.verificarUsuario(usuario);
+    const comercio = await Comercio.create({
+      rif,
+      nombre,
+      correo,
+    });
+    return comercio;
   }
 
   /**
    * Display a single comercio.
-   * GET comercios/:id
+   * GET comercios/:rif
    *
    * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
    */
-  async show ({ params, request, response, view }) {
-  }
-
-  /**
-   * Render a form to update an existing comercio.
-   * GET comercios/:id/edit
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async edit ({ params, request, response, view }) {
+  async show ({ params }) {
+    const comercio = await Comercio.findBy('rif', params.rif);
+    ServicioValidacion.verificarPermiso(comercio);
+    return comercio;
   }
 
   /**
    * Update comercio details.
-   * PUT or PATCH comercios/:id
+   * PUT or PATCH comercios/:rif
    *
    * @param {object} ctx
    * @param {Request} ctx.request
-   * @param {Response} ctx.response
    */
-  async update ({ params, request, response }) {
+  async update ({ params, request }) {
+    const comercio = await Comercio.findBy('rif', params.rif);
+    return await Comercio.query().where('rif', params.rif).update(request.only('nombre')); //0 si hubo error y 1 si se actualizó exitosamente
   }
 
   /**
-   * Delete a comercio with id.
-   * DELETE comercios/:id
+   * Delete a comercio with rif.
+   * DELETE comercios/:rif
    *
    * @param {object} ctx
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async destroy ({ params, request, response }) {
+  async destroy ({ params }) {
+    const comercio = await Comercio.findBy('rif', params.rif);
+    return await Comercio.query().where('rif', params.rif).delete(); //0 si hubo error y 1 si se eliminó exitosamente
   }
 }
 
