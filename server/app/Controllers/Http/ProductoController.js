@@ -31,10 +31,11 @@ class ProductoController {
    * @param {Request} ctx.request
    */
   async create ({ request }) {
-    const { nombre, precio } = request.all();
+    const { nombre, precio, volumen } = request.all();
     const producto = await Producto.create({
       nombre,
       precio,
+      volumen,
     });
     return producto;
   }
