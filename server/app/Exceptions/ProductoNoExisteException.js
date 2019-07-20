@@ -2,7 +2,7 @@
 
 const { LogicalException } = require('@adonisjs/generic-exceptions')
 
-class RecursoNoExisteException extends LogicalException {
+class ProductoNoExisteException extends LogicalException {
   /**
    * Handle this exception by itself
    */
@@ -13,4 +13,4 @@ class RecursoNoExisteException extends LogicalException {
   }
 }
 
-module.exports = RecursoNoExisteException
+module.exports = ProductoNoExisteException

@@ -41,7 +41,7 @@ class SucursalController {
    */
   async show ({ params }) {
     const sucursal = await Database.from('sucursales').where('id', params.id);
-    ServicioValidacion.verificarPermiso(sucursal);
+    ServicioValidacion.verificarSucursal(sucursal);
     return sucursal;
   }
 
@@ -53,7 +53,9 @@ class SucursalController {
    * @param {Request} ctx.request
    */
   async update ({ params, request }) {
-    return await Database.table('sucursales').where('id', params.id).update(request.only('nombre'));
+    const sucursal = await Database.table('sucursales').where('id', params.id).update(request.only('nombre'));
+    ServicioValidacion.verificarSucursal(sucursal);
+    return sucursal;
   }
 
   /**
@@ -63,7 +65,9 @@ class SucursalController {
    * @param {object} ctx
    */
   async destroy ({ params }) {
-    return await Database.table('sucursales').where('id', params.id).delete();
+    const sucursal = await Database.table('sucursales').where('id', params.id).delete();
+    ServicioValidacion.verificarSucursal(sucursal);
+    return sucursal;
   }
 }
 

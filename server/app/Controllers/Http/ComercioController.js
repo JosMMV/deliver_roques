@@ -42,7 +42,7 @@ class ComercioController {
    */
   async show ({ params }) {
     const comercio = await Comercio.findBy('rif', params.rif);
-    ServicioValidacion.verificarPermiso(comercio);
+    ServicioValidacion.verificarComercio(comercio);
     return comercio;
   }
 
@@ -54,8 +54,9 @@ class ComercioController {
    * @param {Request} ctx.request
    */
   async update ({ params, request }) {
-    const comercio = await Comercio.findBy('rif', params.rif);
-    return await Comercio.query().where('rif', params.rif).update(request.only('nombre')); //0 si hubo error y 1 si se actualizó exitosamente
+    const comercio = await Comercio.query().where('rif', params.rif).update(request.only('nombre')); //0 si hubo error y 1 si se actualizó exitosamente
+    ServicioValidacion.verificarComercio(comercio);
+    return comercio;
   }
 
   /**
@@ -67,8 +68,9 @@ class ComercioController {
    * @param {Response} ctx.response
    */
   async destroy ({ params }) {
-    const comercio = await Comercio.findBy('rif', params.rif);
-    return await Comercio.query().where('rif', params.rif).delete(); //0 si hubo error y 1 si se eliminó exitosamente
+    const comercio = await Comercio.query().where('rif', params.rif).delete(); //0 si hubo error y 1 si se eliminó exitosamente
+    ServicioValidacion.verificarComercio(comercio);
+    return comercio;
   }
 }
 

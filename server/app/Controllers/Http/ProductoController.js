@@ -48,7 +48,7 @@ class ProductoController {
    */
   async show ({ params }) {
     const producto = await Producto.find(params.id);
-    ServicioValidacion.verificarPermiso(producto);
+    ServicioValidacion.verificarProducto(producto);
     return producto;
   }
 
@@ -62,6 +62,7 @@ class ProductoController {
    */
   async update ({ params, request }) {
     const producto = await Producto.find(params.id);
+    ServicioValidacion.verificarProducto(producto);
     producto.merge(request.only('precio'));
     await producto.save();
     return producto;
@@ -76,7 +77,7 @@ class ProductoController {
    */
   async destroy ({ params }) {
     const producto = await Producto.find(params.id);
-    ServicioValidacion.verificarPermiso(producto);
+    ServicioValidacion.verificarProducto(producto);
     await producto.delete();
     return producto;
   }
