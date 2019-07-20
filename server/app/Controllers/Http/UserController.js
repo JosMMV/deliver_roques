@@ -11,6 +11,11 @@ class UserController {
     });
     return user;
   }
+  async iniciar_sesion({ request, auth }) {
+    const { username, password } = request.all();
+    const token = await auth.attempt(username, password);
+    return {token, username};
+  }
 }
 
 module.exports = UserController

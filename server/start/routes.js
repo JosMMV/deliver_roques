@@ -17,6 +17,13 @@
 const Route = use('Route')
 
 Route.group(() => {
-  Route.post('auth/registrar', 'UserController.registrar')
   Route.post('auth/iniciar_sesion', 'UserController.iniciar_sesion')
 }).prefix('api')
+
+
+Route.group(() => {
+  Route.post('/auth/registrar', 'UserController.registrar')
+  
+  Route.get('/producto/index', 'ProductoController.index')
+  Route.post('/producto/anadir', 'ProductoController.anadir')
+}).prefix('admin')
