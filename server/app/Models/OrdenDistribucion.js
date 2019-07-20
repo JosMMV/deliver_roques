@@ -16,9 +16,6 @@ class OrdenDistribucion extends Model {
   sucursal () {
     return this.belongsTo('App/Models/Sucursal')
   }
-  productos () {
-    return this.belongsToMany('App/Models/Producto')
-  }
 }
 
 module.exports = OrdenDistribucion
