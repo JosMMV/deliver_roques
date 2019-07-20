@@ -35,4 +35,10 @@ Route.group(() => {
   Route.post('/comercio', 'ComercioController.create')
   Route.patch('/comercio/:rif', 'ComercioController.update')
   Route.delete('/comercio/:rif', 'ComercioController.destroy')
+  
+  Route.get('/sucursal', 'SucursalController.index')
+  Route.get('/sucursal/:id', 'SucursalController.show')
+  Route.post('/sucursal', 'SucursalController.create')
+  Route.patch('/sucursal/:id', 'SucursalController.update')
+  Route.delete('/sucursal/:id', 'SucursalController.destroy')
 }).prefix('admin')

@@ -44,9 +44,6 @@ class ProductoController {
    * GET productos/:id
    *
    * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
    */
   async show ({ params }) {
     const producto = await Producto.find(params.id);

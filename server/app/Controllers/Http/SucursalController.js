@@ -1,5 +1,8 @@
 'use strict'
 
+const Database = use('Database')
+const ServicioValidacion = use('App/Services/ServicioValidacion');
+
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
@@ -8,39 +11,26 @@
  * Resourceful controller for interacting with sucursals
  */
 class SucursalController {
-  /**
-   * Show a list of all sucursals.
-   * GET sucursals
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async index ({ request, response, view }) {
+  async index () {
+    return await Database.select('*').from('sucursales');
   }
 
   /**
    * Render a form to be used for creating a new sucursal.
    * GET sucursals/create
    *
-   * @param {object} ctx
    * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
    */
-  async create ({ request, response, view }) {
-  }
-
-  /**
-   * Create/save a new sucursal.
-   * POST sucursals
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async store ({ request, response }) {
+  async create ({ request }) {
+    const { nombre, estado, ciudad, parroquia, distanciaDesdeCaracas } = request.all();
+    const sucursal = await Database.insert({
+      nombre,
+      estado,
+      ciudad,
+      parroquia,
+      distanciaDesdeCaracas,
+    }).into('sucursales');
+    return sucursal;
   }
 
   /**
@@ -48,23 +38,11 @@ class SucursalController {
    * GET sucursals/:id
    *
    * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
    */
-  async show ({ params, request, response, view }) {
-  }
-
-  /**
-   * Render a form to update an existing sucursal.
-   * GET sucursals/:id/edit
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async edit ({ params, request, response, view }) {
+  async show ({ params }) {
+    const sucursal = await Database.from('sucursales').where('id', params.id);
+    ServicioValidacion.verificarPermiso(sucursal);
+    return sucursal;
   }
 
   /**
@@ -73,9 +51,9 @@ class SucursalController {
    *
    * @param {object} ctx
    * @param {Request} ctx.request
-   * @param {Response} ctx.response
    */
-  async update ({ params, request, response }) {
+  async update ({ params, request }) {
+    return await Database.table('sucursales').where('id', params.id).update(request.only('nombre'));
   }
 
   /**
@@ -83,10 +61,9 @@ class SucursalController {
    * DELETE sucursals/:id
    *
    * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
    */
-  async destroy ({ params, request, response }) {
+  async destroy ({ params }) {
+    return await Database.table('sucursales').where('id', params.id).delete();
   }
 }
 
