@@ -49,7 +49,7 @@ class OrdenDistribucionController {
       created_at: d,
       updated_at: d
     }).into('ordenes_distribucion');
-    console.log(await this.insertarProductoPerteneceOrden(productos, orden[0]));
+    await this.insertarProductoPerteneceOrden(productos, orden[0]);
     return {
       'nroOrden': orden[0],
       'tiempoEnvio': fechaEstimada,
@@ -60,7 +60,7 @@ class OrdenDistribucionController {
   async confirm ({ params }) {
     const ordenDistribucion = await Database.table('ordenes_distribucion').where('id', params.id).update('confirmada', true);
     ServicioValidacion.verificarOrden(ordenDistribucion);
-    return ordenDistribucion; 
+    return !!ordenDistribucion; 
   }
 
   /**
@@ -71,6 +71,18 @@ class OrdenDistribucionController {
    */
   async show ({ params }) {
     const ordenDistribucion = await Database.from('ordenes_distribucion').where('id', params.id);
+    ServicioValidacion.verificarOrden(ordenDistribucion);
+    return ordenDistribucion;
+  }
+
+  /**
+   * Display a single ordendistribucion.
+   * GET ordendistribucions/:id
+   *
+   * @param {object} ctx
+   */
+  async showByShop ({ params }) {
+    const ordenDistribucion = await Database.from('ordenes_distribucion').where('comercio_rif', params.rif);
     ServicioValidacion.verificarOrden(ordenDistribucion);
     return ordenDistribucion;
   }

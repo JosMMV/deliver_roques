@@ -42,7 +42,7 @@ class SucursalController {
   async show ({ params }) {
     const sucursal = await Database.from('sucursales').where('id', params.id);
     ServicioValidacion.verificarSucursal(sucursal);
-    return sucursal;
+    return sucursal[0];
   }
 
   /**
