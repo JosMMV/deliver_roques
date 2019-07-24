@@ -26,6 +26,7 @@ class OrdenDistribucionController {
    * @param {Request} ctx.request
    */
   async create ({ request }) {
+    const d = new Date();
     const { cliente, rifComercio, nombreSucursal, productos } = request.all();
     const sucursal = await Database.from('sucursales').where('nombre', nombreSucursal);
     const clienteA = await Database.from('clientes').where('cedula', cliente.cedula);
@@ -33,11 +34,12 @@ class OrdenDistribucionController {
       cedula: cliente.cedula,
       nombre: cliente.nombre,
       apellido: cliente.apellido,
-      telefono: cliente.telefono
+      telefono: cliente.telefono,
+      created_at: d,
+      updated_at: d
     }).into('clientes') : null;
     const costo = await this.calcularCosto(productos, sucursal[0].distanciaDesdeCaracas);
     const fechaEstimada = this.calcularTiempoEnvio(sucursal[0].distancia);
-    const d = new Date();
     const orden = await Database.insert({
       id: parseInt(d.getTime().toString().substr(4)),
       costoEnvio: costo,
@@ -178,7 +180,6 @@ class OrdenDistribucionController {
     const d = new Date();
     let success = true;
     for (let index = 0; index < productos.length; index++) {
-      console.log(productos[index].id);
       success &= await Database.insert({
         orden_id: orden,
         producto_id: productos[index].id,

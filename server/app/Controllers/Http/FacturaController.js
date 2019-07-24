@@ -1,5 +1,8 @@
 'use strict'
 
+const Factura = use('App/Models/Factura');
+const ServicioValidacion = use('App/Services/ServicioValidacion');
+
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
@@ -17,30 +20,25 @@ class FacturaController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index ({ request, response, view }) {
+  async index () {
+    return await Factura.all();
   }
 
   /**
    * Render a form to be used for creating a new factura.
    * GET facturas/create
    *
-   * @param {object} ctx
    * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
    */
-  async create ({ request, response, view }) {
-  }
-
-  /**
-   * Create/save a new factura.
-   * POST facturas
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async store ({ request, response }) {
+  async create ({ request }) {
+    const { monto, fechaEmision, fechaTope, comercio_rif } = request.all();
+    const factura = await Factura.create({
+      monto,
+      fechaEmision,
+      fechaTope,
+      comercio_rif,
+    });
+    return factura;
   }
 
   /**
@@ -48,23 +46,11 @@ class FacturaController {
    * GET facturas/:id
    *
    * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
    */
-  async show ({ params, request, response, view }) {
-  }
-
-  /**
-   * Render a form to update an existing factura.
-   * GET facturas/:id/edit
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async edit ({ params, request, response, view }) {
+  async show ({ params }) {
+    const factura = await Factura.find(params.id);
+    ServicioValidacion.verificarFactura(factura);
+    return factura;
   }
 
   /**
@@ -73,9 +59,13 @@ class FacturaController {
    *
    * @param {object} ctx
    * @param {Request} ctx.request
-   * @param {Response} ctx.response
    */
-  async update ({ params, request, response }) {
+  async update ({ params, request }) {
+    const factura = await Factura.find(params.id);
+    ServicioValidacion.verificarFactura(factura);
+    //factura.merge(request.only('precio'));
+    await factura.save();
+    return factura;
   }
 
   /**
@@ -83,10 +73,12 @@ class FacturaController {
    * DELETE facturas/:id
    *
    * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
    */
-  async destroy ({ params, request, response }) {
+  async destroy ({ params }) {
+    const factura = await Factura.find(params.id);
+    ServicioValidacion.verificarFactura(factura);
+    await factura.delete();
+    return factura;
   }
 }
 

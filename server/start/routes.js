@@ -52,4 +52,10 @@ Route.group(() => {
   
   Route.patch('/pedido/:id', 'OrdenDistribucionController.update')
   Route.delete('/pedido/:id', 'OrdenDistribucionController.destroy')
+
+  Route.get('/factura', 'FacturaController.index')
+  Route.get('/factura/:id', 'FacturaController.show')
+  Route.post('/factura', 'FacturaController.create')
+  Route.patch('/factura/:id', 'FacturaController.update')
+  Route.delete('/factura/:id', 'FacturaController.destroy')
 }).prefix('admin')
