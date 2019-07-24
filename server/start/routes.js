@@ -18,14 +18,22 @@ const Route = use('Route')
 
 Route.group(() => {
   Route.post('auth/iniciar_sesion', 'UserController.iniciar_sesion')
+
+  Route.get('/productos', 'ProductoController.index')
+  Route.get('/productos/:id', 'ProductoController.show')
+
+  Route.get('/sucursal', 'SucursalController.index')
+  Route.get('/sucursal/:id', 'SucursalController.show')
+
+  Route.get('/pedido', 'OrdenDistribucionController.index')
+  Route.get('/pedido/:id', 'OrdenDistribucionController.show')
+  Route.post('/pedido', 'OrdenDistribucionController.create')
 }).prefix('api')
 
 
 Route.group(() => {
   Route.post('/auth/registrar', 'UserController.registrar')
   
-  Route.get('/productos', 'ProductoController.index')
-  Route.get('/productos/:id', 'ProductoController.show')
   Route.post('/productos', 'ProductoController.create')
   Route.patch('/productos/:id', 'ProductoController.update')
   Route.delete('/productos/:id', 'ProductoController.destroy')
@@ -36,9 +44,10 @@ Route.group(() => {
   Route.patch('/comercio/:rif', 'ComercioController.update')
   Route.delete('/comercio/:rif', 'ComercioController.destroy')
   
-  Route.get('/sucursal', 'SucursalController.index')
-  Route.get('/sucursal/:id', 'SucursalController.show')
   Route.post('/sucursal', 'SucursalController.create')
   Route.patch('/sucursal/:id', 'SucursalController.update')
   Route.delete('/sucursal/:id', 'SucursalController.destroy')
+  
+  Route.patch('/pedido/:id', 'OrdenDistribucionController.update')
+  Route.delete('/pedido/:id', 'OrdenDistribucionController.destroy')
 }).prefix('admin')
