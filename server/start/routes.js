@@ -49,7 +49,7 @@ Route.group(() => {
   Route.post('/sucursal', 'SucursalController.create')
   Route.patch('/sucursal/:id', 'SucursalController.update')
   Route.delete('/sucursal/:id', 'SucursalController.destroy')
-  
+
   Route.patch('/pedido/:id', 'OrdenDistribucionController.update')
   Route.delete('/pedido/:id', 'OrdenDistribucionController.destroy')
 

@@ -23,12 +23,15 @@ class SucursalController {
    */
   async create ({ request }) {
     const { nombre, estado, ciudad, parroquia, distanciaDesdeCaracas } = request.all();
+    const d = new Date();
     const sucursal = await Database.insert({
       nombre,
       estado,
       ciudad,
       parroquia,
       distanciaDesdeCaracas,
+      created_at: d,
+      updated_at: d
     }).into('sucursales');
     return sucursal;
   }
@@ -53,7 +56,10 @@ class SucursalController {
    * @param {Request} ctx.request
    */
   async update ({ params, request }) {
-    const sucursal = await Database.table('sucursales').where('id', params.id).update(request.only('nombre'));
+    const sucursal = await Database.table('sucursales').where('id', params.id).update({
+      nombre: request.only('nombre').nombre,
+      updated_at: new Date()
+    });
     ServicioValidacion.verificarSucursal(sucursal);
     return sucursal;
   }

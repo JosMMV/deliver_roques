@@ -101,16 +101,28 @@ class OrdenDistribucionController {
     const { tipo, fecha } = request.all();
     switch (tipo) {
       case "empacado":
-        ordenDistribucion = await Database.table('ordenes_distribucion').where('id', params.id).update('empacado', fecha);
+        ordenDistribucion = await Database.table('ordenes_distribucion').where('id', params.id).update({
+          empacado: fecha,
+          updated_at: new Date(),
+        });
         break;
       case "cargado":
-        ordenDistribucion = await Database.table('ordenes_distribucion').where('id', params.id).update('cargado', fecha);
+        ordenDistribucion = await Database.table('ordenes_distribucion').where('id', params.id).update({
+          cargado: fecha,
+          updated_at: new Date(),
+        });
         break;
       case "camino":
-        ordenDistribucion = await Database.table('ordenes_distribucion').where('id', params.id).update('camino', fecha);
+        ordenDistribucion = await Database.table('ordenes_distribucion').where('id', params.id).update({
+          camino: fecha,
+          updated_at: new Date(),
+        });
         break;
       case "sucursal":
-        ordenDistribucion = await Database.table('ordenes_distribucion').where('id', params.id).update('sucursal', fecha);
+        ordenDistribucion = await Database.table('ordenes_distribucion').where('id', params.id).update({
+          sucursal: fecha,
+          updated_at: new Date(),
+        });
         break;
       default:
         ordenDistribucion = {

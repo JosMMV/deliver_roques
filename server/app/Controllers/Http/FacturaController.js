@@ -31,11 +31,12 @@ class FacturaController {
    * @param {Request} ctx.request
    */
   async create ({ request }) {
-    const { monto, fechaEmision, fechaTope, comercio_rif } = request.all();
+    const { monto, fechaEmision, fechaTope, estatus, comercio_rif } = request.all();
     const factura = await Factura.create({
       monto,
       fechaEmision,
       fechaTope,
+      estatus,
       comercio_rif,
     });
     return factura;
