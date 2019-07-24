@@ -10,20 +10,12 @@ class OrdenDistribucionSchema extends Schema {
       table.float('costoEnvio').notNullable()
       table.date('tiempoEnvio').notNullable()
       table.boolean('confirmada').notNullable()
-      table.date('empacado')
-      table.date('cargado')
-      table.date('camino')
-      table.date('sucursal')
-      table.integer('cedula_cliente').references('cedula').inTable('clientes')
-      table.string('comercio_rif', 50).references('rif').inTable('comercios')
-      table.integer('factura_id').unsigned().references('id').inTable('facturas')
-      table.integer('sucursal_id').unsigned().references('id').inTable('sucursales')
+      table.datetime('empacado')
+      table.datetime('cargado')
+      table.datetime('camino')
+      table.datetime('sucursal')
       table.timestamps()
     })
-  }
-
-  down () {
-    this.drop('ordenes_distribucion')
   }
 }
 

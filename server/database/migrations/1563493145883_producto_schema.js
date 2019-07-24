@@ -13,10 +13,6 @@ class ProductoSchema extends Schema {
       table.timestamps()
     })
   }
-
-  down () {
-    this.drop('productos')
-  }
 }
 
 module.exports = ProductoSchema

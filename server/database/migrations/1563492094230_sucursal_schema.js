@@ -15,10 +15,6 @@ class SucursalSchema extends Schema {
       table.timestamps()
     })
   }
-
-  down () {
-    this.drop('sucursales')
-  }
 }
 
 module.exports = SucursalSchema

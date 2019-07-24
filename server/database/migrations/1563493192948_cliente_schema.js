@@ -13,10 +13,6 @@ class ClienteSchema extends Schema {
       table.timestamps()
     })
   }
-
-  down () {
-    this.drop('clientes')
-  }
 }
 
 module.exports = ClienteSchema

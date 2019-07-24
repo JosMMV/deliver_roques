@@ -7,18 +7,13 @@ class FacturaSchema extends Schema {
   up () {
     this.create('facturas', (table) => {
       table.increments()
-      table.float('monto').notNullable()
+      table.float('monto',20,3).notNullable()
       table.date('fechaEmision').notNullable()
       table.date('fechaTope').notNullable()
       table.date('fechaDePago')
       table.string('estatus', 255).notNullable()
-      table.string('comercio_rif', 50).references('rif').inTable('comercios')
       table.timestamps()
     })
-  }
-
-  down () {
-    this.drop('facturas')
   }
 }
 
