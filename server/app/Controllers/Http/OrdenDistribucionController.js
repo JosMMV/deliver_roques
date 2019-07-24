@@ -49,6 +49,7 @@ class OrdenDistribucionController {
       created_at: d,
       updated_at: d
     }).into('ordenes_distribucion');
+    console.log(await this.insertarProductoPerteneceOrden(productos, orden[0]));
     return {
       'nroOrden': orden[0],
       'tiempoEnvio': fechaEstimada,
@@ -124,6 +125,7 @@ class OrdenDistribucionController {
     let costoEnvio = 0;
     for (let index = 0; index < productos.length; index++) {
       const producto = await Database.from('productos').where('id', productos[index].id);
+      ServicioValidacion.verificarProducto(producto);
       //precioTotal += producto[0].precio*productos[index].cantidad;
       volumenTotal += producto[0].volumen*productos[index].cantidad;
     }
@@ -158,6 +160,22 @@ class OrdenDistribucionController {
     fecha = fecha.map(num => num.length === 1 ? '0' + num : num);
     let formatted_date = fecha[0] + "/" + fecha[1] + "/" + fecha[2];*/
     return current_datetime;
+  }
+
+  async insertarProductoPerteneceOrden(productos, orden) {
+    const d = new Date();
+    let success = true;
+    for (let index = 0; index < productos.length; index++) {
+      console.log(productos[index].id);
+      success &= await Database.insert({
+        orden_id: orden,
+        producto_id: productos[index].id,
+        cantidad: productos[index].cantidad,
+        created_at: d,
+        updated_at: d,
+      }).into('productos_pertenece_orden');
+    }
+    return success;
   }
 }
 

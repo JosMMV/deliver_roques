@@ -7,7 +7,7 @@ const OrdenDistribucionNoExisteException = use('App/Exceptions/OrdenDistribucion
 
 class ServicioValidacion {
   verificarProducto(producto) {
-    if (!producto) {
+    if (!producto || producto.length === 0) {
       throw new ProductoNoExisteException();
     }
     /* if (userId !== 'admin') {
