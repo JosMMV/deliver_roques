@@ -3,6 +3,7 @@ const ProductoNoExisteException = use('App/Exceptions/ProductoNoExisteException'
 const UsuarioNoExisteException = use('App/Exceptions/UsuarioNoExisteException');
 const SucursalNoExisteException = use('App/Exceptions/SucursalNoExisteException');
 const ComercioNoExisteException = use('App/Exceptions/ComercioNoExisteException');
+const OrdenDistribucionNoExisteException = use('App/Exceptions/OrdenDistribucionNoExisteException');
 
 class ServicioValidacion {
   verificarProducto(producto) {
@@ -26,6 +27,11 @@ class ServicioValidacion {
   verificarComercio(comercio) {
     if (!comercio || comercio.length === 0) {
       throw new ComercioNoExisteException();
+    }
+  }
+  verificarOrden(orden) {
+    if (orden.length === 0 || orden === 0) {
+      throw new OrdenDistribucionNoExisteException();
     }
   }
 }

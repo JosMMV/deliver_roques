@@ -17,7 +17,7 @@ class OrdenDistribucionSchema extends Schema {
       table.integer('cedula_cliente').references('cedula').inTable('clientes')
       table.string('comercio_rif', 50).references('rif').inTable('comercios')
       table.integer('factura_id').unsigned().references('id').inTable('facturas')
-      table.integer('surcursal_id').unsigned().references('id').inTable('sucursales')
+      table.integer('sucursal_id').unsigned().references('id').inTable('sucursales')
       table.timestamps()
     })
   }
