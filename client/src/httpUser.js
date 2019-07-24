@@ -5,7 +5,7 @@ import store from './store/index';
 import authentication from './store/authentication';
 
 export default () => axios.create({
-  baseURL: store.state.baseUrl,
+  baseURL: store.state.baseUrlUser,
   timeout: 2000,
   headers: {
     Authorization: `Bearer ${authentication.state.token}`,
