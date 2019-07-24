@@ -56,8 +56,10 @@ class OrdenDistribucionController {
     };
   }
 
-  async confirm ({ request }) {
-
+  async confirm ({ params }) {
+    const ordenDistribucion = await Database.table('ordenes_distribucion').where('id', params.id).update('confirmada', true);
+    ServicioValidacion.verificarOrden(ordenDistribucion);
+    return ordenDistribucion; 
   }
 
   /**
