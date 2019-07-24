@@ -82,8 +82,27 @@ class OrdenDistribucionController {
    * @param {Request} ctx.request
    */
   async update ({ params, request }) {
-    const ordenDistribucion = await Database.table('ordenes_distribucion').where('id', params.id).update(request.only('nombre'));
-    ServicioValidacion.verificarOrden(ordenDistribucion);
+    let ordenDistribucion;
+    const { tipo, fecha } = request.all();
+    switch (tipo) {
+      case "empacado":
+        ordenDistribucion = await Database.table('ordenes_distribucion').where('id', params.id).update('empacado', fecha);
+        break;
+      case "cargado":
+        ordenDistribucion = await Database.table('ordenes_distribucion').where('id', params.id).update('cargado', fecha);
+        break;
+      case "camino":
+        ordenDistribucion = await Database.table('ordenes_distribucion').where('id', params.id).update('camino', fecha);
+        break;
+      case "sucursal":
+        ordenDistribucion = await Database.table('ordenes_distribucion').where('id', params.id).update('sucursal', fecha);
+        break;
+      default:
+        ordenDistribucion = {
+          'message': 'error',
+        }
+        break;
+    }
     return ordenDistribucion;
   }
 

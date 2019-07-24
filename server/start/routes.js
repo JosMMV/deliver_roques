@@ -34,17 +34,17 @@ Route.group(() => {
 
 Route.group(() => {
   Route.post('/auth/registrar', 'UserController.registrar')
-  
+
   Route.post('/productos', 'ProductoController.create')
   Route.patch('/productos/:id', 'ProductoController.update')
   Route.delete('/productos/:id', 'ProductoController.destroy')
-  
+
   Route.get('/comercio', 'ComercioController.index')
   Route.get('/comercio/:rif', 'ComercioController.show')
   Route.post('/comercio', 'ComercioController.create')
   Route.patch('/comercio/:rif', 'ComercioController.update')
   Route.delete('/comercio/:rif', 'ComercioController.destroy')
-  
+
   Route.post('/sucursal', 'SucursalController.create')
   Route.patch('/sucursal/:id', 'SucursalController.update')
   Route.delete('/sucursal/:id', 'SucursalController.destroy')
