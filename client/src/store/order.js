@@ -1,9 +1,12 @@
 /* eslint-disable */
+import HTTPAdmin from '../httpAdmin';
+import HTTPUser from '../httpUser';
 
 export default {
   namespaced: true,
   state: {
     orderNumber: null,
+    currentOrder: null,
     searching: null,
     selectedItem: null,
     error: false,
@@ -24,13 +27,43 @@ export default {
   },
   actions: {
     searchOrder({ state, commit }, error) {
-      commit('setOrderNumber', null);
-      if (error) {
-        commit('setError', true);
-      } else {
+      return HTTPUser().get(`pedido/${state.searching}`)
+      .then(({ data }) => {
         commit('setError', false);
-        commit('setOrderNumber', state.searching);
+        commit('setCurrentOrder', data);
+        commit('setOrderNumber');
+      }).catch(() => {
+        commit('setError', true);
+      });
+    },
+    addTimestamp({ state, commit }) {
+      let tipo;
+      switch (state.selectedItem) {
+        case 0:
+          tipo = 'empacado';
+          break;
+        case 1:
+          tipo = 'cargado';
+          break;
+        case 2:
+          tipo = 'camino';
+          break;
+        case 3:
+          tipo = 'sucursal';
+          break;
+        default:
+          tipo = null;
+          break;
       }
+      return HTTPAdmin().patch(`pedido/${state.searching}`, {
+        tipo: tipo,
+        fecha: new Date(),
+      })
+      .then(({ data }) => {
+        console.log('listo');
+      }).catch(() => {
+        console.log('error');
+      });
     },
   },
   getters: {
@@ -48,8 +81,11 @@ export default {
     setSearching(state, searching) {
       state.searching = searching;
     },
-    setOrderNumber(state, orderNumber) {
-      state.orderNumber = orderNumber;
+    setCurrentOrder(state, order) {
+      state.currentOrder = order;
+    },
+    setOrderNumber(state) {
+      state.orderNumber = state.currentOrder.id;
     },
     setSelectedItem(state, i) {
       state.selectedItem = i;

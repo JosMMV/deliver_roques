@@ -1,11 +1,12 @@
 import router from '../router';
 /* eslint-disable */
+import HTTP from '../httpUser';
 
 export default {
   namespaced: true,
   state: {
-    loginEmail: 'testing@gmail.com',
-    loginPassword: '12346578',
+    loginEmail: 'admin',
+    loginPassword: '1234',
     loginError: null,
     token: null,
   },
@@ -14,10 +15,19 @@ export default {
       commit('setToken', null); // set value of token to null
       router.push('/tracking'); // then redirect to /login
     },
-    login({ commit }) {
-      commit('setLoginError', null); // set value of LoginError to null
-      commit('setToken', 'este es el token: :)');
-      router.push('/'); // then redirect to home
+    login({ commit, state }) {
+      commit('setLoginError', null);
+      return HTTP().post('auth/iniciar_sesion', {
+        username: state.loginEmail,
+        password: state.loginPassword,
+      })
+      .then(({ data }) => {
+        commit('setToken', data.token);
+        router.push('/');
+      })
+      .catch(() => {
+        commit('setLoginError', 'An error has occured trying to login.');
+      });
     },
   },
   getters: {

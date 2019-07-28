@@ -47,7 +47,7 @@ class OrdenDistribucionController {
       confirmada: false,
       cedula_cliente: cliente.cedula,
       comercio_rif: rifComercio,
-      surcursal_id: sucursal[0].id,
+      sucursal_id: sucursal[0].id,
       created_at: d,
       updated_at: d
     }).into('ordenes_distribucion');
@@ -74,7 +74,7 @@ class OrdenDistribucionController {
   async show ({ params }) {
     const ordenDistribucion = await Database.from('ordenes_distribucion').where('id', params.id);
     ServicioValidacion.verificarOrden(ordenDistribucion);
-    return ordenDistribucion;
+    return ordenDistribucion[0];
   }
 
   /**
@@ -99,6 +99,7 @@ class OrdenDistribucionController {
   async update ({ params, request }) {
     let ordenDistribucion;
     const { tipo, fecha } = request.all();
+    console.log('mensaje 1');
     switch (tipo) {
       case "empacado":
         ordenDistribucion = await Database.table('ordenes_distribucion').where('id', params.id).update({

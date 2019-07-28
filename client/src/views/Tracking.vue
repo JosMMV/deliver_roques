@@ -18,31 +18,103 @@
     <v-timeline
       v-if="isSearching"
     >
-      <v-timeline-item
-        v-for="(procedure, i) in procedures"
-        :key="i"
-        :color="procedure.color"
-        small
-      >
+      <v-timeline-item :color="'cyan'" small v-if="isPacked">
         <template v-slot:opposite>
           <span
-            :class="`headline font-weight-light ${procedure.color}--text`"
-            v-text="procedure.timestamp"
+            :class="`headline font-weight-light cyan--text`"
+            v-text="currentTracking.empacado"
           >
           </span>
            <div>
-            <img v-bind:src="procedure.img" style="width:40%;height:auto;"/>
+            <img v-bind:src="'/package.png'" style="width:40%;height:auto;"/>
           </div>
           <template>
             <v-divider></v-divider>
           </template>
         </template>
         <div class="py-3">
-          <h2 :class="`headline font-weight-bold mb-3 ${procedure.color}--text`">
-            {{ procedure.text }}
+          <h2 :class="`headline font-weight-bold mb-3 cyan--text`">
+            Empacado
           </h2>
           <div>
-            {{ procedure.description }}
+            Empacado en los mejores cartones del mundo, traídos directamente de la india.
+            Adicionalmente se cubrío con esas burbujas de plástico que todo el mundo desea
+            romper con sus pulgares.
+          </div>
+        </div>
+      </v-timeline-item>
+
+      <v-timeline-item :color="'green'" small v-if="isLoaded">
+        <template v-slot:opposite>
+          <span
+            :class="`headline font-weight-light green--text`"
+            v-text="currentTracking.cargado"
+          >
+          </span>
+           <div>
+            <img v-bind:src="'/serv-1.png'" style="width:40%;height:auto;"/>
+          </div>
+          <template>
+            <v-divider></v-divider>
+          </template>
+        </template>
+        <div class="py-3">
+          <h2 :class="`headline font-weight-bold mb-3 green--text`">
+            Cargado
+          </h2>
+          <div>
+            Cargado en los mejores camiones bildados. Para asegurar ese cartón tan especial
+            (y tu paquete, por supuesto).
+          </div>
+        </div>
+      </v-timeline-item>
+
+      <v-timeline-item :color="'blue'" small v-if="isOnWay">
+        <template v-slot:opposite>
+          <span
+            :class="`headline font-weight-light blue--text`"
+            v-text="currentTracking.camino"
+          >
+          </span>
+           <div>
+            <img v-bind:src="'/411712.png'" style="width:40%;height:auto;"/>
+          </div>
+          <template>
+            <v-divider></v-divider>
+          </template>
+        </template>
+        <div class="py-3">
+          <h2 :class="`headline font-weight-bold mb-3 blue--text`">
+            En camino
+          </h2>
+          <div>
+            Nuestros camiones siempre van a la máxima velocidad posible dentro de los márgenes
+            de la ley. Tu paquete estará muy pronto en tus manos.
+          </div>
+        </div>
+      </v-timeline-item>
+
+      <v-timeline-item :color="'red'" small v-if="isBrachOffice">
+        <template v-slot:opposite>
+          <span
+            :class="`headline font-weight-light red--text`"
+            v-text="currentTracking.sucursal"
+          >
+          </span>
+           <div>
+            <img v-bind:src="'/1337104.png'" style="width:40%;height:auto;"/>
+          </div>
+          <template>
+            <v-divider></v-divider>
+          </template>
+        </template>
+        <div class="py-3">
+          <h2 :class="`headline font-weight-bold mb-3 red--text`">
+            En Sucursal
+          </h2>
+          <div>
+            Tu paquete ha llegado, como se esperaba, sano y salvo. Ven lo más pronto posible
+            a buscarlo. Nuestros empleados te atenderán tan bien que seguramente querrás conocerlos más.
           </div>
         </div>
       </v-timeline-item>
@@ -59,45 +131,18 @@ import {
 } from 'vuex';
 
 export default {
-  data: () => ({
-    procedures: [
-      {
-        color: 'cyan',
-        timestamp: '20/06/19 a las 09:35am',
-        text: 'Empacado',
-        description: 'Empacado en los mejores cartones del mundo, traídos directamente de la india. Adicionalmente se cubrío con esas burbujas de plástico que todo el mundo desea romper con sus pulgares.',
-        img: '/package.png',
-      },
-      {
-        color: 'green',
-        timestamp: '20/06/19 a las 12:15pm',
-        text: 'Cargado',
-        description: 'Cargado en los mejores camiones bildados. Para asegurar ese cartón tan especial (y tu paquete, por supuesto).',
-        img: '/serv-1.png',
-      },
-      {
-        color: 'blue',
-        timestamp: '21/06/19 a las 07:30am',
-        text: 'En Camino',
-        description: 'Nuestros camiones siempre van a la máxima velocidad posible dentro de los márgenes de la ley. Tu paquete estará muy pronto en tus manos.',
-        img: '/411712.png',
-      },
-      {
-        color: 'red',
-        timestamp: '23/06/19 a las 02:31pm',
-        text: 'En Sucursal',
-        description: 'Tu paquete ha llegado, como se esperaba, sano y salvo. Ven lo más pronto posible a buscarlo. Nuestros empleados te atenderán tan bien que seguramente querrás conocerlos más.',
-        img: '/1337104.png',
-      },
-    ],
-  }),
   computed: {
     ...mapState('tracking', [
       'searching',
-      'trackingNumber',
+      'currentTracking',
+      'trackingError',
     ]),
     ...mapGetters('tracking', [
       'isSearching',
+      'isPacked',
+      'isLoaded',
+      'isOnWay',
+      'isBrachOffice',
     ]),
   },
   methods: {

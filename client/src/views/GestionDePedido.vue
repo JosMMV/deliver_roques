@@ -143,6 +143,7 @@ export default {
     ]),
     ...mapActions('order', [
       'searchOrder',
+      'addTimestamp',
     ]),
     anadirTimestamp(i) {
       this.setSelectedItem(i);
@@ -150,7 +151,7 @@ export default {
     },
     OkClicked() {
       this.dialog1 = false;
-      this.editTimestamp();
+      this.addTimestamp();
     },
   },
 };

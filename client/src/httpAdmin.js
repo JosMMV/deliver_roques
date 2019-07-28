@@ -1,13 +1,8 @@
 import axios from 'axios';
 // eslint-disable-next-line
 import store from './store/index';
-// eslint-disable-next-line
-import authentication from './store/authentication';
 
 export default () => axios.create({
   baseURL: store.state.baseUrlAdmin,
-  timeout: 2000,
-  headers: {
-    Authorization: `Bearer ${authentication.state.token}`,
-  },
+  timeout: 3000,
 });
