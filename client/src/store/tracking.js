@@ -7,12 +7,13 @@ export default {
     currentTracking: null,
     searching: null,
     trackingError: null,
+    timestamps: null,
   },
   actions: {
     searchTracking({ state, commit }) {
       return HTTP().get(`pedido/${state.searching}`)
       .then(({ data }) => {
-        commit('setTracking', data);
+        commit('setSearching', data);
       }).catch(() => {
         commit('setTrackingError', 'An error has ocurred trying search tracking.');
       });
