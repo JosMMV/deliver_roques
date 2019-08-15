@@ -5,14 +5,22 @@
       clipped
       fixed
       app
-    >
+      >
       <v-list dense>
-        <v-list-tile to="/" v-if="isLoggedIn">
+        <v-list-tile to="/" v-if="isLoggedIn ">
           <v-list-tile-action>
             <v-icon>receipt</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
             <v-list-tile-title>Facturas</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+        <v-list-tile to="/crear-factura" v-if="isLoggedIn  && isAdminUser">
+          <v-list-tile-action>
+            <v-icon>fiber_new</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Crear factura</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
         <v-list-tile to="/orden" v-if="isLoggedIn">
@@ -31,7 +39,7 @@
             <v-list-tile-title>Tracking</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
-        <v-list-tile to="/gestion-pedido" v-if="isLoggedIn">
+        <v-list-tile to="/gestion-pedido" v-if="isLoggedIn && isAdminUser">
           <v-list-tile-action>
             <v-icon>mdi-table-edit</v-icon>
           </v-list-tile-action>
@@ -39,7 +47,7 @@
             <v-list-tile-title>Gestionar Pedido</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
-        <v-list-tile to="/reportes" v-if="isLoggedIn">
+        <v-list-tile to="/reportes" v-if="isLoggedIn && isAdminUser">
           <v-list-tile-action>
             <v-icon>mdi-chart-line</v-icon>
           </v-list-tile-action>
@@ -83,6 +91,7 @@ export default {
   computed: {
     ...mapGetters('authentication', [
       'isLoggedIn',
+      'isAdminUser',
     ]),
   },
   methods: {
@@ -96,7 +105,5 @@ export default {
   },
 };
 </script>
-
 <style>
-
 </style>

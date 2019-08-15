@@ -6,6 +6,7 @@ import Tracking from './views/Tracking.vue';
 import GestionDePedido from './views/GestionDePedido.vue';
 import Reports from './views/Reports.vue';
 import RequestOrder from './views/RequestOrder.vue';
+import CreateReceipt from './views/CreateReceipt.vue';
 
 Vue.use(Router);
 
@@ -42,6 +43,11 @@ export default new Router({
       path: '/orden',
       name: 'orden',
       component: RequestOrder,
+    },
+    {
+      path: '/crear-factura',
+      name: 'crear-factura',
+      component: CreateReceipt,
     },
   ],
 });
