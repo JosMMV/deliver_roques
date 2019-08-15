@@ -14,7 +14,7 @@ export default {
       .then(({ data }) => {
         commit('setTracking', data);
       }).catch(() => {
-        commit('setTrackingError', 'An error has ocurred trying to create your account.');
+        commit('setTrackingError', 'An error has ocurred trying search tracking.');
       });
     },
   },
@@ -67,6 +67,7 @@ export default {
       formatted_date += ' a las ' + fecha[3] + ":" + fecha[4] + ampm;
       state.timestamps[state.selectedItem].timestamp = formatted_date;
       state.currentTracking = tracking;
+      console.log('Fin');
     },
     setTrackingError(state, error) {
       state.trackingError = error;

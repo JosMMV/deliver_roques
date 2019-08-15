@@ -9,20 +9,33 @@
       solo-inverted
       :value="searchingRif"
       @input="setSearchingRif"
-      @keydown.enter="searchRif"
+      @keydown.enter="searchNullReceipts"
     ></v-text-field>
     <template>
       <v-card
         max-width="500"
         class="mx-auto"
-        v-if="issetCurrentRif"
+        v-if="issetcurrentCommerce"
       >
-        <v-card-title><h2>Crear factura de:</h2></v-card-title>
-        <v-card-text><h3>* RIF empresa:</h3><span v-text="currentRif.rif"></span></v-card-text>
-        <v-card-text><h3>* Nombre empresa:</h3><span v-text="currentRif.nombre"></span></v-card-text>
-        <v-card-text><h3>* Cantidad de ordenes:</h3></v-card-text>
-        <v-card-text><h3>* Monto total:</h3></v-card-text>
-        <v-card-text><h3>* Fecha de emision:</h3></v-card-text>
+        <v-card-title>
+          <h2>Crear factura de:</h2>
+        </v-card-title>
+        <v-card-text><h3>
+          * RIF empresa:</h3><span v-text="currentCommerce.rif"></span>
+        </v-card-text>
+        <v-card-text>
+          <h4 class="display-1 font-weight-bold">Nombre comercio:</h4>
+          <span class="font-weight-thin subheading" v-text="currentCommerce.nombre"></span>
+        </v-card-text>
+        <v-card-text>
+          <h3>* Cantidad de ordenes:</h3>
+        </v-card-text>
+        <v-card-text>
+          <h3>* Monto total:</h3>
+        </v-card-text>
+        <v-card-text>
+          <h3>* Fecha de emision:</h3>
+        </v-card-text>
         <v-card-actions>
           <v-btn color="primary" @click="createReceipt">CREAR FACTURA</v-btn>
         </v-card-actions>
@@ -44,10 +57,10 @@ export default {
     ...mapState('receipt', [
       'searchingRif',
       'searchingRifError',
-      'currentRif',
+      'currentCommerce',
     ]),
     ...mapGetters('receipt', [
-      'issetCurrentRif',
+      'issetcurrentCommerce',
       'issetSearchingRifError',
     ]),
   },
@@ -55,10 +68,10 @@ export default {
     ...mapMutations('receipt', [
       'setSearchingRif',
       'setSearchingRifError',
-      'setCurrentRif',
+      'setcurrentCommerce',
     ]),
     ...mapActions('receipt', [
-      'searchRif',
+      'searchNullReceipts',
       'createReceipt',
     ]),
   },

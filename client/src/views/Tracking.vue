@@ -26,7 +26,7 @@
           >
           </span>
            <div>
-            <img v-bind:src="'/package.png'" style="width:40%;height:auto;"/>
+            <img :src="'/package.png'" style="width:40%;height:auto;"/>
           </div>
           <template>
             <v-divider></v-divider>
@@ -52,7 +52,7 @@
           >
           </span>
            <div>
-            <img v-bind:src="'/serv-1.png'" style="width:40%;height:auto;"/>
+            <img :src="'/serv-1.png'" style="width:40%;height:auto;"/>
           </div>
           <template>
             <v-divider></v-divider>
@@ -77,7 +77,7 @@
           >
           </span>
            <div>
-            <img v-bind:src="'/411712.png'" style="width:40%;height:auto;"/>
+            <img :src="'/411712.png'" style="width:40%;height:auto;"/>
           </div>
           <template>
             <v-divider></v-divider>
@@ -102,7 +102,7 @@
           >
           </span>
            <div>
-            <img v-bind:src="'/1337104.png'" style="width:40%;height:auto;"/>
+            <img :src="'/1337104.png'" style="width:40%;height:auto;"/>
           </div>
           <template>
             <v-divider></v-divider>
@@ -114,7 +114,8 @@
           </h2>
           <div>
             Tu paquete ha llegado, como se esperaba, sano y salvo. Ven lo más pronto posible
-            a buscarlo. Nuestros empleados te atenderán tan bien que seguramente querrás conocerlos más.
+            a buscarlo. Nuestros empleados te atenderán tan bien que seguramente querrás
+            conocerlos más.
           </div>
         </div>
       </v-timeline-item>

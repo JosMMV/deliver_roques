@@ -1,4 +1,3 @@
-
 /* eslint-disable */
 import HTTP from '../httpAdmin';
 
@@ -14,14 +13,14 @@ export default {
   state: {
     searchingRif: null,
     searchingRifError: null,
-    currentRif: null,
+    currentCommerce: null,
     currentDate: null,
   },
   actions: {
-    searchRif({ state, commit }) {
+    searchNullReceipts({ state, commit }) {
       return HTTP().get(`comercio/${state.searchingRif}`)
       .then(({ data }) => {
-        commit('setCurrentRif', data);
+        commit('setCurrentCommerce', data);
         commit('setCurrentDate');
         console.log(state.currentDate);
       }).catch(() => {
@@ -35,7 +34,7 @@ export default {
         fechaEmision: state.currentDate,
         fechaTope: state.currentDate.addDays(15),
         estatus: 'pendiente', 
-        comercio_rif: state.currentRif.rif,
+        comercio_rif: state.currentCommerce.rif,
       })
       .then(({ data }) => {
         console.log('SE CREO xdddddd');
@@ -46,8 +45,8 @@ export default {
     },
   },
   getters: {
-    issetCurrentRif (state) {
-      return !!state.currentRif;
+    issetcurrentCommerce (state) {
+      return !!state.currentCommerce;
     },
     issetSearchingRifError(state) {
       return !!state.searchingRifError;
@@ -57,8 +56,8 @@ export default {
     setSearchingRif(state, searchingRif) {
       state.searchingRif = searchingRif;
     },
-    setCurrentRif(state, searchingRif) {
-      state.currentRif = searchingRif;
+    setCurrentCommerce(state, searchingRif) {
+      state.currentCommerce = searchingRif;
     },
     setCurrentDate(state) {
       let current_datetime = new Date();

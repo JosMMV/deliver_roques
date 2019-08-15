@@ -4,5 +4,5 @@ import store from './store/index';
 
 export default () => axios.create({
   baseURL: store.state.baseUrlAdmin,
-  timeout: 3000,
+  timeout: 5000,
 });

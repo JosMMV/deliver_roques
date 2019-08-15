@@ -1,12 +1,12 @@
+/* eslint-disable */
 import router from '../router';
 import HTTP from '../httpUser';
-/* eslint-disable */
 
 export default {
   namespaced: true,
   state: {
     loginEmail: 'admin',
-    loginPassword: 'admin',
+    loginPassword: '1234',
     loginError: null,
     token: null,
     isAdmin: false,
@@ -22,14 +22,14 @@ export default {
         username: state.loginEmail,
         password: state.loginPassword,
       })
-        .then(({ data }) => {
-          commit('setToken', data.token);
-          commit('setAdminUser');
-          router.push('/');
-        })
-        .catch(() => {
-          commit('setLoginError', 'An error has occured trying to login.');
-        });
+      .then(({ data }) => {
+        commit('setToken', data.token);
+        commit('setAdminUser');
+        router.push('/');
+      })
+      .catch(() => {
+        commit('setLoginError', 'An error has occured trying to login.');
+      });
     },
   },
   getters: {
