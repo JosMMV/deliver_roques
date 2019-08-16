@@ -15,6 +15,9 @@
       @input="setSearching"
       @keydown.enter="searchTracking"
     ></v-text-field>
+
+    <v-alert type="error" :value="trackingError">{{trackingError}}</v-alert>
+
     <v-timeline
       v-if="isSearching"
     >
