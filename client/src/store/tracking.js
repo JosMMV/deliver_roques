@@ -74,7 +74,7 @@ export default {
           }
           if (index === 3) {
             if (!!tracking.sucursal) current_datetime = new Date(tracking.sucursal);
-            break;
+            else break;
           }
           let horas = current_datetime.getHours();
           let ampm = horas >= 12 ? 'pm' : 'am';

@@ -60,8 +60,11 @@ export default {
         fecha: new Date(),
       })
       .then(({ data }) => {
-        commit('setCurrentOrder', data);
-        commit('editTimestamps');
+        HTTPUser().get(`pedido/${state.searching}`)
+        .then(({ data }) => {
+          commit('setCurrentOrder', data);
+          commit('editTimestamps');
+        })
       }).catch(() => {
         console.log('error');
       });
@@ -105,7 +108,7 @@ export default {
         }
         if (index === 3) {
           if (!!state.currentOrder.sucursal) current_datetime = new Date(state.currentOrder.sucursal);
-          break;
+          else break;
         }
         let horas = current_datetime.getHours();
         let ampm = horas >= 12 ? 'pm' : 'am';
