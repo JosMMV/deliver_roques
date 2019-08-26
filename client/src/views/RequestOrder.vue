@@ -14,7 +14,7 @@
       </v-card-title>
       <v-data-table
         :headers="headers"
-        :items="desserts"
+        :items="orders"
         :search="search"
         :rows-per-page-text="text"
         prev-icon="mdi-menu-left"
@@ -22,16 +22,19 @@
         sort-icon="mdi-menu-down"
       >
         <template v-slot:items="props">
-          <td>{{ props.item.tracking }}</td>
-          <td class="text-xs-center">{{ props.item.client }}</td>
-          <td class="text-xs-center">{{ props.item.sucursal }}</td>
+          <td>{{ props.item.id }}</td>
+          <td class="text-xs-center">{{ props.item.cedula_cliente }}</td>
+          <td class="text-xs-center">{{ props.item.sucursal_id }}</td>
           <td class="text-xs-center">
-            <v-chip small :class="`${ props.item.status } white--text my-2 caption`">
-              {{ props.item.status }}
+            <v-chip
+              small
+              :class="`${ getStatus(props.item.empacado, props.item.sucursal) } white--text my-2 caption`"
+            >
+              {{ getStatus(props.item.empacado, props.item.sucursal) }}
             </v-chip>
           </td>
-          <td class="text-xs-center">{{ props.item.cost }}</td>
-          <td class="text-xs-center">{{ props.item.time }}</td>
+          <td class="text-xs-center">{{ props.item.costoEnvio }}</td>
+          <td class="text-xs-center">{{ props.item.tiempoEnvio }}</td>
         </template>
         <template v-slot:no-results>
           <v-alert :value="true" color="error" icon="warning">
@@ -47,6 +50,7 @@
 import {
   mapState,
   mapMutations,
+  mapActions,
 } from 'vuex';
 
 export default {
@@ -112,15 +116,31 @@ export default {
       ],
     };
   },
+  mounted() {
+    this.fetchOrders();
+  },
   computed: {
     ...mapState('commerce', [
       'idCommerce',
+      'orders',
     ]),
   },
   methods: {
     ...mapMutations('commerce', [
       'setIdCommerce',
     ]),
+    ...mapActions('commerce', [
+      'fetchOrders',
+    ]),
+    getStatus(empacado, sucursal) {
+      if (empacado) {
+        if (sucursal) {
+          return 'Recibida';
+        }
+        return 'Despachada';
+      }
+      return 'PorDespachar';
+    },
   },
 };
 </script>
