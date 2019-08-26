@@ -28,7 +28,8 @@
           <td class="text-xs-center">
             <v-chip
               small
-              :class="`${ getStatus(props.item.empacado, props.item.sucursal) } white--text my-2 caption`"
+              :class="`${ getStatus(props.item.empacado,
+              props.item.sucursal) } white--text my-2 caption`"
             >
               {{ getStatus(props.item.empacado, props.item.sucursal) }}
             </v-chip>

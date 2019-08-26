@@ -86,7 +86,7 @@ import router from '../router';
 
 export default {
   mounted() {
-    if (!this.isLoggedIn && router.currentRoute.path === '/') {
+    if (!this.isLoggedIn) {
       return router.push('/tracking');
     }
     return this;
