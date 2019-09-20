@@ -14,12 +14,6 @@ class UserSchema extends Schema {
   }
 
   down () {
-    this.drop('ordenes_distribucion')
-    this.drop('productos')
-    this.drop('sucursales')
-    this.drop('clientes')
-    this.drop('facturas')
-    this.drop('comercios')
     this.drop('users')
   }
 }

@@ -8,9 +8,9 @@ const ServicioValidacion = use('App/Services/ServicioValidacion');
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 
 /**
- * Resourceful controller for interacting with sucursals
+ * Resourceful controller for interacting with subsidiaries
  */
-class SucursalController {
+class SubsidiaryController {
   async index () {
     return await Database.select('*').from('sucursales');
   }
@@ -77,4 +77,4 @@ class SucursalController {
   }
 }
 
-module.exports = SucursalController
+module.exports = SubsidiaryController

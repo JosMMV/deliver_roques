@@ -1,6 +1,6 @@
 'use strict'
 
-const Comercio = use('App/Models/Comercio');
+const Commerce = use('App/Models/Commerce');
 const ServicioValidacion = use('App/Services/ServicioValidacion');
 const User = use('App/Models/User');
 
@@ -9,11 +9,11 @@ const User = use('App/Models/User');
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 
 /**
- * Resourceful controller for interacting with comercios
+ * Resourceful controller for interacting with commerce
  */
-class ComercioController {
+class CommerceController {
   async index () {
-    return await Comercio.all();
+    return await Commerce.all();
   }
 
   /**
@@ -26,7 +26,7 @@ class ComercioController {
     const { rif, nombre, correo } = request.all();
     const usuario = await User.findBy('username', correo);
     ServicioValidacion.verificarUsuario(usuario);
-    const comercio = await Comercio.create({
+    const comercio = await Commerce.create({
       rif,
       nombre,
       correo,
@@ -41,7 +41,7 @@ class ComercioController {
    * @param {object} ctx
    */
   async show ({ params }) {
-    const comercio = await Comercio.findBy('rif', params.rif);
+    const comercio = await Commerce.findBy('rif', params.rif);
     ServicioValidacion.verificarComercio(comercio);
     return comercio;
   }
@@ -54,7 +54,7 @@ class ComercioController {
    * @param {Request} ctx.request
    */
   async update ({ params, request }) {
-    const comercio = await Comercio.query().where('rif', params.rif).update(request.only('nombre')); //0 si hubo error y 1 si se actualizó exitosamente
+    const comercio = await Commerce.query().where('rif', params.rif).update(request.only('nombre')); //0 si hubo error y 1 si se actualizó exitosamente
     ServicioValidacion.verificarComercio(comercio);
     return comercio;
   }
@@ -68,10 +68,10 @@ class ComercioController {
    * @param {Response} ctx.response
    */
   async destroy ({ params }) {
-    const comercio = await Comercio.query().where('rif', params.rif).delete(); //0 si hubo error y 1 si se eliminó exitosamente
+    const comercio = await Commerce.query().where('rif', params.rif).delete(); //0 si hubo error y 1 si se eliminó exitosamente
     ServicioValidacion.verificarComercio(comercio);
     return comercio;
   }
 }
 
-module.exports = ComercioController
+module.exports = CommerceController

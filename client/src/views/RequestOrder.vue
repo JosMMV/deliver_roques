@@ -35,7 +35,7 @@
             </v-chip>
           </td>
           <td class="text-xs-center">{{ props.item.costoEnvio }}</td>
-          <td class="text-xs-center">{{ props.item.tiempoEnvio }}</td>
+          <td class="text-xs-center">{{ getDate(props.item.tiempoEnvio) }}</td>
         </template>
         <template v-slot:no-results>
           <v-alert :value="true" color="error" icon="warning">
@@ -48,6 +48,7 @@
 </template>
 
 <script>
+/* eslint-disable */
 import {
   mapState,
   mapMutations,
@@ -55,65 +56,18 @@ import {
 } from 'vuex';
 
 export default {
+  name: 'RequestOrder',
   data() {
     return {
       search: '',
       text: 'Filas a mostrar',
       headers: [
-        {
-          text: 'Tracking',
-          align: 'center',
-          value: 'tracking',
-        },
+        { text: 'Tracking', value: 'tracking', align: 'center' },
         { text: 'Cliente', value: 'client', align: 'center' },
         { text: 'Sucursal', value: 'sucursal', align: 'center' },
         { text: 'Estatus', value: 'status', align: 'center' },
         { text: 'Costo envío', value: 'cost', align: 'center' },
-        { text: 'Tiempo envío', value: 'time', align: 'center' },
-      ],
-
-
-      desserts: [
-        {
-          tracking: '15454',
-          client: 'José Medina',
-          sucursal: 'Bolívar',
-          status: 'Recibida',
-          cost: '46,6 Bs',
-          time: '5 días',
-        },
-        {
-          tracking: '24345',
-          client: 'José Medina',
-          sucursal: 'Vargas',
-          status: 'Recibida',
-          cost: '50,0 Bs',
-          time: '1 día',
-        },
-        {
-          tracking: '33453',
-          client: 'José Medina',
-          sucursal: 'Nueva Esparta',
-          status: 'Despachada',
-          cost: '29,4 Bs',
-          time: '5 días',
-        },
-        {
-          tracking: '45433',
-          client: 'Johanna Rojas',
-          sucursal: 'Sucre',
-          status: 'PorDespachar',
-          cost: '70,0 Bs',
-          time: '3 días',
-        },
-        {
-          tracking: '52345',
-          client: 'Johanna Rojas',
-          sucursal: 'Zulia',
-          status: 'PorDespachar',
-          cost: '10.7 Bs',
-          time: '6 días',
-        },
+        { text: 'Fecha de entrega*', value: 'time', align: 'center' },
       ],
     };
   },
@@ -141,6 +95,13 @@ export default {
         return 'Despachada';
       }
       return 'PorDespachar';
+    },
+    getDate(date) {
+      let d = new Date(date);
+      let fecha = [d.getDate().toString(), (d.getMonth() + 1).toString(), d.getFullYear().toString()];
+      fecha = fecha.map((num) => { return num.length === 1 ? '0' + num : num; });
+      const formattedDate = fecha[0] + '/' + fecha[1] + '/' + fecha[2];
+      return formattedDate;
     },
   },
 };

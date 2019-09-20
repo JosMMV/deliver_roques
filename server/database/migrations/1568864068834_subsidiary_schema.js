@@ -3,9 +3,9 @@
 /** @type {import('@adonisjs/lucid/src/Schema')} */
 const Schema = use('Schema')
 
-class SucursalSchema extends Schema {
+class SubsidiarySchema extends Schema {
   up () {
-    this.create('sucursales', (table) => {
+    this.create('subsidiaries', (table) => {
       table.increments()
       table.string('nombre', 254).notNullable().unique()
       table.string('estado', 254).notNullable()
@@ -15,6 +15,10 @@ class SucursalSchema extends Schema {
       table.timestamps()
     })
   }
+
+  down () {
+    this.drop('subsidiaries')
+  }
 }
 
-module.exports = SucursalSchema
+module.exports = SubsidiarySchema

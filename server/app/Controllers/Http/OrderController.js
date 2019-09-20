@@ -8,9 +8,9 @@ const ServicioValidacion = use('App/Services/ServicioValidacion');
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 
 /**
- * Resourceful controller for interacting with ordendistribucions
+ * Resourceful controller for interacting with orders
  */
-class OrdenDistribucionController {
+class OrderController {
   /**
    * Show a list of all ordendistribucions.
    * GET ordendistribucions
@@ -205,4 +205,4 @@ class OrdenDistribucionController {
   }
 }
 
-module.exports = OrdenDistribucionController
+module.exports = OrderController

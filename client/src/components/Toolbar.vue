@@ -65,7 +65,7 @@
     </v-navigation-drawer>
     <v-toolbar app fixed clipped-left>
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-      <v-toolbar-title>Distribuidor 2</v-toolbar-title>
+      <v-toolbar-title class="font-weight-thin display-1">Deliver Roques</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-title v-if="!isLoggedIn">¿Eres comercio?:</v-toolbar-title>
       <v-toolbar-items>

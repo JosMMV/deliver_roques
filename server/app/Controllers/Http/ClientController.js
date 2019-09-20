@@ -5,12 +5,12 @@
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 
 /**
- * Resourceful controller for interacting with clientes
+ * Resourceful controller for interacting with clients
  */
-class ClienteController {
+class ClientController {
   /**
-   * Show a list of all clientes.
-   * GET clientes
+   * Show a list of all clients.
+   * GET clients
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -21,8 +21,8 @@ class ClienteController {
   }
 
   /**
-   * Render a form to be used for creating a new cliente.
-   * GET clientes/create
+   * Render a form to be used for creating a new client.
+   * GET clients/create
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -33,8 +33,8 @@ class ClienteController {
   }
 
   /**
-   * Create/save a new cliente.
-   * POST clientes
+   * Create/save a new client.
+   * POST clients
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -44,8 +44,8 @@ class ClienteController {
   }
 
   /**
-   * Display a single cliente.
-   * GET clientes/:id
+   * Display a single client.
+   * GET clients/:id
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -56,8 +56,8 @@ class ClienteController {
   }
 
   /**
-   * Render a form to update an existing cliente.
-   * GET clientes/:id/edit
+   * Render a form to update an existing client.
+   * GET clients/:id/edit
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -68,8 +68,8 @@ class ClienteController {
   }
 
   /**
-   * Update cliente details.
-   * PUT or PATCH clientes/:id
+   * Update client details.
+   * PUT or PATCH clients/:id
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -79,8 +79,8 @@ class ClienteController {
   }
 
   /**
-   * Delete a cliente with id.
-   * DELETE clientes/:id
+   * Delete a client with id.
+   * DELETE clients/:id
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -90,4 +90,4 @@ class ClienteController {
   }
 }
 
-module.exports = ClienteController
+module.exports = ClientController

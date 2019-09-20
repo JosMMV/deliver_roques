@@ -7,7 +7,6 @@ Date.prototype.addDays = function(days) {
   return date;
 }
 
-
 export default {
   namespaced: true,
   state: {
