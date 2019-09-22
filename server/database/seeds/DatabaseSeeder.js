@@ -25,8 +25,6 @@ class DatabaseSeeder {
 
     const orderArray = []
 
-    const ordersByCommerce = {}
-
     // create 50 orders
     for (let i = 0; i < 50; i++) {
       let subsidiary = Math.floor(Math.random() * subsidiaryArray.length)
