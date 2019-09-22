@@ -7,9 +7,9 @@ class ProductSchema extends Schema {
   up () {
     this.create('products', (table) => {
       table.increments()
-      table.string('nombre',255).notNullable()
-      table.float('precio',10,2).notNullable()
-      table.float('volumen',10,2).notNullable()
+      table.string('name',255).notNullable()
+      table.float('price',10,2).notNullable()
+      table.float('bulk',10,2).notNullable()
       table.timestamps()
     })
   }

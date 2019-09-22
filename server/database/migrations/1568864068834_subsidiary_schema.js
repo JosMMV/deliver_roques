@@ -7,11 +7,11 @@ class SubsidiarySchema extends Schema {
   up () {
     this.create('subsidiaries', (table) => {
       table.increments()
-      table.string('nombre', 254).notNullable().unique()
-      table.string('estado', 254).notNullable()
-      table.string('ciudad', 254).notNullable()
-      table.string('parroquia', 254).notNullable()
-      table.integer('distanciaDesdeCaracas').notNullable()
+      table.string('name', 100).notNullable().unique()
+      table.string('state', 100).notNullable()
+      table.string('city', 100).notNullable()
+      table.string('parish', 100).notNullable()
+      table.integer('distanceFromCaracas').notNullable()
       table.timestamps()
     })
   }

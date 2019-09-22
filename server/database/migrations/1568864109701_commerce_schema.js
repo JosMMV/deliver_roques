@@ -8,8 +8,8 @@ class CommerceSchema extends Schema {
     this.create('commerce', (table) => {
       table.increments()
       table.integer('user_id').unsigned().references('id').inTable('users').onDelete('CASCADE')
-      table.string('rif', 50).notNullable().unique()
-      table.string('nombre', 254).notNullable()
+      table.string('tir', 50).notNullable().unique()
+      table.string('name', 254).notNullable()
     })
   }
 
