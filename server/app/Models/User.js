@@ -29,8 +29,8 @@ class User extends Model {
       let commerce = new Commerce()
       commerce.fill({
         user_id: userInstance.id,
-        tir: '',
-        name: ''
+        tir: (Math.floor(Math.random() * 9999999) + 1) + '',
+        name: 'My name is: ' + (Math.floor(Math.random() * 99999) + 1)
       })
       userInstance.commerce().save(commerce);
     })
