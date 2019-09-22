@@ -20,6 +20,8 @@ class DatabaseSeeder {
     const productArray = await Factory.model('App/Models/Product').createMany(15)
 
     const subsidiaryArray = await Factory.model('App/Models/Subsidiary').createMany(24)
+
+    const clientArray = await Factory.model('App/Models/Client').createMany(12)
   }
 }
 

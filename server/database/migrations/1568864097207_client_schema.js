@@ -8,9 +8,9 @@ class ClientSchema extends Schema {
     this.create('clients', (table) => {
       table.increments()
       table.integer('cedula').notNullable().unique()
-      table.string('nombre',255)
-      table.string('apellido',255)
-      table.string('telefono',255)
+      table.string('nombre',100)
+      table.string('apellido',100)
+      table.string('telefono',50)
     })
   }
 

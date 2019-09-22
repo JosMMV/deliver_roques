@@ -50,3 +50,12 @@ Factory.blueprint('App/Models/Subsidiary', faker => {
     distanciaDesdeCaracas: faker.natural({min: 10, max: 800})
   } 
 })
+
+Factory.blueprint('App/Models/Client', faker => {
+  return {
+    cedula: faker.natural({min: 900000, max: 30000000}),
+    nombre: faker.first(),
+    apellido: faker.last(),
+    telefono: faker.phone()
+  }
+})
