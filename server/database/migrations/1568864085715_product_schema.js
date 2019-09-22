@@ -10,7 +10,6 @@ class ProductSchema extends Schema {
       table.string('name',255).notNullable()
       table.float('price',10,2).notNullable()
       table.float('bulk',10,2).notNullable()
-      table.timestamps()
     })
   }
 
