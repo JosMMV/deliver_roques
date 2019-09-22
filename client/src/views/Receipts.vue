@@ -4,6 +4,7 @@
       <v-card-title>
         Facturas
         <v-spacer></v-spacer>
+        <v-spacer></v-spacer>
         <v-text-field
           v-model="search"
           append-icon="search"
@@ -32,9 +33,10 @@
               {{ props.item.status }}
             </v-chip>
           </td>
-           <td class="text-xs-right">
-              <v-icon>mdi-file-document-box-search-outline</v-icon>
-           </td>
+          <td class="text-xs-right">
+            <v-icon>mdi-file-document-box-search-outline</v-icon>
+          </td>
+          <td class="text-xs-right" v-if="isAdminUser">{{ props.item.comercio }}</td>
         </template>
         <template v-slot:no-results>
           <v-alert :value="true" color="error" icon="warning">
@@ -50,6 +52,7 @@
 import {
   mapState,
   mapMutations,
+  mapGetters,
 } from 'vuex';
 
 export default {
@@ -69,6 +72,7 @@ export default {
         { text: 'Fecha de cancelación', value: 'dateCancel', align: 'center' },
         { text: 'Estatus', value: 'status', align: 'center' },
         { text: 'Ver factura', value: 'bill', align: 'center' },
+        { text: 'Comercio', value: 'comercio', align: 'center' },
       ],
       desserts: [
         {
@@ -78,6 +82,7 @@ export default {
           dateMaximum: '06/06/19',
           dateCancel: '06/06/19',
           status: 'Pendiente',
+          comercio: 'Comercio 1',
         },
         {
           id: '2',
@@ -86,6 +91,7 @@ export default {
           dateMaximum: '06/06/19',
           dateCancel: '06/06/19',
           status: 'Pendiente',
+          comercio: 'Comercio 1',
         },
         {
           id: '3',
@@ -94,6 +100,7 @@ export default {
           dateMaximum: '06/06/19',
           dateCancel: '06/06/19',
           status: 'Pendiente',
+          comercio: 'Comercio 1',
         },
         {
           id: '4',
@@ -102,6 +109,7 @@ export default {
           dateMaximum: '06/06/19',
           dateCancel: '06/06/19',
           status: 'Pagado',
+          comercio: 'Comercio 1',
         },
         {
           id: '5',
@@ -110,6 +118,7 @@ export default {
           dateMaximum: '06/06/19',
           dateCancel: '06/06/19',
           status: 'Pagado',
+          comercio: 'Comercio 2',
         },
         {
           id: '6',
@@ -118,6 +127,7 @@ export default {
           dateMaximum: '06/06/19',
           dateCancel: '06/06/19',
           status: 'Pagado',
+          comercio: 'Comercio 2',
         },
         {
           id: '7',
@@ -126,6 +136,7 @@ export default {
           dateMaximum: '06/06/19',
           dateCancel: '06/06/19',
           status: 'Pagado',
+          comercio: 'Comercio 2',
         },
         {
           id: '8',
@@ -134,6 +145,7 @@ export default {
           dateMaximum: '06/06/19',
           dateCancel: '06/06/19',
           status: 'Pagado',
+          comercio: 'Comercio 1',
         },
         {
           id: '9',
@@ -142,6 +154,7 @@ export default {
           dateMaximum: '06/06/19',
           dateCancel: '06/06/19',
           status: 'Pagado',
+          comercio: 'Comercio 2',
         },
         {
           id: '10',
@@ -150,6 +163,7 @@ export default {
           dateMaximum: '06/06/19',
           dateCancel: '06/06/19',
           status: 'Pagado',
+          comercio: 'Comercio 2',
         },
       ],
     };
@@ -157,6 +171,10 @@ export default {
   computed: {
     ...mapState('commerce', [
       'idCommerce',
+    ]),
+    ...mapGetters('authentication', [
+      'isLoggedIn',
+      'isAdminUser',
     ]),
   },
   methods: {

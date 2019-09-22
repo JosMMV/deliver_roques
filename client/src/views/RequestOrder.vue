@@ -14,7 +14,7 @@
       </v-card-title>
       <v-data-table
         :headers="headers"
-        :items="desserts"
+        :items="orders"
         :search="search"
         :rows-per-page-text="text"
         prev-icon="mdi-menu-left"
@@ -22,16 +22,20 @@
         sort-icon="mdi-menu-down"
       >
         <template v-slot:items="props">
-          <td>{{ props.item.tracking }}</td>
-          <td class="text-xs-center">{{ props.item.client }}</td>
-          <td class="text-xs-center">{{ props.item.sucursal }}</td>
+          <td>{{ props.item.id }}</td>
+          <td class="text-xs-center">{{ props.item.cedula_cliente }}</td>
+          <td class="text-xs-center">{{ props.item.sucursal_id }}</td>
           <td class="text-xs-center">
-            <v-chip small :class="`${ props.item.status } white--text my-2 caption`">
-              {{ props.item.status }}
+            <v-chip
+              small
+              :class="`${ getStatus(props.item.empacado,
+              props.item.sucursal) } white--text my-2 caption`"
+            >
+              {{ getStatus(props.item.empacado, props.item.sucursal) }}
             </v-chip>
           </td>
-          <td class="text-xs-center">{{ props.item.cost }}</td>
-          <td class="text-xs-center">{{ props.item.time }}</td>
+          <td class="text-xs-center">{{ props.item.costoEnvio }}</td>
+          <td class="text-xs-center">{{ getDate(props.item.tiempoEnvio) }}</td>
         </template>
         <template v-slot:no-results>
           <v-alert :value="true" color="error" icon="warning">
@@ -44,83 +48,61 @@
 </template>
 
 <script>
+/* eslint-disable */
 import {
   mapState,
   mapMutations,
+  mapActions,
 } from 'vuex';
 
 export default {
+  name: 'RequestOrder',
   data() {
     return {
       search: '',
       text: 'Filas a mostrar',
       headers: [
-        {
-          text: 'Tracking',
-          align: 'center',
-          value: 'tracking',
-        },
+        { text: 'Tracking', value: 'tracking', align: 'center' },
         { text: 'Cliente', value: 'client', align: 'center' },
         { text: 'Sucursal', value: 'sucursal', align: 'center' },
         { text: 'Estatus', value: 'status', align: 'center' },
         { text: 'Costo envío', value: 'cost', align: 'center' },
-        { text: 'Tiempo envío', value: 'time', align: 'center' },
-      ],
-
-
-      desserts: [
-        {
-          tracking: '15454',
-          client: 'José Medina',
-          sucursal: 'Bolívar',
-          status: 'Recibida',
-          cost: '46,6 Bs',
-          time: '5 días',
-        },
-        {
-          tracking: '24345',
-          client: 'José Medina',
-          sucursal: 'Vargas',
-          status: 'Recibida',
-          cost: '50,0 Bs',
-          time: '1 día',
-        },
-        {
-          tracking: '33453',
-          client: 'José Medina',
-          sucursal: 'Nueva Esparta',
-          status: 'Despachada',
-          cost: '29,4 Bs',
-          time: '5 días',
-        },
-        {
-          tracking: '45433',
-          client: 'Johanna Rojas',
-          sucursal: 'Sucre',
-          status: 'PorDespachar',
-          cost: '70,0 Bs',
-          time: '3 días',
-        },
-        {
-          tracking: '52345',
-          client: 'Johanna Rojas',
-          sucursal: 'Zulia',
-          status: 'PorDespachar',
-          cost: '10.7 Bs',
-          time: '6 días',
-        },
+        { text: 'Fecha de entrega*', value: 'time', align: 'center' },
       ],
     };
+  },
+  mounted() {
+    this.fetchOrders();
   },
   computed: {
     ...mapState('commerce', [
       'idCommerce',
+      'orders',
     ]),
   },
   methods: {
     ...mapMutations('commerce', [
       'setIdCommerce',
     ]),
+    ...mapActions('commerce', [
+      'fetchOrders',
+    ]),
+    getStatus(empacado, sucursal) {
+      if (empacado) {
+        if (sucursal) {
+          return 'Recibida';
+        }
+        return 'Despachada';
+      }
+      return 'PorDespachar';
+    },
+    getDate(date) {
+      let d = new Date(date);
+      let fecha = [d.getDate().toString(), (d.getMonth() + 1).toString(), d.getFullYear().toString()];
+      fecha = fecha.map((num) => { return num.length === 1 ? '0' + num : num; });
+      const formattedDate = fecha[0] + '/' + fecha[1] + '/' + fecha[2];
+      return formattedDate;
+    },
   },
 };
 </script>

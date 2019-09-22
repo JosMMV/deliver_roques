@@ -1,11 +1,12 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Dashboard from './views/Dashboard.vue';
+import Receipts from './views/Receipts.vue';
 import LogIn from './views/LogIn.vue';
 import Tracking from './views/Tracking.vue';
-import GestionDePedido from './views/GestionDePedido.vue';
+import ManageOrder from './views/ManageOrder.vue';
 import Reports from './views/Reports.vue';
 import RequestOrder from './views/RequestOrder.vue';
+import CreateReceipt from './views/CreateReceipt.vue';
 
 Vue.use(Router);
 
@@ -15,8 +16,8 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'dashboard',
-      component: Dashboard,
+      name: 'receipts',
+      component: Receipts,
     },
     {
       path: '/iniciar-sesion',
@@ -31,7 +32,7 @@ export default new Router({
     {
       path: '/gestion-pedido',
       name: 'gestion-pedido',
-      component: GestionDePedido,
+      component: ManageOrder,
     },
     {
       path: '/reportes',
@@ -42,6 +43,11 @@ export default new Router({
       path: '/orden',
       name: 'orden',
       component: RequestOrder,
+    },
+    {
+      path: '/crear-factura',
+      name: 'crear-factura',
+      component: CreateReceipt,
     },
   ],
 });

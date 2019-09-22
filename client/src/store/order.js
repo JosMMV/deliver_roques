@@ -5,7 +5,6 @@ import HTTPUser from '../httpUser';
 export default {
   namespaced: true,
   state: {
-    orderNumber: null,
     currentOrder: null,
     searching: null,
     selectedItem: null,
@@ -27,11 +26,12 @@ export default {
   },
   actions: {
     searchOrder({ state, commit }, error) {
+      commit('setCurrentOrder', null);
       return HTTPUser().get(`pedido/${state.searching}`)
       .then(({ data }) => {
         commit('setError', false);
         commit('setCurrentOrder', data);
-        commit('setOrderNumber');
+        commit('editTimestamps');
       }).catch(() => {
         commit('setError', true);
       });
@@ -60,7 +60,11 @@ export default {
         fecha: new Date(),
       })
       .then(({ data }) => {
-        console.log('listo');
+        HTTPUser().get(`pedido/${state.searching}`)
+        .then(({ data }) => {
+          commit('setCurrentOrder', data);
+          commit('editTimestamps');
+        })
       }).catch(() => {
         console.log('error');
       });
@@ -68,7 +72,7 @@ export default {
   },
   getters: {
     isSearching(state) {
-      return !!state.orderNumber;
+      return !!state.currentOrder;
     },
     thereIsError(state) {
       return !!state.error;
@@ -84,23 +88,41 @@ export default {
     setCurrentOrder(state, order) {
       state.currentOrder = order;
     },
-    setOrderNumber(state) {
-      state.orderNumber = state.currentOrder.id;
-    },
     setSelectedItem(state, i) {
       state.selectedItem = i;
     },
-    editTimestamp(state) {
-      let current_datetime = new Date();
-      let horas = current_datetime.getHours();
-      let ampm = horas >= 12 ? 'pm' : 'am';
-      horas = horas % 12;
-      horas = horas ? horas : 12;
-      let fecha = [current_datetime.getDate().toString(), current_datetime.getMonth().toString(), current_datetime.getFullYear().toString(), horas.toString(), current_datetime.getMinutes().toString()]
-      fecha = fecha.map(num => num.length === 1 ? '0' + num : num);
-      let formatted_date = fecha[0] + "/" + fecha[1] + "/" + fecha[2];
-      formatted_date += ' a las ' + fecha[3] + ":" + fecha[4] + ampm;
-      state.timestamps[state.selectedItem].timestamp = formatted_date;
+    editTimestamps(state) {
+      let current_datetime;
+      for (let index = 0; index < 4; index++) {
+        if (index === 0) {
+          if (!!state.currentOrder.empacado) current_datetime = new Date(state.currentOrder.empacado);
+          else break;
+        }
+        if (index === 1) {
+          if (!!state.currentOrder.cargado) current_datetime = new Date(state.currentOrder.cargado);
+          else break;
+        }
+        if (index === 2) {
+          if (!!state.currentOrder.camino) current_datetime = new Date(state.currentOrder.camino);
+          else break;
+        }
+        if (index === 3) {
+          if (!!state.currentOrder.sucursal) current_datetime = new Date(state.currentOrder.sucursal);
+          else break;
+        }
+        let horas = current_datetime.getHours();
+        let ampm = horas >= 12 ? 'pm' : 'am';
+        horas = horas % 12;
+        horas = horas ? horas : 12;
+        let fecha = [current_datetime.getDate().toString(), (current_datetime.getMonth() + 1).toString(), current_datetime.getFullYear().toString(), horas.toString(), current_datetime.getMinutes().toString()]
+        fecha = fecha.map(num => num.length === 1 ? '0' + num : num);
+        let formatted_date = fecha[0] + "/" + fecha[1] + "/" + fecha[2];
+        formatted_date += ' a las ' + fecha[3] + ":" + fecha[4] + ampm;
+        if (index === 0) state.timestamps[0].timestamp = formatted_date;
+        if (index === 1) state.timestamps[1].timestamp = formatted_date;
+        if (index === 2) state.timestamps[2].timestamp = formatted_date;
+        if (index === 3) state.timestamps[3].timestamp = formatted_date;
+      }
     },
   },
 };

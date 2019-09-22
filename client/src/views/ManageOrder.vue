@@ -8,7 +8,7 @@
       solo-inverted
       :value="searching"
       @input="setSearching"
-      @keydown.enter="searchOrder(!$v.searching.minLength || !$v.searching.numeric)"
+      @keydown.enter="searchOrder(!$v.search.minLength || !$v.search.numeric)"
     ></v-text-field>
     <v-snackbar
       v-if="thereIsError"
@@ -16,7 +16,7 @@
       :color="'error'"
       :timeout="0"
     >
-      El número de orden debe tener al menos {{$v.searching.$params.minLength.min}}
+      El número de orden debe tener al menos {{$v.search.$params.minLength.min}}
       caracteres numéricos.
     </v-snackbar>
     <v-layout align-center justify-center class="mb-4">
@@ -24,7 +24,7 @@
         class="font-weight-thin display-1"
         v-if="isSearching"
       >
-        Editando pedido número {{ orderNumber }}
+        Editando pedido número {{ currentOrder.id }}
       </h2>
     </v-layout>
     <v-timeline
@@ -113,9 +113,9 @@ export default {
     snackbar: true,
   }),
   validations: {
-    searching: {
+    search: {
       required,
-      minLength: minLength(4),
+      minLength: minLength(8),
       numeric,
     },
   },
@@ -125,9 +125,9 @@ export default {
   computed: {
     ...mapState('order', [
       'searching',
-      'orderNumber',
       'timestamps',
       'selectedItem',
+      'currentOrder',
       'error',
     ]),
     ...mapGetters('order', [

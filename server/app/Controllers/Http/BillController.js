@@ -1,6 +1,6 @@
 'use strict'
 
-const Factura = use('App/Models/Factura');
+const Bill = use('App/Models/Bill');
 const ServicioValidacion = use('App/Services/ServicioValidacion');
 
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
@@ -10,7 +10,7 @@ const ServicioValidacion = use('App/Services/ServicioValidacion');
 /**
  * Resourceful controller for interacting with facturas
  */
-class FacturaController {
+class BillController {
   /**
    * Show a list of all facturas.
    * GET facturas
@@ -21,7 +21,7 @@ class FacturaController {
    * @param {View} ctx.view
    */
   async index () {
-    return await Factura.all();
+    return await Bill.all();
   }
 
   /**
@@ -32,7 +32,7 @@ class FacturaController {
    */
   async create ({ request }) {
     const { monto, fechaEmision, fechaTope, estatus, comercio_rif } = request.all();
-    const factura = await Factura.create({
+    const factura = await Bill.create({
       monto,
       fechaEmision,
       fechaTope,
@@ -49,7 +49,7 @@ class FacturaController {
    * @param {object} ctx
    */
   async show ({ params }) {
-    const factura = await Factura.find(params.id);
+    const factura = await Bill.find(params.id);
     ServicioValidacion.verificarFactura(factura);
     return factura;
   }
@@ -62,7 +62,7 @@ class FacturaController {
    * @param {Request} ctx.request
    */
   async update ({ params, request }) {
-    const factura = await Factura.find(params.id);
+    const factura = await Bill.find(params.id);
     ServicioValidacion.verificarFactura(factura);
     //factura.merge(request.only('precio'));
     await factura.save();
@@ -76,11 +76,11 @@ class FacturaController {
    * @param {object} ctx
    */
   async destroy ({ params }) {
-    const factura = await Factura.find(params.id);
+    const factura = await Bill.find(params.id);
     ServicioValidacion.verificarFactura(factura);
     await factura.delete();
     return factura;
   }
 }
 
-module.exports = FacturaController
+module.exports = BillController
