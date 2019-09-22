@@ -31,11 +31,11 @@ class ProductController {
    * @param {Request} ctx.request
    */
   async create ({ request }) {
-    const { nombre, precio, volumen } = request.all();
+    const { name, price, bulk } = request.all();
     const product = await Product.create({
-      nombre,
-      precio,
-      volumen,
+      name,
+      price,
+      bulk,
     });
     return product;
   }
@@ -63,7 +63,9 @@ class ProductController {
   async update ({ params, request }) {
     const product = await Product.find(params.id);
     ServicioValidacion.verificarProducto(product);
-    product.merge(request.only('precio'));
+    product.merge({
+      price: request.only('price').price,
+    });
     await product.save();
     return product;
   }
