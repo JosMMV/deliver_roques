@@ -15,6 +15,10 @@ class Commerce extends Model {
   orders () {
     return this.hasMany('App/Models/Order')
   }
+
+  bills () {
+    return this.hasMany('App/Models/Bill')
+  }
 }
 
 module.exports = Commerce

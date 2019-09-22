@@ -7,6 +7,10 @@ class Bill extends Model {
   orders () {
     return this.hasMany('App/Models/Order')
   }
+
+  commerce () {
+    return this.belongsTo('App/Models/Commerce')
+  }
 }
 
 module.exports = Bill
