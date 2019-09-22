@@ -6,6 +6,8 @@ const Model = use('Model')
 /** @type {import('@adonisjs/framework/src/Hash')} */
 const Hash = use('Hash')
 
+const Commerce = use('App/Models/Commerce')
+
 class User extends Model {
   static boot () {
     super.boot()
@@ -14,12 +16,21 @@ class User extends Model {
      * A hook to hash the user password before saving
      * it to the database.
      */
-    this.addHook('beforeSave', async (userInstance) => {
+    this.addHook('beforeSave', async userInstance => {
       if (userInstance.dirty.password) {
         userInstance.password = await Hash.make(userInstance.password)
       }
     })
+
+    /*
+      * Create new commerce after create an user
+    */
+    /* this.addHook('afterCreate', async userInstance => {
+      let commerce = new Commerce()
+      userInstance.commerce().save(commerce);
+    })*/
   }
+  
 
   /**
    * A relationship on tokens is required for auth to

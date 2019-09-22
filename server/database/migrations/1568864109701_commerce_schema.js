@@ -7,7 +7,7 @@ class CommerceSchema extends Schema {
   up () {
     this.create('commerce', (table) => {
       table.increments()
-      table.string('correo',80).references('username').inTable('users').onDelete('CASCADE')
+      table.integer('user_id').unsigned().references('id').inTable('users').onDelete('CASCADE')
       table.string('rif', 50).notNullable().unique()
       table.string('nombre', 254).notNullable()
     })
