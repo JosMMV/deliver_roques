@@ -1,6 +1,6 @@
 'use strict'
 
-const Database = use('Database')
+const Subsidiary = use('App/Models/Subsidiary')
 const ServicioValidacion = use('App/Services/ServicioValidacion');
 
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
@@ -12,19 +12,19 @@ const ServicioValidacion = use('App/Services/ServicioValidacion');
  */
 class SubsidiaryController {
   async index () {
-    return await Database.select('*').from('sucursales');
+    return await Subsidiary.all();
   }
 
   /**
-   * Render a form to be used for creating a new sucursal.
-   * GET sucursals/create
+   * Render a form to be used for creating a new subsidiary.
+   * GET subsidiaries/create
    *
    * @param {Request} ctx.request
    */
   async create ({ request }) {
     const { nombre, estado, ciudad, parroquia, distanciaDesdeCaracas } = request.all();
     const d = new Date();
-    const sucursal = await Database.insert({
+    const subsidiary = await Database.insert({
       nombre,
       estado,
       ciudad,
@@ -33,47 +33,50 @@ class SubsidiaryController {
       created_at: d,
       updated_at: d
     }).into('sucursales');
-    return sucursal;
+    return subsidiary;
   }
 
   /**
-   * Display a single sucursal.
-   * GET sucursals/:id
+   * Display a single subsidiary.
+   * GET subsidiaries/:id
    *
    * @param {object} ctx
    */
   async show ({ params }) {
-    const sucursal = await Database.from('sucursales').where('id', params.id);
-    ServicioValidacion.verificarSucursal(sucursal);
-    return sucursal[0];
+    const subsidiary = await Subsidiary.find(params.id);
+    ServicioValidacion.verificarSucursal(subsidiary);
+    return subsidiary;
   }
 
   /**
-   * Update sucursal details.
-   * PUT or PATCH sucursals/:id
+   * Update subsidiary details.
+   * PUT or PATCH subsidiaries/:id
    *
    * @param {object} ctx
    * @param {Request} ctx.request
    */
   async update ({ params, request }) {
-    const sucursal = await Database.table('sucursales').where('id', params.id).update({
-      nombre: request.only('nombre').nombre,
+    const subsidiary = await Subsidiary.find(params.id);
+    ServicioValidacion.verificarSucursal(subsidiary);
+    subsidiary.merge({
+      name: request.only('name').name,
       updated_at: new Date()
     });
-    ServicioValidacion.verificarSucursal(sucursal);
-    return sucursal;
+    await subsidiary.save();
+    return subsidiary;
   }
 
   /**
-   * Delete a sucursal with id.
-   * DELETE sucursals/:id
+   * Delete a subsidiary with id.
+   * DELETE subsidiaries/:id
    *
    * @param {object} ctx
    */
   async destroy ({ params }) {
-    const sucursal = await Database.table('sucursales').where('id', params.id).delete();
-    ServicioValidacion.verificarSucursal(sucursal);
-    return sucursal;
+    const subsidiary = await Subsidiary.find(params.id);
+    ServicioValidacion.verificarSucursal(subsidiary);
+    await subsidiary.delete();
+    return subsidiary;
   }
 }
 

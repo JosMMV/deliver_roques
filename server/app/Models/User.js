@@ -25,12 +25,16 @@ class User extends Model {
     /*
       * Create new commerce after create an user
     */
-    /* this.addHook('afterCreate', async userInstance => {
+    this.addHook('afterCreate', async userInstance => {
       let commerce = new Commerce()
+      commerce.fill({
+        user_id: userInstance.id,
+        tir: '',
+        name: ''
+      })
       userInstance.commerce().save(commerce);
-    })*/
+    })
   }
-  
 
   /**
    * A relationship on tokens is required for auth to
