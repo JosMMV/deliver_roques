@@ -4,7 +4,9 @@ const Database = use('Database');
 const Order = use('App/Models/Order')
 const Client = use('App/Models/Client')
 const Subsidiary = use('App/Models/Subsidiary')
-const ServicioValidacion = use('App/Services/ServicioValidacion');
+const Commerce = use('App/Models/Commerce')
+const Product = use('App/Models/Product')
+const ValidationService = use('App/Services/ServicioValidacion');
 
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
@@ -31,47 +33,81 @@ class OrderController {
   async create ({ request }) {
     const trx = await Database.beginTransaction()
 
-    const { client, tir, subsidiaryName, products } = request.all()
+    try {
+      const { client, tir, subsidiaryName, products } = request.all()
 
-    const subsidiary = await Subsidiary.findBy('name', subsidiaryName)
+      const subsidiary = await Subsidiary.findBy('name', subsidiaryName)
+      ValidationService.verifySubsidiary(subsidiary)
 
-    const clientA = await Client.findBy('ci', client.ci)
-    if (clientA === null) {
-      const newClient = new Client()
-      newClient.fill({
-        ci: client.ci,
-        firstName: client.first,
-        lastName: client.last,
-        phoneNumber: client.phoneNumber
-      })
+      const commerce = await Commerce.findBy('tir', tir)
+      ValidationService.verifyCommerce(commerce)
 
-      await newClient.save(trx)
-    }
-    const amount = await this.calcularCosto(productos, sucursal[0].distanciaDesdeCaracas);
-    const fechaEstimada = this.calcularTiempoEnvio(sucursal[0].distancia);
-    const orden = await Database.insert({
-      id: parseInt(d.getTime().toString().substr(4)),
-      costoEnvio: amount,
-      tiempoEnvio: fechaEstimada,
-      confirmada: false,
-      cedula_cliente: cliente.cedula,
-      comercio_rif: rifComercio,
-      sucursal_id: sucursal[0].id,
-      created_at: d,
-      updated_at: d
-    }).into('ordenes_distribucion');
-    await this.insertarProductoPerteneceOrden(productos, orden[0]);
-    return {
-      'nroOrden': orden[0],
-      'tiempoEnvio': fechaEstimada,
-      'costoEnvio': amount,
-    };
+      let clientA = await Client.findBy('ci', client.ci)
+      if (clientA === null) {
+        clientA = await Client.create({
+          ci: client.ci,
+          firstName: client.first,
+          lastName: client.last,
+          phoneNumber: client.phoneNumber
+        }, trx)
+      }
+
+      let idProducts = []
+      let quantityProducts = []
+      products.forEach(product => {
+        idProducts.push(product.id)
+        quantityProducts.push(product.quantity)
+      });
+      let productsQuery = await Product.query().whereIn('id', idProducts).fetch()
+      productsQuery = productsQuery.toJSON()
+
+      const amount = await this.calculateAmount(productsQuery, products, subsidiary.distanceFromCaracas)
+
+      const deliveryDate = this.calculateDeliveryDate(subsidiary.distanceFromCaracas);
+
+      const d = new Date()
+
+      const order = await Order.create({
+        tracking_id: parseInt(d.getTime().toString().substr(4)),
+        shippingCost: amount,
+        shippingTime: deliveryDate,
+        confirmed: false,
+        client_id: clientA.id,
+        commerce_id: commerce.id,
+        subsidiary_id: subsidiary.id
+      }, trx)
+
+      let i = 0
+
+      await order.products().attach(idProducts, row => {
+        row.amount = quantityProducts[i]
+        i++
+      }, trx)
+
+      trx.commit()
+
+      return {
+        'nroOrden': order.tracking_id,
+        'tiempoEnvio': deliveryDate,
+        'costoEnvio': amount,
+      };
+    } catch (error) {
+      console.log(error)
+      trx.rollback()
+      return {
+        'error': 'Error al crear orden'
+      }
+    } 
   }
 
   async confirm ({ params }) {
-    const ordenDistribucion = await Database.table('ordenes_distribucion').where('id', params.id).update('confirmada', true);
-    ServicioValidacion.verificarOrden(ordenDistribucion);
-    return !!ordenDistribucion; 
+    const order = await Order.findBy('tracking_id', params.id);
+    ValidationService.verifyOrder(order);
+    order.merge({
+      confirmed: true
+    })
+    order.save()
+    return order; 
   }
 
   /**
@@ -81,21 +117,22 @@ class OrderController {
    * @param {object} ctx
    */
   async show ({ params }) {
-    const ordenDistribucion = await Database.from('ordenes_distribucion').where('id', params.id);
-    ServicioValidacion.verificarOrden(ordenDistribucion);
-    return ordenDistribucion[0];
+    const order = await Order.findBy('tracking_id', params.id);
+    ValidationService.verifyOrder(order);
+    return order;
   }
 
   /**
-   * Display a single order.
+   * Display a all the orders of a commerce
    * GET orders/:id
    *
    * @param {object} ctx
    */
-  async showByShop ({ params }) {
-    const ordenDistribucion = await Database.from('ordenes_distribucion').where('comercio_rif', params.rif);
-    ServicioValidacion.verificarOrden(ordenDistribucion);
-    return ordenDistribucion;
+  async showByCommerce ({ params }) {
+    const commerce = await Commerce.find(params.id)
+    ValidationService.verifyCommerce(commerce);
+    await commerce.load('orders')
+    return commerce;
   }
 
   /**
@@ -106,41 +143,19 @@ class OrderController {
    * @param {Request} ctx.request
    */
   async update ({ params, request }) {
-    let ordenDistribucion;
-    const { tipo, fecha } = request.all();
-    console.log('mensaje 1');
-    switch (tipo) {
-      case "empacado":
-        ordenDistribucion = await Database.table('ordenes_distribucion').where('id', params.id).update({
-          empacado: fecha,
-          updated_at: new Date(),
-        });
-        break;
-      case "cargado":
-        ordenDistribucion = await Database.table('ordenes_distribucion').where('id', params.id).update({
-          cargado: fecha,
-          updated_at: new Date(),
-        });
-        break;
-      case "camino":
-        ordenDistribucion = await Database.table('ordenes_distribucion').where('id', params.id).update({
-          camino: fecha,
-          updated_at: new Date(),
-        });
-        break;
-      case "sucursal":
-        ordenDistribucion = await Database.table('ordenes_distribucion').where('id', params.id).update({
-          sucursal: fecha,
-          updated_at: new Date(),
-        });
-        break;
-      default:
-        ordenDistribucion = {
-          'message': 'error',
-        }
-        break;
-    }
-    return ordenDistribucion;
+    const { tipo, fecha } = request.all()
+    const order = await Order.findBy('tracking_id', params.id)
+
+    ValidationService.verifyOrder(order)
+    ValidationService.verifyConfirmedOrder(order)
+
+    if (tipo === 'packed') order.merge({packed: fecha})
+    else if (tipo === 'charged') order.merge({charged: fecha})
+      else if (tipo === 'way') order.merge({way: fecha})
+        else if(tipo === 'subsidiary') order.merge({subsidiary: fecha})
+          else return {'error': 'Tipo no encontrado'}
+    order.save()
+    return order
   }
 
   /**
@@ -155,62 +170,26 @@ class OrderController {
     }
   }
 
-  async calcularCosto(productos, distancia) {
-    // let precioTotal = 0;
-    let volumenTotal = 0;
-    let costoEnvio = 0;
-    for (let index = 0; index < productos.length; index++) {
-      const producto = await Database.from('productos').where('id', productos[index].id);
-      ServicioValidacion.verificarProducto(producto);
-      //precioTotal += producto[0].precio*productos[index].cantidad;
-      volumenTotal += producto[0].volumen*productos[index].cantidad;
+  async calculateAmount(products, requestProducts, distance) {
+    let totalBulk = 0;
+    for (let i = 0; i < products.length; i++) {
+      totalBulk += products[i].bulk * requestProducts[i].quantity
     }
-    costoEnvio = volumenTotal*distancia*0.005;
-    /*if (precioTotal > 200000) {
-      costoEnvio *= 0.7;
-    }*/
-    return costoEnvio;
+    return totalBulk * distance * 0.005
   }
-  
-  calcularTiempoEnvio(distancia) {
+
+  calculateDeliveryDate(distance) {
     Date.prototype.addDays = function(days) {
       var date = new Date(this.valueOf());
       date.setDate(date.getDate() + days);
       return date;
     }
-    let current_datetime = new Date();
-    if (distancia === 458) {
-      current_datetime = current_datetime.addDays(5);
-    } else {
-      if (distancia < 100) {
-        current_datetime = current_datetime.addDays(1);
-      } else {
-        if (distancia < 400) {
-          current_datetime = current_datetime.addDays(2);
-        } else {
-          current_datetime = current_datetime.addDays(3);
-        }
-      }
-    }
-    /*let fecha = [current_datetime.getDate().toString(), (current_datetime.getMonth() + 1).toString(), current_datetime.getFullYear().toString()]
-    fecha = fecha.map(num => num.length === 1 ? '0' + num : num);
-    let formatted_date = fecha[0] + "/" + fecha[1] + "/" + fecha[2];*/
-    return current_datetime;
-  }
-
-  async insertarProductoPerteneceOrden(productos, orden) {
-    const d = new Date();
-    let success = true;
-    for (let index = 0; index < productos.length; index++) {
-      success &= await Database.insert({
-        orden_id: orden,
-        producto_id: productos[index].id,
-        cantidad: productos[index].cantidad,
-        created_at: d,
-        updated_at: d,
-      }).into('productos_pertenece_orden');
-    }
-    return success;
+    let deliveryDate = new Date()
+    if (distance === 458) deliveryDate = deliveryDate.addDays(5)
+    else if (distance < 100) deliveryDate = deliveryDate.addDays(1)
+      else if (distance < 400) deliveryDate = deliveryDate.addDays(2)
+        else deliveryDate = deliveryDate.addDays(3)
+    return deliveryDate;
   }
 }
 
