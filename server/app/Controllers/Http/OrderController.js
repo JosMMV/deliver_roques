@@ -1,6 +1,9 @@
 'use strict'
 
 const Database = use('Database');
+const Order = use('App/Models/Order')
+const Client = use('App/Models/Client')
+const Subsidiary = use('App/Models/Subsidiary')
 const ServicioValidacion = use('App/Services/ServicioValidacion');
 
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
@@ -12,37 +15,43 @@ const ServicioValidacion = use('App/Services/ServicioValidacion');
  */
 class OrderController {
   /**
-   * Show a list of all ordendistribucions.
-   * GET ordendistribucions
+   * Show a list of all orders.
+   * GET orders
    */
   async index () {
-    return await Database.select('*').from('ordenes_distribucion');
+    return await Order.all();
   }
 
   /**
-   * Render a form to be used for creating a new ordendistribucion.
-   * GET ordendistribucions/create
+   * Render a form to be used for creating a new order.
+   * GET orders/create
    *
    * @param {Request} ctx.request
    */
   async create ({ request }) {
-    const d = new Date();
-    const { cliente, rifComercio, nombreSucursal, productos } = request.all();
-    const sucursal = await Database.from('sucursales').where('nombre', nombreSucursal);
-    const clienteA = await Database.from('clientes').where('cedula', cliente.cedula);
-    clienteA.length === 0 ? await Database.insert({
-      cedula: cliente.cedula,
-      nombre: cliente.nombre,
-      apellido: cliente.apellido,
-      telefono: cliente.telefono,
-      created_at: d,
-      updated_at: d
-    }).into('clientes') : null;
-    const costo = await this.calcularCosto(productos, sucursal[0].distanciaDesdeCaracas);
+    const trx = await Database.beginTransaction()
+
+    const { client, tir, subsidiaryName, products } = request.all()
+
+    const subsidiary = await Subsidiary.findBy('name', subsidiaryName)
+
+    const clientA = await Client.findBy('ci', client.ci)
+    if (clientA === null) {
+      const newClient = new Client()
+      newClient.fill({
+        ci: client.ci,
+        firstName: client.first,
+        lastName: client.last,
+        phoneNumber: client.phoneNumber
+      })
+
+      await newClient.save(trx)
+    }
+    const amount = await this.calcularCosto(productos, sucursal[0].distanciaDesdeCaracas);
     const fechaEstimada = this.calcularTiempoEnvio(sucursal[0].distancia);
     const orden = await Database.insert({
       id: parseInt(d.getTime().toString().substr(4)),
-      costoEnvio: costo,
+      costoEnvio: amount,
       tiempoEnvio: fechaEstimada,
       confirmada: false,
       cedula_cliente: cliente.cedula,
@@ -55,7 +64,7 @@ class OrderController {
     return {
       'nroOrden': orden[0],
       'tiempoEnvio': fechaEstimada,
-      'costoEnvio': costo,
+      'costoEnvio': amount,
     };
   }
 
@@ -66,8 +75,8 @@ class OrderController {
   }
 
   /**
-   * Display a single ordendistribucion.
-   * GET ordendistribucions/:id
+   * Display a single order.
+   * GET orders/:id
    *
    * @param {object} ctx
    */
@@ -78,8 +87,8 @@ class OrderController {
   }
 
   /**
-   * Display a single ordendistribucion.
-   * GET ordendistribucions/:id
+   * Display a single order.
+   * GET orders/:id
    *
    * @param {object} ctx
    */
@@ -90,8 +99,8 @@ class OrderController {
   }
 
   /**
-   * Update ordendistribucion details.
-   * PUT or PATCH ordendistribucions/:id
+   * Update order details.
+   * PUT or PATCH orders/:id
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -135,8 +144,8 @@ class OrderController {
   }
 
   /**
-   * Delete a ordendistribucion with id.
-   * DELETE ordendistribucions/:id
+   * Delete a order with id.
+   * DELETE orders/:id
    *
    * @param {object} ctx
    */
