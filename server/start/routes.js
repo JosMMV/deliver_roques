@@ -27,7 +27,7 @@ Route.group(() => {
 
   Route.get('/pedido', 'OrderController.index')
   Route.get('/pedido/:id', 'OrderController.show')
-  Route.get('/pedido/tienda/:id', 'OrderController.showByCommerce')
+  Route.get('/pedido/comercio/:id', 'OrderController.showByCommerce')
   Route.post('/pedido', 'OrderController.create')
   Route.post('/pedido/:id', 'OrderController.confirm')
 }).prefix('api')
@@ -55,6 +55,7 @@ Route.group(() => {
 
   Route.get('/factura', 'BillController.index')
   Route.get('/factura/:id', 'BillController.show')
+  Route.get('/factura/comercio/:id', 'BillController.showByCommerce')
   Route.post('/factura', 'BillController.create')
   Route.patch('/factura/:id', 'BillController.update')
   Route.delete('/factura/:id', 'BillController.destroy')
