@@ -3,42 +3,31 @@ const ProductoNoExisteException = use('App/Exceptions/ProductoNoExisteException'
 const UsuarioNoExisteException = use('App/Exceptions/UsuarioNoExisteException');
 const SucursalNoExisteException = use('App/Exceptions/SucursalNoExisteException');
 const ComercioNoExisteException = use('App/Exceptions/ComercioNoExisteException');
-const OrdenDistribucionNoExisteException = use('App/Exceptions/OrdenDistribucionNoExisteException');
+const OrdenNoExisteException = use('App/Exceptions/OrdenNoExisteException');
+const OrdenNoConfirmadaException = use('App/Exceptions/OrdenNoConfirmadaException')
 const FacturaNoExisteException = use('App/Exceptions/FacturaNoExisteException');
 
 class ServicioValidacion {
-  verificarProducto(producto) {
-    if (!producto || producto.length === 0) {
-      throw new ProductoNoExisteException();
-    }
-    /* if (userId !== 'admin') {
-      throw new AccesoInvalidoException();
-    }*/
+  verifyProduct(product) {
+    if (!product) throw new ProductoNoExisteException()
   }
-  verificarUsuario(usuario) {
-    if (!usuario) {
-      throw new UsuarioNoExisteException();
-    }
+  verifyUser(user) {
+    if (!user) throw new UsuarioNoExisteException()
   }
-  verificarSucursal(sucursal) {
-    if (sucursal.length === 0 || sucursal === 0) {
-      throw new SucursalNoExisteException();
-    }
+  verifySubsidiary(subsidiary) {
+    if (!subsidiary) throw new SucursalNoExisteException()
   }
-  verificarComercio(comercio) {
-    if (!comercio || comercio.length === 0) {
-      throw new ComercioNoExisteException();
-    }
+  verifyCommerce(commerce) {
+    if (!commerce) throw new ComercioNoExisteException()
   }
-  verificarOrden(orden) {
-    if (orden.length === 0 || orden === 0) {
-      throw new OrdenDistribucionNoExisteException();
-    }
+  verifyOrder(order) {
+    if (!order) throw new OrdenNoExisteException()
   }
-  verificarFactura(factura) {
-    if (!factura || factura.length === 0) {
-      throw new FacturaNoExisteException();
-    }
+  verifyConfirmedOrder(order) {
+    if (!order.confirmed) throw new OrdenNoConfirmadaException()
+  }
+  verifyBill(bill) {
+    if (!bill) throw new FacturaNoExisteException()
   }
 }
 

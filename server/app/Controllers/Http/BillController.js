@@ -4,7 +4,7 @@ const Bill = use('App/Models/Bill')
 const Order = use('App/Models/Order')
 
 const Database = use('Database')
-const ServicioValidacion = use('App/Services/ServicioValidacion');
+const ValidationService = use('App/Services/ServicioValidacion');
 
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
@@ -33,7 +33,7 @@ class BillController {
    *
    * @param {Request} ctx.request
    */
-  async create ({ request, response }) {
+  async create ({ request }) {
     Date.prototype.addDays = function(days) {
       var date = new Date(this.valueOf());
       date.setDate(date.getDate() + days);
@@ -78,9 +78,9 @@ class BillController {
    * @param {object} ctx
    */
   async show ({ params }) {
-    const factura = await Bill.find(params.id);
-    ServicioValidacion.verificarFactura(factura);
-    return factura;
+    const bill = await Bill.find(params.id)
+    ValidationService.verifyBill(bill)
+    return bill
   }
 
   /**
@@ -92,6 +92,7 @@ class BillController {
    */
   async update ({ params }) {
     const bill = await Bill.find(params.id)
+    ValidationService.verifyBill(bill)
     bill.merge({
       status: 'Pagado',
       payingDate: new Date()
@@ -107,9 +108,10 @@ class BillController {
    * @param {object} ctx
    */
   async destroy ({ params }) {
-    const bill = await Bill.find(params.id);
-    await bill.delete();
-    return bill;
+    const bill = await Bill.find(params.id)
+    ValidationService.verifyBill(bill)
+    await bill.delete()
+    return bill
   }
 }
 

@@ -1,7 +1,7 @@
 'use strict'
 
 const Product = use('App/Models/Product');
-const ServicioValidacion = use('App/Services/ServicioValidacion');
+const ValidationService = use('App/Services/ServicioValidacion');
 
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
@@ -25,22 +25,6 @@ class ProductController {
   }
 
   /**
-   * Create/save a new product.
-   * POST products
-   *
-   * @param {Request} ctx.request
-   */
-  async create ({ request }) {
-    const { name, price, bulk } = request.all();
-    const product = await Product.create({
-      name,
-      price,
-      bulk,
-    });
-    return product;
-  }
-
-  /**
    * Display a single product.
    * GET products/:id
    *
@@ -48,7 +32,7 @@ class ProductController {
    */
   async show ({ params }) {
     const product = await Product.find(params.id);
-    ServicioValidacion.verificarProducto(product);
+    ValidationService.verifyProduct(product);
     return product;
   }
 
@@ -62,7 +46,7 @@ class ProductController {
    */
   async update ({ params, request }) {
     const product = await Product.find(params.id);
-    ServicioValidacion.verificarProducto(product);
+    ValidationService.verifyProduct(product);
     product.merge({
       price: request.only('price').price,
     });
@@ -79,7 +63,7 @@ class ProductController {
    */
   async destroy ({ params }) {
     const product = await Product.find(params.id);
-    ServicioValidacion.verificarProducto(product);
+    ValidationService.verifyProduct(product);
     await product.delete();
     return product;
   }

@@ -1,8 +1,7 @@
 'use strict'
 
-const Commerce = use('App/Models/Commerce');
-const ServicioValidacion = use('App/Services/ServicioValidacion');
-const User = use('App/Models/User');
+const Commerce = use('App/Models/Commerce')
+const ValidationService = use('App/Services/ServicioValidacion')
 
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
@@ -13,54 +12,38 @@ const User = use('App/Models/User');
  */
 class CommerceController {
   async index () {
-    return await Commerce.all();
+    return await Commerce.all()
   }
 
   /**
-   * Render a form to be used for creating a new comercio.
-   * GET comercios/create
-   *
-   * @param {Request} ctx.request
-   */
-  async create ({ request }) {
-    const { rif, nombre, correo } = request.all();
-    const usuario = await User.findBy('username', correo);
-    ServicioValidacion.verificarUsuario(usuario);
-    const comercio = await Commerce.create({
-      rif,
-      nombre,
-      correo,
-    });
-    return comercio;
-  }
-
-  /**
-   * Display a single comercio.
+   * Display a single commerce.
    * GET comercios/:rif
    *
    * @param {object} ctx
    */
   async show ({ params }) {
-    const comercio = await Commerce.findBy('rif', params.rif);
-    ServicioValidacion.verificarComercio(comercio);
-    return comercio;
+    const commerce = await Commerce.findBy('tir', params.rif)
+    ValidationService.verifyCommerce(commerce)
+    return commerce
   }
 
   /**
-   * Update comercio details.
+   * Update commerce details.
    * PUT or PATCH comercios/:rif
    *
    * @param {object} ctx
    * @param {Request} ctx.request
    */
   async update ({ params, request }) {
-    const comercio = await Commerce.query().where('rif', params.rif).update(request.only('nombre')); //0 si hubo error y 1 si se actualizó exitosamente
-    ServicioValidacion.verificarComercio(comercio);
-    return comercio;
+    const commerce = await Commerce.findBy('tir', params.rif)
+    ValidationService.verifyCommerce(commerce);
+    commerce.merge({name: request.only('name').name})
+    commerce.save()
+    return commerce;
   }
 
   /**
-   * Delete a comercio with rif.
+   * Delete a commerce with rif.
    * DELETE comercios/:rif
    *
    * @param {object} ctx
@@ -68,9 +51,10 @@ class CommerceController {
    * @param {Response} ctx.response
    */
   async destroy ({ params }) {
-    const comercio = await Commerce.query().where('rif', params.rif).delete(); //0 si hubo error y 1 si se eliminó exitosamente
-    ServicioValidacion.verificarComercio(comercio);
-    return comercio;
+    const commerce = await Commerce.find(params.id)
+    ValidationService.verifyCommerce(commerce)
+    await commerce.delete()
+    return commerce
   }
 }
 

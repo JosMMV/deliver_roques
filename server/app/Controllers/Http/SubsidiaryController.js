@@ -1,7 +1,7 @@
 'use strict'
 
 const Subsidiary = use('App/Models/Subsidiary')
-const ServicioValidacion = use('App/Services/ServicioValidacion');
+const ValidationService = use('App/Services/ServicioValidacion');
 
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
@@ -22,18 +22,9 @@ class SubsidiaryController {
    * @param {Request} ctx.request
    */
   async create ({ request }) {
-    const { nombre, estado, ciudad, parroquia, distanciaDesdeCaracas } = request.all();
-    const d = new Date();
-    const subsidiary = await Database.insert({
-      nombre,
-      estado,
-      ciudad,
-      parroquia,
-      distanciaDesdeCaracas,
-      created_at: d,
-      updated_at: d
-    }).into('sucursales');
-    return subsidiary;
+    const subsidiariesData = request.raw()
+    const subsidiaries = await Subsidiary.createMany(JSON.parse(subsidiariesData))
+    return subsidiaries;
   }
 
   /**
@@ -44,7 +35,7 @@ class SubsidiaryController {
    */
   async show ({ params }) {
     const subsidiary = await Subsidiary.find(params.id);
-    ServicioValidacion.verificarSucursal(subsidiary);
+    ValidationService.verifySubsidiary(subsidiary);
     return subsidiary;
   }
 
@@ -57,10 +48,9 @@ class SubsidiaryController {
    */
   async update ({ params, request }) {
     const subsidiary = await Subsidiary.find(params.id);
-    ServicioValidacion.verificarSucursal(subsidiary);
+    ValidationService.verifySubsidiary(subsidiary);
     subsidiary.merge({
-      name: request.only('name').name,
-      updated_at: new Date()
+      name: request.only('name').name
     });
     await subsidiary.save();
     return subsidiary;
@@ -74,7 +64,7 @@ class SubsidiaryController {
    */
   async destroy ({ params }) {
     const subsidiary = await Subsidiary.find(params.id);
-    ServicioValidacion.verificarSucursal(subsidiary);
+    ValidationService.verifySubsidiary(subsidiary);
     await subsidiary.delete();
     return subsidiary;
   }
