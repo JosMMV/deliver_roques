@@ -12,7 +12,6 @@ class SubsidiarySchema extends Schema {
       table.string('city', 100).notNullable()
       table.string('parish', 100).notNullable()
       table.integer('distanceFromCaracas').notNullable()
-      table.timestamps()
     })
   }
 
