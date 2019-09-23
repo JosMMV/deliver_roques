@@ -2,6 +2,7 @@
 
 const Bill = use('App/Models/Bill')
 const Order = use('App/Models/Order')
+const Commerce = use('App/Models/Commerce')
 
 const Database = use('Database')
 const ValidationService = use('App/Services/ServicioValidacion');
@@ -11,12 +12,12 @@ const ValidationService = use('App/Services/ServicioValidacion');
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 
 /**
- * Resourceful controller for interacting with facturas
+ * Resourceful controller for interacting with bills
  */
 class BillController {
   /**
-   * Show a list of all facturas.
-   * GET facturas
+   * Show a list of all bills.
+   * GET bills
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -28,8 +29,8 @@ class BillController {
   }
 
   /**
-   * Render a form to be used for creating a new factura.
-   * GET facturas/create
+   * Render a form to be used for creating a new bill.
+   * GET bills/create
    *
    * @param {Request} ctx.request
    */
@@ -44,36 +45,45 @@ class BillController {
 
     const trx = await Database.beginTransaction()
 
-    let amount = await Database.raw('SELECT SUM(shippingCost) AS amount FROM orders WHERE bill_id IS null AND commerce_id = ?', commerce_id)
+    try {
+      let amount = await Database.raw('SELECT SUM(shippingCost) AS amount FROM orders WHERE bill_id IS null AND subsidiary IS NOT null AND commerce_id = ?', commerce_id)
 
-    amount = amount[0][0].amount
-    const bill = await Bill.create({
-      commerce_id: commerce_id,
-      amount: amount,
-      topDate: d.addDays(15),
-      payingDate: null,
-      status: 'Pendiente',
-      created_at: d
-    }, trx);
+      amount = amount[0][0].amount
 
-    const affectedRows = await trx.table('orders')
-      .where('commerce_id', commerce_id)
-      .andWhere('bill_id', null)
-      .andWhere('confirmed', true)
-      .andWhere('subsidiary', '!=', null)
-      .update('bill_id', bill.id)
+      if (!amount){
+        trx.rollback()
+        return {'error': 'No hay ordenes entregadas sin factura'}
+      }
 
-    affectedRows === 0 ? trx.rollback() : trx.commit()
+      const bill = await Bill.create({
+        commerce_id: commerce_id,
+        amount: amount,
+        topDate: d.addDays(15),
+        payingDate: null,
+        status: 'Pendiente'
+      }, trx);
 
-    return await Order.query()
-      .where('commerce_id', commerce_id)
-      .andWhere('bill_id', bill.id)
-      .fetch()
+      const affectedRows = await trx.table('orders')
+        .where('commerce_id', commerce_id)
+        .andWhere('bill_id', null)
+        .andWhere('subsidiary', 'is not', null)
+        .update('bill_id', bill.id)
+
+      affectedRows === 0 ? trx.rollback() : trx.commit()
+
+      return await Order.query()
+        .where('commerce_id', commerce_id)
+        .andWhere('bill_id', bill.id)
+        .fetch()
+    } catch (error) {
+      trx.rollback()
+      return {'error': 'No se pudo crear factura', 'message': error}
+    }
   }
 
   /**
-   * Display a single factura.
-   * GET facturas/:id
+   * Display a single bill.
+   * GET bills/:id
    *
    * @param {object} ctx
    */
@@ -84,8 +94,21 @@ class BillController {
   }
 
   /**
-   * Update factura details.
-   * PUT or PATCH facturas/:id
+   * Display a all the bills of a commerce
+   * GET bills/:id
+   *
+   * @param {object} ctx
+   */
+  async showByCommerce ({ params }) {
+    const commerce = await Commerce.find(params.id)
+    ValidationService.verifyCommerce(commerce);
+    await commerce.load('bills')
+    return commerce;
+  }
+
+  /**
+   * Update bill details.
+   * PUT or PATCH bills/:id
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -102,8 +125,8 @@ class BillController {
   }
 
   /**
-   * Delete a factura with id.
-   * DELETE facturas/:id
+   * Delete a bill with id.
+   * DELETE bills/:id
    *
    * @param {object} ctx
    */
