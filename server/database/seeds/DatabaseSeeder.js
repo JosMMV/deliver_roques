@@ -13,7 +13,7 @@
 /** @type {import('@adonisjs/lucid/src/Factory')} */
 const Factory = use('Factory')
 const Subsidiary = use('App/Models/Subsidiary')
-const subsidiaries = require('./sucursales.json')
+const subsidiaries = require('./subsidiaries.json')
 
 class DatabaseSeeder {
   async run () {
