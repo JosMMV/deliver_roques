@@ -12,6 +12,8 @@
 
 /** @type {import('@adonisjs/lucid/src/Factory')} */
 const Factory = use('Factory')
+const Subsidiary = use('App/Models/Subsidiary')
+const subsidiaries = require('./sucursales.json')
 
 class DatabaseSeeder {
   async run () {
@@ -19,7 +21,7 @@ class DatabaseSeeder {
 
     const productArray = await Factory.model('App/Models/Product').createMany(15)
 
-    const subsidiaryArray = await Factory.model('App/Models/Subsidiary').createMany(24)
+    const subsidiaryArray = await Subsidiary.createMany(subsidiaries)
 
     const clientArray = await Factory.model('App/Models/Client').createMany(12)
 

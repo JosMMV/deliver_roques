@@ -1,0 +1,163 @@
+[
+  {
+    "name": "Ávila",
+    "state": "Distrito Capital",
+    "city": "Caracas",
+    "parish": "El Recreo",
+    "distanceFromCaracas": 8
+  },
+  {
+    "name": "Cerro Autana",
+    "state": "Amazonas",
+    "city": "Puerto Ayacucho",
+    "parish": "Luis Alberto Gómez",
+    "distanceFromCaracas": 713
+  },
+  {
+    "name": "Mochima",
+    "state": "Anzoategui",
+    "city": "Barcelona",
+    "parish": "El Carmen",
+    "distanceFromCaracas": 315
+  },
+  {
+    "name": "Río Viejo",
+    "state": "Apure",
+    "city": "San Fernando",
+    "parish": "San Fernando",
+    "distanceFromCaracas": 414
+  },
+  {
+    "name": "Choroní",
+    "state": "Aragua",
+    "city": "Maracay",
+    "parish": "Joaquín Crespo",
+    "distanceFromCaracas": 128
+  },
+  {
+    "name": "La Acequia",
+    "state": "Barinas",
+    "city": "Barinas",
+    "parish": "Barinas",
+    "distanceFromCaracas": 512
+  },
+  {
+    "name": "Roraima",
+    "state": "Bolívar",
+    "city": "Ciudad Guayana",
+    "parish": "Unare",
+    "distanceFromCaracas": 643
+  },
+  {
+    "name": "Henri Pittier",
+    "state": "Carabobo",
+    "city": "Valencia",
+    "parish": "El Socorro",
+    "distanceFromCaracas": 171
+  },
+  {
+    "name": "La Aguadita",
+    "state": "Cojedes",
+    "city": "San Carlos",
+    "parish": "San Carlos de Austria",
+    "distanceFromCaracas": 278
+  },
+  {
+    "name": "Caño Araguaimujo",
+    "state": "Delta Amacuro",
+    "city": "Tucupita",
+    "parish": "San José",
+    "distanceFromCaracas": 717
+  },
+  {
+    "name": "Morrocoy",
+    "state": "Falcón",
+    "city": "Coro",
+    "parish": "San Antonio",
+    "distanceFromCaracas": 452
+  },
+  {
+    "name": "Los Morros",
+    "state": "Guárico",
+    "city": "San Juan de los Morros",
+    "parish": "San Juan de los Morros",
+    "distanceFromCaracas": 154
+  },
+  {
+    "name": "Terepaima",
+    "state": "Lara",
+    "city": "Barquisimeto",
+    "parish": "Concepción",
+    "distanceFromCaracas": 368
+  },
+  {
+    "name": "Mukumbarí",
+    "state": "Mérida",
+    "city": "Mérida",
+    "parish": "Antonio Spinetti Dini",
+    "distanceFromCaracas": 669
+  },
+  {
+    "name": "Barlovento",
+    "state": "Miranda",
+    "city": "Los Teques",
+    "parish": "Los Teques",
+    "distanceFromCaracas": 33.5
+  },
+  {
+    "name": "El Guácharo",
+    "state": "Monagas",
+    "city": "Maturín",
+    "parish": "Maturín",
+    "distanceFromCaracas": 501
+  },
+  {
+    "name": "Margarita",
+    "state": "Nueva Esparta",
+    "city": "Porlamar",
+    "parish": "Porlamar",
+    "distanceFromCaracas": 458
+  },
+  {
+    "name": "Chorro San Miguel",
+    "state": "Portuguesa",
+    "city": "Guanare",
+    "parish": "Guanare",
+    "distanceFromCaracas": 436
+  },
+  {
+    "name": "Península de Araya",
+    "state": "Sucre",
+    "city": "Cumaná",
+    "parish": "Ayacucho",
+    "distanceFromCaracas": 403
+  },
+  {
+    "name": "La Grita",
+    "state": "Táchira",
+    "city": "San Cristóbal",
+    "parish": "La Concordia",
+    "distanceFromCaracas": 810
+  },
+  {
+    "name": "Sierra de la Culata",
+    "state": "Trujillo",
+    "city": "Trujillo",
+    "parish": "Andrés Linares",
+    "distanceFromCaracas": 588
+  },
+  {
+    "name": "Catatumbo",
+    "state": "Zulia",
+    "city": "Maracaibo",
+    "parish": "Bolívar",
+    "distanceFromCaracas": 701
+  },
+  {
+    "name": "Los Caracas",
+    "state": "Vargas",
+    "city": "La Guaira",
+    "parish": "Maiquetía",
+    "distanceFromCaracas": 26.6
+  }
+]
