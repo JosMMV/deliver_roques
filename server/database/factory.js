@@ -69,6 +69,7 @@ Factory.blueprint('App/Models/Order', (faker, i, data) => {
   }
   let d = new Date()
   return {
+    tracking_id: parseInt(d.getTime().toString().substr(4)),
     client_id: data.client_id,
     commerce_id: data.commerce_id,
     bill_id: data.bill_id,

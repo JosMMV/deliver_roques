@@ -7,6 +7,7 @@ class OrderSchema extends Schema {
   up () {
     this.create('orders', (table) => {
       table.increments()
+      table.integer('tracking_id').notNullable().unique()
       table.float('shippingCost').notNullable()
       table.date('shippingTime').notNullable()
       table.boolean('confirmed').notNullable()
