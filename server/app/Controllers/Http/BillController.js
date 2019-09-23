@@ -1,7 +1,6 @@
 'use strict'
 
-const Bill = use('App/Models/Bill');
-const Commerce = use('App/Models/Commerce')
+const Bill = use('App/Models/Bill')
 const Order = use('App/Models/Order')
 
 const Database = use('Database')
@@ -43,6 +42,8 @@ class BillController {
     const { commerce_id } = request.all();
     let d = new Date()
 
+    const trx = await Database.beginTransaction()
+
     let amount = await Database.raw('SELECT SUM(shippingCost) AS amount FROM orders WHERE bill_id IS null AND commerce_id = ?', commerce_id)
 
     amount = amount[0][0].amount
@@ -53,14 +54,21 @@ class BillController {
       payingDate: null,
       status: 'Pendiente',
       created_at: d
-    });
+    }, trx);
 
-    await Order.query()
+    const affectedRows = await trx.table('orders')
       .where('commerce_id', commerce_id)
       .andWhere('bill_id', null)
-      .update({bill_id: bill.id})
+      .andWhere('confirmed', true)
+      .andWhere('subsidiary', '!=', null)
+      .update('bill_id', bill.id)
 
-    return await Order.findBy('bill_id', bill.id)
+    affectedRows === 0 ? trx.rollback() : trx.commit()
+
+    return await Order.query()
+      .where('commerce_id', commerce_id)
+      .andWhere('bill_id', bill.id)
+      .fetch()
   }
 
   /**
