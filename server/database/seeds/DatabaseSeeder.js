@@ -58,7 +58,7 @@ class DatabaseSeeder {
       orderArray.push(order)
     }
 
-    for (let i = 1; i <= 5; i++) {
+    /*for (let i = 1; i <= 5; i++) {
       let amount = 0
       orderArray.forEach(order => {
         if (order.commerce_id === i) {
@@ -69,7 +69,7 @@ class DatabaseSeeder {
         commerce_id: i,
         amount: amount
       })
-    }
+    }*/
   }
 }
 
