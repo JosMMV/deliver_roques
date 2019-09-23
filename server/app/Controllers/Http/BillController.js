@@ -1,6 +1,10 @@
 'use strict'
 
 const Bill = use('App/Models/Bill');
+const Commerce = use('App/Models/Commerce')
+const Order = use('App/Models/Order')
+
+const Database = use('Database')
 const ServicioValidacion = use('App/Services/ServicioValidacion');
 
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
@@ -30,16 +34,33 @@ class BillController {
    *
    * @param {Request} ctx.request
    */
-  async create ({ request }) {
-    const { monto, fechaEmision, fechaTope, estatus, comercio_rif } = request.all();
-    const factura = await Bill.create({
-      monto,
-      fechaEmision,
-      fechaTope,
-      estatus,
-      comercio_rif,
+  async create ({ request, response }) {
+    Date.prototype.addDays = function(days) {
+      var date = new Date(this.valueOf());
+      date.setDate(date.getDate() + days);
+      return date;
+    }
+    const { commerce_id } = request.all();
+    let d = new Date()
+
+    let amount = await Database.raw('SELECT SUM(shippingCost) AS amount FROM orders WHERE bill_id IS null AND commerce_id = ?', commerce_id)
+
+    amount = amount[0][0].amount
+    const bill = await Bill.create({
+      commerce_id: commerce_id,
+      amount: amount,
+      topDate: d.addDays(15),
+      payingDate: null,
+      status: 'Pendiente',
+      created_at: d
     });
-    return factura;
+
+    await Order.query()
+      .where('commerce_id', commerce_id)
+      .andWhere('bill_id', null)
+      .update({bill_id: bill.id})
+
+    return await Order.findBy('bill_id', bill.id)
   }
 
   /**
@@ -61,12 +82,14 @@ class BillController {
    * @param {object} ctx
    * @param {Request} ctx.request
    */
-  async update ({ params, request }) {
-    const factura = await Bill.find(params.id);
-    ServicioValidacion.verificarFactura(factura);
-    //factura.merge(request.only('precio'));
-    await factura.save();
-    return factura;
+  async update ({ params }) {
+    const bill = await Bill.find(params.id)
+    bill.merge({
+      status: 'Pagado',
+      payingDate: new Date()
+    })
+    await bill.save()
+    return bill
   }
 
   /**
@@ -76,10 +99,9 @@ class BillController {
    * @param {object} ctx
    */
   async destroy ({ params }) {
-    const factura = await Bill.find(params.id);
-    ServicioValidacion.verificarFactura(factura);
-    await factura.delete();
-    return factura;
+    const bill = await Bill.find(params.id);
+    await bill.delete();
+    return bill;
   }
 }
 
