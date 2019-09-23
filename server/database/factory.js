@@ -29,7 +29,7 @@ Factory.blueprint('App/Models/Commerce', async faker => {
     user_id: async () => {
       return (await Factory.model('App/Models/User').create()).id
     },
-    tir: faker.ssn({ dashes: false }),
+    tir: 'J-' + faker.ssn({ dashes: false }),
     name: faker.company(),
   }
 });
