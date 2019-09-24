@@ -1,6 +1,5 @@
 const AccesoInvalidoException = use('App/Exceptions/AccesoInvalidoException');
 const ProductoNoExisteException = use('App/Exceptions/ProductoNoExisteException');
-const UsuarioNoExisteException = use('App/Exceptions/UsuarioNoExisteException');
 const SucursalNoExisteException = use('App/Exceptions/SucursalNoExisteException');
 const ComercioNoExisteException = use('App/Exceptions/ComercioNoExisteException');
 const OrdenNoExisteException = use('App/Exceptions/OrdenNoExisteException');
@@ -10,9 +9,6 @@ const FacturaNoExisteException = use('App/Exceptions/FacturaNoExisteException');
 class ServicioValidacion {
   verifyProduct(product) {
     if (!product) throw new ProductoNoExisteException()
-  }
-  verifyUser(user) {
-    if (!user) throw new UsuarioNoExisteException()
   }
   verifySubsidiary(subsidiary) {
     if (!subsidiary) throw new SucursalNoExisteException()

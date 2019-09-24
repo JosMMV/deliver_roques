@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Receipts from './views/Receipts.vue';
+import Bills from './views/Bills.vue';
 import LogIn from './views/LogIn.vue';
 import Tracking from './views/Tracking.vue';
 import ManageOrder from './views/ManageOrder.vue';
@@ -16,8 +16,8 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'receipts',
-      component: Receipts,
+      name: 'bill',
+      component: Bills,
     },
     {
       path: '/iniciar-sesion',

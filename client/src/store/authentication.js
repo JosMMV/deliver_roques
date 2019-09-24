@@ -28,7 +28,7 @@ export default {
         router.push('/');
       })
       .catch(() => {
-        commit('setLoginError', 'An error has occured trying to login.');
+        commit('setLoginError', 'Usuario y/o contraseña incorrectos');
       });
     },
   },

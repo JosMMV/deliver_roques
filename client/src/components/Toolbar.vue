@@ -109,7 +109,6 @@ export default {
     ]),
     logoutAndSetCurrentProject() {
       this.logout();
-      this.setCurrentProject(null);
     },
   },
 };

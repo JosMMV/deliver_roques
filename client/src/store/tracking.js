@@ -17,7 +17,7 @@ export default {
       .then(({ data }) => {
         commit('setTracking', data);
       }).catch(() => {
-        commit('setTrackingError', 'An error has ocurred trying search tracking.');
+        commit('setTrackingError', 'Número de tracking no existe');
       });
     },
   },
@@ -27,25 +27,25 @@ export default {
     },
     isPacked(state) {
       if (!!state.currentTracking){
-        return !!state.currentTracking.empacado;
+        return !!state.currentTracking.packed;
       }
       return false;
     },
-    isLoaded(state) {
+    isCharged(state) {
       if (!!state.currentTracking){
-        return !!state.currentTracking.cargado;
+        return !!state.currentTracking.charged;
       }
       return false;
     },
     isOnWay(state) {
       if (!!state.currentTracking){
-        return !!state.currentTracking.camino;
+        return !!state.currentTracking.way;
       }
       return false;
     },
-    isBrachOffice(state) {
+    isSubsidiary(state) {
       if (!!state.currentTracking){
-        return !!state.currentTracking.sucursal;
+        return !!state.currentTracking.subsidiary;
       }
       return false;
     },
@@ -61,19 +61,19 @@ export default {
         let current_datetime;
         for (let index = 0; index < 4; index++) {
           if (index === 0) {
-            if (!!tracking.empacado) current_datetime = new Date(tracking.empacado);
+            if (!!tracking.packed) current_datetime = new Date(tracking.packed);
             else break;
           }
           if (index === 1) {
-            if (!!tracking.cargado) current_datetime = new Date(tracking.cargado);
+            if (!!tracking.charged) current_datetime = new Date(tracking.charged);
             else break;
           }
           if (index === 2) {
-            if (!!tracking.camino) current_datetime = new Date(tracking.camino);
+            if (!!tracking.way) current_datetime = new Date(tracking.way);
             else break;
           }
           if (index === 3) {
-            if (!!tracking.sucursal) current_datetime = new Date(tracking.sucursal);
+            if (!!tracking.subsidiary) current_datetime = new Date(tracking.subsidiary);
             else break;
           }
           let horas = current_datetime.getHours();
@@ -84,10 +84,10 @@ export default {
           fecha = fecha.map(num => num.length === 1 ? '0' + num : num);
           let formatted_date = fecha[0] + "/" + fecha[1] + "/" + fecha[2];
           formatted_date += ' a las ' + fecha[3] + ":" + fecha[4] + ampm;
-          if (index === 0) tracking.empacado = formatted_date;
-          if (index === 1) tracking.cargado = formatted_date;
-          if (index === 2) tracking.camino = formatted_date;
-          if (index === 3) tracking.sucursal = formatted_date;
+          if (index === 0) tracking.packed = formatted_date;
+          if (index === 1) tracking.charged = formatted_date;
+          if (index === 2) tracking.way = formatted_date;
+          if (index === 3) tracking.subsidiary = formatted_date;
         }
         state.currentTracking = tracking;
       }

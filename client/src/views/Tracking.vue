@@ -25,7 +25,7 @@
         <template v-slot:opposite>
           <span
             :class="`headline font-weight-light cyan--text`"
-            v-text="currentTracking.empacado"
+            v-text="currentTracking.packed"
           >
           </span>
            <div>
@@ -47,11 +47,11 @@
         </div>
       </v-timeline-item>
 
-      <v-timeline-item :color="'green'" small v-if="isLoaded">
+      <v-timeline-item :color="'green'" small v-if="isCharged">
         <template v-slot:opposite>
           <span
             :class="`headline font-weight-light green--text`"
-            v-text="currentTracking.cargado"
+            v-text="currentTracking.charged"
           >
           </span>
            <div>
@@ -76,7 +76,7 @@
         <template v-slot:opposite>
           <span
             :class="`headline font-weight-light blue--text`"
-            v-text="currentTracking.camino"
+            v-text="currentTracking.way"
           >
           </span>
            <div>
@@ -97,11 +97,11 @@
         </div>
       </v-timeline-item>
 
-      <v-timeline-item :color="'red'" small v-if="isBrachOffice">
+      <v-timeline-item :color="'red'" small v-if="isSubsidiary">
         <template v-slot:opposite>
           <span
             :class="`headline font-weight-light red--text`"
-            v-text="currentTracking.sucursal"
+            v-text="currentTracking.subsidiary"
           >
           </span>
            <div>
@@ -144,9 +144,9 @@ export default {
     ...mapGetters('tracking', [
       'isSearching',
       'isPacked',
-      'isLoaded',
+      'isCharged',
       'isOnWay',
-      'isBrachOffice',
+      'isSubsidiary',
     ]),
   },
   methods: {
