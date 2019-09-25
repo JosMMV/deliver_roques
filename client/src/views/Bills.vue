@@ -57,6 +57,7 @@ import {
 } from 'vuex';
 
 export default {
+  name: 'Bills',
   data() {
     return {
       search: '',

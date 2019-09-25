@@ -6,6 +6,7 @@ export default {
   namespaced: true,
   state: {
     currentOrder: null,
+    orders: [],
     searching: null,
     selectedItem: null,
     error: false,
@@ -36,20 +37,33 @@ export default {
         commit('setError', true);
       });
     },
+    fetchOrders({ commit }, { isAdminUser, commerceID }) {
+      if (isAdminUser) {
+        return HTTPUser().get('pedido')
+        .then(({ data }) => {
+          commit('setOrders', data);
+        });
+      } else {
+        return HTTPUser().get(`pedido/comercio/${commerceID}`)
+        .then(({ data }) => {
+          commit('setOrders', data.orders);
+        });
+      }
+    },
     addTimestamp({ state, commit }) {
       let tipo;
       switch (state.selectedItem) {
         case 0:
-          tipo = 'empacado';
+          tipo = 'packed';
           break;
         case 1:
-          tipo = 'cargado';
+          tipo = 'charged';
           break;
         case 2:
-          tipo = 'camino';
+          tipo = 'way';
           break;
         case 3:
-          tipo = 'sucursal';
+          tipo = 'subsidiary';
           break;
         default:
           tipo = null;
@@ -90,6 +104,9 @@ export default {
     },
     setSelectedItem(state, i) {
       state.selectedItem = i;
+    },
+    setOrders(state, orders) {
+      state.orders = orders;
     },
     editTimestamps(state) {
       let current_datetime;

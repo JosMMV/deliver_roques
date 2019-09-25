@@ -22,20 +22,22 @@
         sort-icon="mdi-menu-down"
       >
         <template v-slot:items="props">
-          <td>{{ props.item.id }}</td>
-          <td class="text-xs-center">{{ props.item.cedula_cliente }}</td>
-          <td class="text-xs-center">{{ props.item.sucursal_id }}</td>
+          <td>{{ props.item.tracking_id }}</td>
+          <td class="text-xs-center">{{ props.item.client_id }}</td>
+          <td class="text-xs-center">{{ props.item.subsidiary_id }}</td>
+          <td v-if="isAdminUser" class="text-xs-center">{{ props.item.commerce_id }}</td>
+          <td v-else class="text-xs-center">N/A</td>
           <td class="text-xs-center">
             <v-chip
               small
-              :class="`${ getStatus(props.item.empacado,
-              props.item.sucursal) } white--text my-2 caption`"
+              :class="`${ getStatus(props.item.packed,
+              props.item.subsidary) } white--text my-2 caption`"
             >
-              {{ getStatus(props.item.empacado, props.item.sucursal) }}
+              {{ getStatus(props.item.packed, props.item.subsidary) }}
             </v-chip>
           </td>
-          <td class="text-xs-center">{{ props.item.costoEnvio }}</td>
-          <td class="text-xs-center">{{ getDate(props.item.tiempoEnvio) }}</td>
+          <td class="text-xs-center">{{ props.item.shippingCost }}</td>
+          <td class="text-xs-center">{{ getDate(props.item.shippingTime) }}</td>
         </template>
         <template v-slot:no-results>
           <v-alert :value="true" color="error" icon="warning">
@@ -53,43 +55,47 @@ import {
   mapState,
   mapMutations,
   mapActions,
+  mapGetters,
 } from 'vuex';
 
 export default {
-  name: 'RequestOrder',
+  name: 'Orders',
   data() {
     return {
       search: '',
       text: 'Filas a mostrar',
       headers: [
-        { text: 'Tracking', value: 'tracking', align: 'center' },
-        { text: 'Cliente', value: 'client', align: 'center' },
-        { text: 'Sucursal', value: 'sucursal', align: 'center' },
+        { text: 'Tracking', align: 'center' },
+        { text: 'Cliente', align: 'center' },
+        { text: 'Sucursal', align: 'center' },
+        { text: 'Comercio', align: 'center' },
         { text: 'Estatus', value: 'status', align: 'center' },
-        { text: 'Costo envío', value: 'cost', align: 'center' },
-        { text: 'Fecha de entrega*', value: 'time', align: 'center' },
+        { text: 'Costo envío', align: 'center' },
+        { text: 'Fecha de entrega*', align: 'center' },
       ],
     };
   },
   mounted() {
-    this.fetchOrders();
+    this.fetchOrders({ isAdminUser: this.isAdminUser, commerceID: this.commerceID });
   },
   computed: {
-    ...mapState('commerce', [
-      'idCommerce',
+    ...mapState('order', [
       'orders',
+    ]),
+    ...mapState('authentication', [
+      'commerceID',
+    ]),
+    ...mapGetters('authentication', [
+      'isAdminUser',
     ]),
   },
   methods: {
-    ...mapMutations('commerce', [
-      'setIdCommerce',
-    ]),
-    ...mapActions('commerce', [
+    ...mapActions('order', [
       'fetchOrders',
     ]),
     getStatus(empacado, sucursal) {
-      if (empacado) {
-        if (sucursal) {
+      if (!!empacado) {
+        if (!!sucursal) {
           return 'Recibida';
         }
         return 'Despachada';

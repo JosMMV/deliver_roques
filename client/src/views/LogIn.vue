@@ -32,6 +32,7 @@
 import { mapState, mapMutations, mapActions } from 'vuex';
 
 export default {
+  name: 'LogIn',
   computed: {
     ...mapState('authentication', [
       'loginEmail',

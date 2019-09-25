@@ -85,6 +85,7 @@ import { required, minLength, numeric } from 'vuelidate/lib/validators';
 import DialogComfirm from '../components/DialogConfirm.vue';
 
 export default {
+  name: 'ManageOrder',
   data: () => ({
     procedures: [
       {

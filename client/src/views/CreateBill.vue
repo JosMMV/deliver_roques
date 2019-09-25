@@ -9,8 +9,11 @@
       solo-inverted
       :value="searchingRif"
       @input="setSearchingRif"
-      @keydown.enter="searchNullReceipts"
+      @keydown.enter="createBill"
     ></v-text-field>
+
+    <v-alert type="error" :value="searchingRifError">{{searchingRifError}}</v-alert>
+
     <template>
       <v-card
         max-width="500"
@@ -21,11 +24,11 @@
           <h2>Crear factura de:</h2>
         </v-card-title>
         <v-card-text><h3>
-          * RIF empresa:</h3><span v-text="currentCommerce.rif"></span>
+          * RIF empresa:</h3><span v-text="currentCommerce.tir"></span>
         </v-card-text>
         <v-card-text>
           <h4 class="display-1 font-weight-bold">Nombre comercio:</h4>
-          <span class="font-weight-thin subheading" v-text="currentCommerce.nombre"></span>
+          <span class="font-weight-thin subheading" v-text="currentCommerce.name"></span>
         </v-card-text>
         <v-card-text>
           <h3>* Cantidad de ordenes:</h3>
@@ -53,6 +56,7 @@ import {
 } from 'vuex';
 
 export default {
+  name: 'CreateBill',
   computed: {
     ...mapState('bill', [
       'searchingRif',
@@ -71,8 +75,7 @@ export default {
       'setcurrentCommerce',
     ]),
     ...mapActions('bill', [
-      'searchNullReceipts',
-      'createReceipt',
+      'createBill',
     ]),
   },
 };

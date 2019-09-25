@@ -5,7 +5,7 @@ import LogIn from './views/LogIn.vue';
 import Tracking from './views/Tracking.vue';
 import ManageOrder from './views/ManageOrder.vue';
 import Reports from './views/Reports.vue';
-import RequestOrder from './views/RequestOrder.vue';
+import Orders from './views/Orders.vue';
 import CreateBill from './views/CreateBill.vue';
 
 Vue.use(Router);
@@ -42,7 +42,7 @@ export default new Router({
     {
       path: '/orden',
       name: 'orden',
-      component: RequestOrder,
+      component: Orders,
     },
     {
       path: '/crear-factura',

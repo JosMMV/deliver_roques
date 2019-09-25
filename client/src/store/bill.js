@@ -1,12 +1,6 @@
 /* eslint-disable */
 import HTTP from '../httpAdmin';
 
-Date.prototype.addDays = function(days) {
-  var date = new Date(this.valueOf());
-  date.setDate(date.getDate() + days);
-  return date;
-}
-
 export default {
   namespaced: true,
   state: {
@@ -15,22 +9,19 @@ export default {
     currentCommerce: null,
     currentDate: null,
     bills: [],
+    orders: [],
   },
   actions: {
-    createReceipt({ commit, state }) {
-      //commit('facturaError', null);
+    createBill({ commit, state }) {
+      commit('setSearchingRifError', null);
       return HTTP().post('factura', {
-        monto: 343434.542,
-        fechaEmision: state.currentDate,
-        fechaTope: state.currentDate.addDays(15),
-        estatus: 'pendiente', 
-        comercio_rif: state.currentCommerce.rif,
+        commerce_tir: state.searchingRif
       })
       .then(({ data }) => {
-        console.log('SE CREO xdddddd');
+        if (!!data.error) commit('setSearchingRifError', data.error);
       })
-      .catch(() => {
-        //commit('genFacturaError', 'An error has occured trying to generate receipt.');
+      .catch(({ data }) => {
+        commit('setSearchingRifError', data.error);
       });
     },
     fetchBills({ commit }, { isAdminUser, commerceID }) {
@@ -93,6 +84,13 @@ export default {
           bill.created_at = formatted_date;
         });
         state.bills = bills;
+      }
+    },
+    setOrders(state, orders) {
+      if (!orders) {
+        state.orders = [];
+      } else {
+        state.orders = orders;
       }
     }
   },

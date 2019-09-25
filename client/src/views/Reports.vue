@@ -49,6 +49,7 @@ import {
 import Report from '../components/Report.vue';
 
 export default {
+  name: 'Reports',
   data: () => ({
     items: [
       { title: 'Por día' },

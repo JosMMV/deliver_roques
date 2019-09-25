@@ -36,17 +36,21 @@ class BillController {
    */
   async create ({ request }) {
     Date.prototype.addDays = function(days) {
-      var date = new Date(this.valueOf());
-      date.setDate(date.getDate() + days);
+      var date = new Date(this.valueOf())
+      date.setDate(date.getDate() + days)
       return date;
     }
-    const { commerce_id } = request.all();
+    const { commerce_tir } = request.all()
+    const commerce = await Commerce.findBy('tir', commerce_tir)
+
+    if (!commerce) return {'error': 'No existe comercio con ese RIF'}
+
     let d = new Date()
 
     const trx = await Database.beginTransaction()
 
     try {
-      let amount = await Database.raw('SELECT SUM(shippingCost) AS amount FROM orders WHERE bill_id IS null AND subsidiary IS NOT null AND commerce_id = ?', commerce_id)
+      let amount = await Database.raw('SELECT SUM(shippingCost) AS amount FROM orders WHERE bill_id IS null AND subsidiary IS NOT null AND commerce_id = ?', commerce.id)
 
       amount = amount[0][0].amount
 
@@ -56,7 +60,7 @@ class BillController {
       }
 
       const bill = await Bill.create({
-        commerce_id: commerce_id,
+        commerce_id: commerce.id,
         amount: amount,
         topDate: d.addDays(15),
         payingDate: null,
@@ -64,7 +68,7 @@ class BillController {
       }, trx);
 
       const affectedRows = await trx.table('orders')
-        .where('commerce_id', commerce_id)
+        .where('commerce_id', commerce.id)
         .andWhere('bill_id', null)
         .andWhere('subsidiary', 'is not', null)
         .update('bill_id', bill.id)
@@ -72,7 +76,7 @@ class BillController {
       affectedRows === 0 ? trx.rollback() : trx.commit()
 
       return await Order.query()
-        .where('commerce_id', commerce_id)
+        .where('commerce_id', commerce.id)
         .andWhere('bill_id', bill.id)
         .fetch()
     } catch (error) {

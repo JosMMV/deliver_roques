@@ -3,7 +3,6 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import authentication from './authentication';
 import tracking from './tracking';
-import commerce from './commerce';
 import order from './order';
 import report from './report';
 import bill from './bill';
@@ -19,7 +18,6 @@ export default new Vuex.Store({
   modules: {
     authentication,
     tracking,
-    commerce,
     order,
     report,
     bill,
