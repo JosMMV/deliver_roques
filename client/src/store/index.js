@@ -6,7 +6,7 @@ import tracking from './tracking';
 import commerce from './commerce';
 import order from './order';
 import report from './report';
-import receipt from './receipt';
+import bill from './bill';
 
 Vue.use(Vuex);
 
@@ -22,6 +22,6 @@ export default new Vuex.Store({
     commerce,
     order,
     report,
-    receipt,
+    bill,
   },
 });

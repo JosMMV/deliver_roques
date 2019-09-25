@@ -15,7 +15,7 @@
       </v-card-title>
       <v-data-table
         :headers="headers"
-        :items="desserts"
+        :items="bills"
         :search="search"
         :rows-per-page-text="text"
         prev-icon="mdi-menu-left"
@@ -25,9 +25,9 @@
         <template v-slot:items="props">
           <td>{{ props.item.id }}</td>
           <td class="text-xs-right">{{ props.item.amount }}</td>
-          <td class="text-xs-right">{{ props.item.dateCreation }}</td>
-          <td class="text-xs-right">{{ props.item.dateMaximum }}</td>
-          <td class="text-xs-right">{{ props.item.dateCancel }}</td>
+          <td class="text-xs-right">{{ props.item.created_at }}</td>
+          <td class="text-xs-right">{{ props.item.topDate }}</td>
+          <td class="text-xs-right">{{ props.item.payingDate }}</td>
           <td class="text-xs-right">
             <v-chip small :class="`${ props.item.status } white--text my-2 caption`">
               {{ props.item.status }}
@@ -53,6 +53,7 @@ import {
   mapState,
   mapMutations,
   mapGetters,
+  mapActions,
 } from 'vuex';
 
 export default {
@@ -67,110 +68,24 @@ export default {
           value: 'id',
         },
         { text: 'Monto', value: 'amount', align: 'center' },
-        { text: 'Fecha de emisión', value: 'dateCreation', align: 'center' },
-        { text: 'Fecha tope', value: 'dateMaximum', align: 'center' },
+        { text: 'Fecha de emisión', value: 'created_at', align: 'center' },
+        { text: 'Fecha tope', value: 'topDate', align: 'center' },
         { text: 'Fecha de cancelación', value: 'dateCancel', align: 'center' },
         { text: 'Estatus', value: 'status', align: 'center' },
         { text: 'Ver factura', value: 'bill', align: 'center' },
-        { text: 'Comercio', value: 'comercio', align: 'center' },
-      ],
-      desserts: [
-        {
-          id: '1',
-          amount: 159,
-          dateCreation: '06/05/19',
-          dateMaximum: '06/06/19',
-          dateCancel: '06/06/19',
-          status: 'Pendiente',
-          comercio: 'Comercio 1',
-        },
-        {
-          id: '2',
-          amount: 237,
-          dateCreation: '06/05/19',
-          dateMaximum: '06/06/19',
-          dateCancel: '06/06/19',
-          status: 'Pendiente',
-          comercio: 'Comercio 1',
-        },
-        {
-          id: '3',
-          amount: 262,
-          dateCreation: '06/05/19',
-          dateMaximum: '06/06/19',
-          dateCancel: '06/06/19',
-          status: 'Pendiente',
-          comercio: 'Comercio 1',
-        },
-        {
-          id: '4',
-          amount: 305,
-          dateCreation: '06/05/19',
-          dateMaximum: '06/06/19',
-          dateCancel: '06/06/19',
-          status: 'Pagado',
-          comercio: 'Comercio 1',
-        },
-        {
-          id: '5',
-          amount: 356,
-          dateCreation: '06/05/19',
-          dateMaximum: '06/06/19',
-          dateCancel: '06/06/19',
-          status: 'Pagado',
-          comercio: 'Comercio 2',
-        },
-        {
-          id: '6',
-          amount: 375,
-          dateCreation: '06/05/19',
-          dateMaximum: '06/06/19',
-          dateCancel: '06/06/19',
-          status: 'Pagado',
-          comercio: 'Comercio 2',
-        },
-        {
-          id: '7',
-          amount: 392,
-          dateCreation: '06/05/19',
-          dateMaximum: '06/06/19',
-          dateCancel: '06/06/19',
-          status: 'Pagado',
-          comercio: 'Comercio 2',
-        },
-        {
-          id: '8',
-          amount: 408,
-          dateCreation: '06/05/19',
-          dateMaximum: '06/06/19',
-          dateCancel: '06/06/19',
-          status: 'Pagado',
-          comercio: 'Comercio 1',
-        },
-        {
-          id: '9',
-          amount: 452,
-          dateCreation: '06/05/19',
-          dateMaximum: '06/06/19',
-          dateCancel: '06/06/19',
-          status: 'Pagado',
-          comercio: 'Comercio 2',
-        },
-        {
-          id: '10',
-          amount: 518,
-          dateCreation: '06/05/19',
-          dateMaximum: '06/06/19',
-          dateCancel: '06/06/19',
-          status: 'Pagado',
-          comercio: 'Comercio 2',
-        },
       ],
     };
   },
+  mounted() {
+    this.fetchBills({ isAdminUser: this.isAdminUser, commerceID: this.commerceID });
+  },
   computed: {
-    ...mapState('commerce', [
-      'idCommerce',
+    ...mapState('authentication', [
+      'commerceID',
+      'commerceName',
+    ]),
+    ...mapState('bill', [
+      'bills',
     ]),
     ...mapGetters('authentication', [
       'isLoggedIn',
@@ -180,6 +95,9 @@ export default {
   methods: {
     ...mapMutations('commerce', [
       'setIdCommerce',
+    ]),
+    ...mapActions('bill', [
+      'fetchBills',
     ]),
   },
 };

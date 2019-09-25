@@ -54,23 +54,23 @@ import {
 
 export default {
   computed: {
-    ...mapState('receipt', [
+    ...mapState('bill', [
       'searchingRif',
       'searchingRifError',
       'currentCommerce',
     ]),
-    ...mapGetters('receipt', [
+    ...mapGetters('bill', [
       'issetcurrentCommerce',
       'issetSearchingRifError',
     ]),
   },
   methods: {
-    ...mapMutations('receipt', [
+    ...mapMutations('bill', [
       'setSearchingRif',
       'setSearchingRifError',
       'setcurrentCommerce',
     ]),
-    ...mapActions('receipt', [
+    ...mapActions('bill', [
       'searchNullReceipts',
       'createReceipt',
     ]),

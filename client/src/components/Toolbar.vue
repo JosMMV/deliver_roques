@@ -72,7 +72,7 @@
         <v-btn flat v-if="!isLoggedIn" to="/iniciar-sesion">
           <v-icon class="mr-1">mdi-fingerprint</v-icon>Iniciar Sesión
         </v-btn>
-        <v-btn flat v-if="isLoggedIn" @click="logoutAndSetCurrentProject">
+        <v-btn flat v-if="isLoggedIn" @click="logout">
           <v-icon class="mr-1">exit_to_app</v-icon>Cerrar Sesión
         </v-btn>
       </v-toolbar-items>
@@ -107,9 +107,6 @@ export default {
     ...mapActions('authentication', [
       'logout',
     ]),
-    logoutAndSetCurrentProject() {
-      this.logout();
-    },
   },
 };
 </script>

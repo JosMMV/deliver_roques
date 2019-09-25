@@ -10,11 +10,13 @@ export default {
     loginError: null,
     token: null,
     isAdmin: false,
+    commerceID: null,
+    commerceName: null,
   },
   actions: {
     logout({ commit }) {
       commit('setToken', null); // set value of token to null
-      router.push('/tracking'); // then redirect to /login
+      router.push('/iniciar-sesion'); // then redirect to /iniciar-sesion
     },
     login({ commit, state }) {
       commit('setLoginError', null);
@@ -25,6 +27,7 @@ export default {
       .then(({ data }) => {
         commit('setToken', data.token);
         commit('setAdminUser');
+        commit('setCommerceID', data)
         router.push('/');
       })
       .catch(() => {
@@ -40,18 +43,21 @@ export default {
     isAdminUser(state) {
       return state.isAdmin;
     },
+    
   },
   mutations: {
     setToken(state, token) {
       state.token = token;
+      state.isAdmin = false;
+      state.commerceID = null;
+      state.commerceName = null;
+    },
+    setCommerceID(state, data) {
+      state.commerceID = data.commerce_id;
+      state.commerceName = data.commerce_name;
     },
     setAdminUser(state) {
-       if (state.loginEmail[0]=='a' && state.loginEmail[1]=='d' && state.loginEmail[2]=='m' &&
-          state.loginEmail[3]=='i' && state.loginEmail[4]=='n'){
-            state.isAdmin = true;
-      }else{
-        state.isAdmin = false;
-      }
+      if (state.loginEmail.substring(0, 5) === 'admin') state.isAdmin = true;
     },
     setLoginError(state, error) {
       state.loginError = error;
