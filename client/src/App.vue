@@ -11,7 +11,7 @@
       </v-container>
     </v-content>
     <v-footer app fixed>
-      <span>Distribuidor&copy; 2019</span>
+      <span>Deliver Roques&copy; 2019</span>
     </v-footer>
   </v-app>
 </template>

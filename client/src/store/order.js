@@ -26,15 +26,15 @@ export default {
     ],
   },
   actions: {
-    searchOrder({ state, commit }, error) {
+    searchOrder({ state, commit }) {
+      commit('setError', null);
       commit('setCurrentOrder', null);
-      return HTTPUser().get(`pedido/${state.searching}`)
+      return HTTPUser().get(`pedido/${state.searching.trim()}`)
       .then(({ data }) => {
-        commit('setError', false);
         commit('setCurrentOrder', data);
         commit('editTimestamps');
-      }).catch(() => {
-        commit('setError', true);
+      }).catch(error => {
+        commit('setError', error.response.data.error);
       });
     },
     fetchOrders({ commit }, { isAdminUser, commerceID }) {
@@ -69,27 +69,23 @@ export default {
           tipo = null;
           break;
       }
-      return HTTPAdmin().patch(`pedido/${state.searching}`, {
-        tipo: tipo,
-        fecha: new Date(),
+      return HTTPAdmin().patch(`pedido/${state.searching.trim()}`, {
+        tipo: tipo
       })
-      .then(({ data }) => {
-        HTTPUser().get(`pedido/${state.searching}`)
+      .then(() => {
+        HTTPUser().get(`pedido/${state.searching.trim()}`)
         .then(({ data }) => {
           commit('setCurrentOrder', data);
           commit('editTimestamps');
         })
-      }).catch(() => {
-        console.log('error');
+      }).catch(error => {
+        commit('setError', error.response.data.error);
       });
     },
   },
   getters: {
     isSearching(state) {
       return !!state.currentOrder;
-    },
-    thereIsError(state) {
-      return !!state.error;
     },
   },
   mutations: {
@@ -101,6 +97,10 @@ export default {
     },
     setCurrentOrder(state, order) {
       state.currentOrder = order;
+      state.timestamps[0].timestamp = null;
+      state.timestamps[1].timestamp = null;
+      state.timestamps[2].timestamp = null;
+      state.timestamps[3].timestamp = null;
     },
     setSelectedItem(state, i) {
       state.selectedItem = i;
@@ -109,36 +109,27 @@ export default {
       state.orders = orders;
     },
     editTimestamps(state) {
-      let current_datetime;
+      let current_datetime = null;
       for (let index = 0; index < 4; index++) {
-        if (index === 0) {
-          if (!!state.currentOrder.empacado) current_datetime = new Date(state.currentOrder.empacado);
-          else break;
+        if (index === 0 && !!state.currentOrder.packed) current_datetime = new Date(state.currentOrder.packed);
+        if (index === 1 && !!state.currentOrder.charged) current_datetime = new Date(state.currentOrder.charged);
+        if (index === 2 && !!state.currentOrder.way) current_datetime = new Date(state.currentOrder.way);
+        if (index === 3 && !!state.currentOrder.subsidiary) current_datetime = new Date(state.currentOrder.subsidiary);
+        if (!!current_datetime) {
+          let horas = current_datetime.getHours();
+          let ampm = horas >= 12 ? 'pm' : 'am';
+          horas = horas % 12;
+          horas = horas ? horas : 12;
+          let fecha = [current_datetime.getDate().toString(), (current_datetime.getMonth() + 1).toString(), current_datetime.getFullYear().toString(), horas.toString(), current_datetime.getMinutes().toString()]
+          fecha = fecha.map(num => num.length === 1 ? '0' + num : num);
+          let formatted_date = fecha[0] + "/" + fecha[1] + "/" + fecha[2];
+          formatted_date += ' a las ' + fecha[3] + ":" + fecha[4] + ampm;
+          if (index === 0) state.timestamps[0].timestamp = formatted_date;
+          if (index === 1) state.timestamps[1].timestamp = formatted_date;
+          if (index === 2) state.timestamps[2].timestamp = formatted_date;
+          if (index === 3) state.timestamps[3].timestamp = formatted_date;
+          current_datetime = null;
         }
-        if (index === 1) {
-          if (!!state.currentOrder.cargado) current_datetime = new Date(state.currentOrder.cargado);
-          else break;
-        }
-        if (index === 2) {
-          if (!!state.currentOrder.camino) current_datetime = new Date(state.currentOrder.camino);
-          else break;
-        }
-        if (index === 3) {
-          if (!!state.currentOrder.sucursal) current_datetime = new Date(state.currentOrder.sucursal);
-          else break;
-        }
-        let horas = current_datetime.getHours();
-        let ampm = horas >= 12 ? 'pm' : 'am';
-        horas = horas % 12;
-        horas = horas ? horas : 12;
-        let fecha = [current_datetime.getDate().toString(), (current_datetime.getMonth() + 1).toString(), current_datetime.getFullYear().toString(), horas.toString(), current_datetime.getMinutes().toString()]
-        fecha = fecha.map(num => num.length === 1 ? '0' + num : num);
-        let formatted_date = fecha[0] + "/" + fecha[1] + "/" + fecha[2];
-        formatted_date += ' a las ' + fecha[3] + ":" + fecha[4] + ampm;
-        if (index === 0) state.timestamps[0].timestamp = formatted_date;
-        if (index === 1) state.timestamps[1].timestamp = formatted_date;
-        if (index === 2) state.timestamps[2].timestamp = formatted_date;
-        if (index === 3) state.timestamps[3].timestamp = formatted_date;
       }
     },
   },

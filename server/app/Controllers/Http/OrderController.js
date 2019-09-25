@@ -143,17 +143,19 @@ class OrderController {
    * @param {Request} ctx.request
    */
   async update ({ params, request }) {
-    const { tipo, fecha } = request.all()
+    const { tipo } = request.all()
     const order = await Order.findBy('tracking_id', params.id)
 
     ValidationService.verifyOrder(order)
     ValidationService.verifyConfirmedOrder(order)
 
-    if (tipo === 'packed') order.merge({packed: fecha})
-    else if (tipo === 'charged') order.merge({charged: fecha})
-      else if (tipo === 'way') order.merge({way: fecha})
-        else if(tipo === 'subsidiary') order.merge({subsidiary: fecha})
-          else return {'error': 'Tipo no encontrado'}
+    let date = new Date()
+
+    if (tipo === 'packed' && !order.packed) order.merge({packed: date})
+    else if (tipo === 'charged' && !order.charged && order.packed) order.merge({charged: date})
+      else if (tipo === 'way' && !order.way && order.packed && order.charged) order.merge({way: date})
+        else if(tipo === 'subsidiary' && !order.subsidiary && order.packed && order.charged && order.way) order.merge({subsidiary: date})
+          else return {'error': 'No se pudo actualizar la fecha'}
     order.save()
     return order
   }

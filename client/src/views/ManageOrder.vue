@@ -8,23 +8,15 @@
       solo-inverted
       :value="searching"
       @input="setSearching"
-      @keydown.enter="searchOrder(!$v.search.minLength || !$v.search.numeric)"
+      @keydown.enter="searchOrder()"
     ></v-text-field>
-    <v-snackbar
-      v-if="thereIsError"
-      v-model="snackbar"
-      :color="'error'"
-      :timeout="0"
-    >
-      El número de orden debe tener al menos {{$v.search.$params.minLength.min}}
-      caracteres numéricos.
-    </v-snackbar>
+    <v-alert type="error" :value="error">{{error}}</v-alert>
     <v-layout align-center justify-center class="mb-4">
       <h2
         class="font-weight-thin display-1"
         v-if="isSearching"
       >
-        Editando pedido número {{ currentOrder.id }}
+        Editando pedido número {{ currentOrder.tracking_id }}
       </h2>
     </v-layout>
     <v-timeline
@@ -81,7 +73,6 @@ import {
   mapActions,
   mapGetters,
 } from 'vuex';
-import { required, minLength, numeric } from 'vuelidate/lib/validators';
 import DialogComfirm from '../components/DialogConfirm.vue';
 
 export default {
@@ -113,13 +104,6 @@ export default {
     dialog2: false,
     snackbar: true,
   }),
-  validations: {
-    search: {
-      required,
-      minLength: minLength(8),
-      numeric,
-    },
-  },
   components: {
     DialogComfirm,
   },
@@ -133,7 +117,6 @@ export default {
     ]),
     ...mapGetters('order', [
       'isSearching',
-      'thereIsError',
     ]),
   },
   methods: {
