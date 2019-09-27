@@ -25,7 +25,7 @@ class BillController {
    * @param {View} ctx.view
    */
   async index () {
-    return await Bill.all();
+    return await Bill.query().with('commerce').fetch()
   }
 
   /**

@@ -82,6 +82,13 @@ export default {
         commit('setError', error.response.data.error);
       });
     },
+    setNotNullOrderItems({ commit }) {
+      commit('setError', null);
+      commit('setSearching', null);
+      commit('setCurrentOrder', null);
+      commit('setSelectedItem', null);
+      commit('setOrders', null);
+    }
   },
   getters: {
     isSearching(state) {

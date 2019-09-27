@@ -131,7 +131,11 @@ class OrderController {
   async showByCommerce ({ params }) {
     const commerce = await Commerce.find(params.id)
     ValidationService.verifyCommerce(commerce);
-    await commerce.load('orders')
+    await commerce.loadMany({
+      orders: order => {
+        order.select('*').with('client').with('subsidiary')
+      }
+    })
     return commerce;
   }
 

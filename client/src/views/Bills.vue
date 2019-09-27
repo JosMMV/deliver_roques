@@ -23,20 +23,18 @@
         sort-icon="mdi-menu-down"
       >
         <template v-slot:items="props">
-          <td>{{ props.item.id }}</td>
-          <td class="text-xs-right">{{ props.item.amount }}</td>
-          <td class="text-xs-right">{{ props.item.created_at }}</td>
-          <td class="text-xs-right">{{ props.item.topDate }}</td>
-          <td class="text-xs-right">{{ props.item.payingDate }}</td>
-          <td class="text-xs-right">
+          <td class="text-xs-center">{{ props.item.id }}</td>
+          <td class="text-xs-center">{{ props.item.amount }}</td>
+          <td class="text-xs-center">{{ props.item.created_at }}</td>
+          <td class="text-xs-center">{{ props.item.topDate }}</td>
+          <td class="text-xs-center">{{ props.item.payingDate }}</td>
+          <td class="text-xs-center">
             <v-chip small :class="`${ props.item.status } white--text my-2 caption`">
               {{ props.item.status }}
             </v-chip>
           </td>
-          <td class="text-xs-right">
-            <v-icon>mdi-file-document-box-search-outline</v-icon>
-          </td>
-          <td class="text-xs-right" v-if="isAdminUser">{{ props.item.comercio }}</td>
+          <td class="text-xs-center" v-if="isAdminUser">{{ props.item.commerce.name }}</td>
+          <td class="text-xs-center" v-else>N/A</td>
         </template>
         <template v-slot:no-results>
           <v-alert :value="true" color="error" icon="warning">
@@ -73,7 +71,7 @@ export default {
         { text: 'Fecha tope', value: 'topDate', align: 'center' },
         { text: 'Fecha de cancelación', value: 'dateCancel', align: 'center' },
         { text: 'Estatus', value: 'status', align: 'center' },
-        { text: 'Ver factura', value: 'bill', align: 'center' },
+        { text: 'Comercio', value: 'commerce', align: 'center' },
       ],
     };
   },

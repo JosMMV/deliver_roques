@@ -72,7 +72,7 @@
         <v-btn flat v-if="!isLoggedIn" to="/iniciar-sesion">
           <v-icon class="mr-1">mdi-fingerprint</v-icon>Iniciar Sesión
         </v-btn>
-        <v-btn flat v-if="isLoggedIn" @click="logout">
+        <v-btn flat v-if="isLoggedIn" @click="logoutAndSetCurrentItems()">
           <v-icon class="mr-1">exit_to_app</v-icon>Cerrar Sesión
         </v-btn>
       </v-toolbar-items>
@@ -107,6 +107,17 @@ export default {
     ...mapActions('authentication', [
       'logout',
     ]),
+    ...mapActions('bill', [
+      'setNotNullBillItems',
+    ]),
+    ...mapActions('order', [
+      'setNotNullOrderItems',
+    ]),
+    logoutAndSetCurrentItems() {
+      this.setNotNullBillItems();
+      this.setNotNullOrderItems();
+      this.logout();
+    },
   },
 };
 </script>

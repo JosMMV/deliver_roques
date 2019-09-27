@@ -55,6 +55,13 @@ export default {
           });
         }
       }
+    },
+    setNotNullBillItems({ commit }) {
+      commit('setSuccessMessage', null);
+      commit('setSearchingRif', null);
+      commit('setSearchingRifError', null);
+      commit('setBills', null);
+      commit('setCurrentCommerce', null);
     }
   },
   getters: {
