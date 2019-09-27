@@ -39,15 +39,7 @@
             <img class="imagen" :src="procedure.img"/>
             <p>{{ timestamps[i].timestamp }}</p>
             <v-btn
-              v-if="!!timestamps[i].timestamp"
-              :color="procedure.color"
-              outline
-              disabled
-            >
-              Añadir timestamp
-            </v-btn>
-            <v-btn
-              v-else
+              v-if="!timestamps[i].timestamp"
               :color="'black'"
               outline
               @click="anadirTimestamp(i)"

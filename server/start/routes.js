@@ -56,6 +56,7 @@ Route.group(() => {
   Route.get('/factura', 'BillController.index')
   Route.get('/factura/:id', 'BillController.show')
   Route.get('/factura/comercio/:id', 'BillController.showByCommerce')
+  Route.get('/factura/prefactura/:id', 'BillController.preBill')
   Route.post('/factura', 'BillController.create')
   Route.patch('/factura/:id', 'BillController.update')
   Route.delete('/factura/:id', 'BillController.destroy')

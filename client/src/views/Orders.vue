@@ -23,9 +23,9 @@
       >
         <template v-slot:items="props">
           <td>{{ props.item.tracking_id }}</td>
-          <td class="text-xs-center">{{ props.item.client_id }}</td>
-          <td class="text-xs-center">{{ props.item.subsidiary_id }}</td>
-          <td v-if="isAdminUser" class="text-xs-center">{{ props.item.commerce_id }}</td>
+          <td class="text-xs-center">{{ props.item.client.ci }}</td>
+          <td class="text-xs-center">{{ props.item.subsidiary.name }}</td>
+          <td v-if="isAdminUser" class="text-xs-center">{{ props.item.commerce.name }}</td>
           <td v-else class="text-xs-center">N/A</td>
           <td class="text-xs-center">
             <v-chip
@@ -65,13 +65,13 @@ export default {
       search: '',
       text: 'Filas a mostrar',
       headers: [
-        { text: 'Tracking', align: 'center' },
-        { text: 'Cliente', align: 'center' },
-        { text: 'Sucursal', align: 'center' },
-        { text: 'Comercio', align: 'center' },
+        { text: 'Tracking', value: 'tracking_id', align: 'center' },
+        { text: 'Cliente', value: 'client_id', align: 'center' },
+        { text: 'Sucursal', value: 'subsidiary_id', align: 'center' },
+        { text: 'Comercio', value: 'commerce_id', align: 'center' },
         { text: 'Estatus', value: 'status', align: 'center' },
-        { text: 'Costo envío', align: 'center' },
-        { text: 'Fecha de entrega*', align: 'center' },
+        { text: 'Costo envío', value: 'shippingCost', align: 'center' },
+        { text: 'Fecha de entrega*', value: 'shippingTime', align: 'center' },
       ],
     };
   },

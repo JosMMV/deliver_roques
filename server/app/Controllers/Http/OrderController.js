@@ -21,7 +21,7 @@ class OrderController {
    * GET orders
    */
   async index () {
-    return await Order.all();
+    return await Order.query().with('client').with('subsidiary').with('commerce').fetch()
   }
 
   /**
@@ -150,11 +150,16 @@ class OrderController {
     ValidationService.verifyConfirmedOrder(order)
 
     let date = new Date()
+    console.log(tipo)
+    console.log('------------')
+    console.log(!!order.subsidiary)
+    console.log('------------')
+    console.log(!!order.way)
 
-    if (tipo === 'packed' && !order.packed) order.merge({packed: date})
-    else if (tipo === 'charged' && !order.charged && order.packed) order.merge({charged: date})
-      else if (tipo === 'way' && !order.way && order.packed && order.charged) order.merge({way: date})
-        else if(tipo === 'subsidiary' && !order.subsidiary && order.packed && order.charged && order.way) order.merge({subsidiary: date})
+    if (tipo === 'packed') order.merge({packed: date})
+    else if (tipo === 'charged' && !!order.packed) order.merge({charged: date})
+      else if (tipo === 'way' && !!order.charged) order.merge({way: date})
+        else if(tipo === 'subsidiary' && !!order.way) order.merge({subsidiary: date})
           else return {'error': 'No se pudo actualizar la fecha'}
     order.save()
     return order

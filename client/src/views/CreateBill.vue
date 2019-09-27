@@ -9,41 +9,57 @@
       solo-inverted
       :value="searchingRif"
       @input="setSearchingRif"
-      @keydown.enter="createBill"
+      @keydown.enter="preBill"
     ></v-text-field>
 
-    <v-alert type="error" :value="searchingRifError">{{searchingRifError}}</v-alert>
+    <v-alert type="error" :value="searchingRifError">{{ searchingRifError }}.</v-alert>
+    <v-alert type="success" :value="successMessage">{{ successMessage }}.</v-alert>
 
-    <template>
-      <v-card
-        max-width="500"
-        class="mx-auto"
-        v-if="issetcurrentCommerce"
+    <Panel v-if="issetcurrentCommerce" :title="currentCommerce.name">
+      <v-layout row wrap>
+        <v-flex xs4>
+          <div class="headline font-weight-thin"># DE TRACKING</div>
+        </v-flex>
+        <v-flex xs4>
+          <div class="headline font-weight-thin">COSTO DE ENVÍO</div>
+        </v-flex>
+        <v-flex xs4>
+          <div class="headline font-weight-thin">CREADA EL</div>
+        </v-flex>
+      </v-layout>
+      <v-divider light></v-divider>
+      <div class="mt-2" v-for="order in currentCommerce.orders" :key="order.id">
+        <v-layout row wrap>
+          <slot></slot>
+          <v-flex xs4 class="text-xs-left my-4">
+            <span>{{ order.tracking_id }}</span>
+          </v-flex>
+          <v-flex xs4 class="text-xs-left my-4">
+            <span>Bs. {{ order.shippingCost }}</span>
+          </v-flex>
+          <v-flex xs4 class="text-xs-left my-4">
+            <span>{{ order.created_at }}</span>
+          </v-flex>
+        </v-layout>
+      </div>
+      <v-divider light></v-divider>
+      <v-layout row wrap>
+        <v-flex xs6>
+          <div class="headline font-weight-thin mt-5 text-xs-center">TOTAL :</div>
+        </v-flex>
+        <v-flex xs6>
+          <div class="headline font-weight-thin mt-5">Bs. {{ currentCommerce.amount }}</div>
+        </v-flex>
+      </v-layout>
+      <v-btn
+        block
+        color="green"
+        class="mt-5"
+        @click="createBill"
       >
-        <v-card-title>
-          <h2>Crear factura de:</h2>
-        </v-card-title>
-        <v-card-text><h3>
-          * RIF empresa:</h3><span v-text="currentCommerce.tir"></span>
-        </v-card-text>
-        <v-card-text>
-          <h4 class="display-1 font-weight-bold">Nombre comercio:</h4>
-          <span class="font-weight-thin subheading" v-text="currentCommerce.name"></span>
-        </v-card-text>
-        <v-card-text>
-          <h3>* Cantidad de ordenes:</h3>
-        </v-card-text>
-        <v-card-text>
-          <h3>* Monto total:</h3>
-        </v-card-text>
-        <v-card-text>
-          <h3>* Fecha de emision:</h3>
-        </v-card-text>
-        <v-card-actions>
-          <v-btn color="primary" @click="createReceipt">CREAR FACTURA</v-btn>
-        </v-card-actions>
-      </v-card>
-    </template>
+        Crear Factura
+      </v-btn>
+    </Panel>
   </v-container>
 </template>
 
@@ -54,18 +70,22 @@ import {
   mapActions,
   mapGetters,
 } from 'vuex';
+import Panel from '@/components/Panel.vue';
 
 export default {
+  components: {
+    Panel,
+  },
   name: 'CreateBill',
   computed: {
     ...mapState('bill', [
       'searchingRif',
       'searchingRifError',
       'currentCommerce',
+      'successMessage',
     ]),
     ...mapGetters('bill', [
       'issetcurrentCommerce',
-      'issetSearchingRifError',
     ]),
   },
   methods: {
@@ -76,6 +96,7 @@ export default {
     ]),
     ...mapActions('bill', [
       'createBill',
+      'preBill',
     ]),
   },
 };

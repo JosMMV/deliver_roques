@@ -75,10 +75,15 @@ class BillController {
 
       affectedRows === 0 ? trx.rollback() : trx.commit()
 
-      return await Order.query()
+      const orders = await Order.query()
         .where('commerce_id', commerce.id)
         .andWhere('bill_id', bill.id)
         .fetch()
+
+      return {
+        'orders': orders,
+        'bill': bill
+      }
     } catch (error) {
       trx.rollback()
       return {'error': 'No se pudo crear factura', 'message': error}
@@ -105,9 +110,27 @@ class BillController {
    */
   async showByCommerce ({ params }) {
     const commerce = await Commerce.find(params.id)
-    ValidationService.verifyCommerce(commerce);
+    ValidationService.verifyCommerce(commerce)
     await commerce.load('bills')
     return commerce;
+  }
+
+  /**
+   * Display some orders of a commerce
+   * GET factura/prefactura/:id
+   *
+   * @param {object} ctx
+   */
+  async preBill ({ params }) {
+    const commerce = await Commerce.findBy('tir',params.id)
+    ValidationService.verifyCommerce(commerce)
+    await commerce.loadMany({
+      orders: order => order.where('bill_id', null)
+      .andWhere('subsidiary', 'is not', null)
+    })
+    if (commerce.getRelated('orders').size() === 0) return {'error': 'No hay ordenes entregadas sin factura'}
+
+    return commerce
   }
 
   /**
