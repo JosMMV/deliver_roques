@@ -28,6 +28,7 @@ Route.group(() => {
   Route.get('/pedido', 'OrderController.index')
   Route.get('/pedido/:id', 'OrderController.show')
   Route.get('/pedido/comercio/:id', 'OrderController.showByCommerce')
+  Route.get('/pedido/detalle/:id', 'OrderController.showDetailOrder')
   Route.post('/pedido', 'OrderController.create')
   Route.post('/pedido/:id', 'OrderController.confirm')
 }).prefix('api')

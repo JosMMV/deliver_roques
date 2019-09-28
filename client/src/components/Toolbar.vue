@@ -49,7 +49,7 @@
               <v-icon>mdi-table-edit</v-icon>
             </v-list-tile-action>
             <v-list-tile-content>
-              <v-list-tile-title>Gestionar Pedido</v-list-tile-title>
+              <v-list-tile-title>Gestionar Orden</v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
           <v-list-tile to="/reportes" v-if="isLoggedIn && isAdminUser">

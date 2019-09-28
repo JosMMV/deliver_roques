@@ -38,6 +38,10 @@
           </td>
           <td class="text-xs-center">{{ props.item.shippingCost }}</td>
           <td class="text-xs-center">{{ getDate(props.item.shippingTime) }}</td>
+          <td class="text-xs-center cursor" @click="seeDetailOrder(props.item)">
+            <v-icon>mdi-file-find</v-icon>
+            Ver orden
+          </td>
         </template>
         <template v-slot:no-results>
           <v-alert :value="true" color="error" icon="warning">
@@ -46,6 +50,11 @@
         </template>
       </v-data-table>
     </v-card>
+    <DetailOrder
+      @OkClicked="dialog = false"
+      :dialog="dialog"
+      :order="currentDetailOrder"
+    />
   </v-container>
 </template>
 
@@ -58,8 +67,13 @@ import {
   mapGetters,
 } from 'vuex';
 
+import DetailOrder from '../components/DetailOrder';
+
 export default {
   name: 'Orders',
+  components: {
+    DetailOrder,
+  },
   data() {
     return {
       search: '',
@@ -72,7 +86,9 @@ export default {
         { text: 'Estatus', value: 'status', align: 'center' },
         { text: 'Costo envío', value: 'shippingCost', align: 'center' },
         { text: 'Fecha de entrega*', value: 'shippingTime', align: 'center' },
+        { text: 'Detallar orden', value: 'details', align: 'center' },
       ],
+      dialog: false,
     };
   },
   mounted() {
@@ -81,6 +97,7 @@ export default {
   computed: {
     ...mapState('order', [
       'orders',
+      'currentDetailOrder',
     ]),
     ...mapState('authentication', [
       'commerceID',
@@ -92,7 +109,12 @@ export default {
   methods: {
     ...mapActions('order', [
       'fetchOrders',
+      'searchDetailOrder'
     ]),
+    seeDetailOrder(order) {
+      this.searchDetailOrder({ order });
+      this.dialog = true;
+    },
     getStatus(empacado, sucursal) {
       if (!!empacado) {
         if (!!sucursal) {
@@ -117,11 +139,21 @@ export default {
 .v-chip.Despachada{
   background: #5e8a25;
 }
+
 .v-chip.Recibida{
   background: #00BFFF;
 }
+
 .v-chip.PorDespachar{
   background: #DAA520;
+}
+
+.cursor{
+  cursor: pointer;
+}
+
+.cursor:hover{
+  color: rgb(6, 160, 19);
 }
 
 </style>

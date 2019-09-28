@@ -5,7 +5,7 @@ const Model = use('Model')
 
 class Order extends Model {
   products () {
-    return this.belongsToMany('App/Models/Product')
+    return this.belongsToMany('App/Models/Product').withPivot(['amount'])
   }
 
   bill () {

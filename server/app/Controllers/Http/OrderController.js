@@ -101,8 +101,8 @@ class OrderController {
   }
 
   async confirm ({ params }) {
-    const order = await Order.findBy('tracking_id', params.id);
-    ValidationService.verifyOrder(order);
+    const order = await Order.findBy('tracking_id', params.id)
+    ValidationService.verifyOrder(order)
     order.merge({
       confirmed: true
     })
@@ -118,7 +118,7 @@ class OrderController {
    */
   async show ({ params }) {
     const order = await Order.findBy('tracking_id', params.id);
-    ValidationService.verifyOrder(order);
+    ValidationService.verifyOrder(order)
     return order;
   }
 
@@ -130,13 +130,25 @@ class OrderController {
    */
   async showByCommerce ({ params }) {
     const commerce = await Commerce.find(params.id)
-    ValidationService.verifyCommerce(commerce);
+    ValidationService.verifyCommerce(commerce)
     await commerce.loadMany({
       orders: order => {
         order.select('*').with('client').with('subsidiary')
       }
     })
     return commerce;
+  }
+
+  async showDetailOrder({params}) {
+    const order = await Order.find(params.id)
+    ValidationService.verifyOrder(order)
+    await order.loadMany({
+      products: product => product.select('name', 'price'),
+      client: client => client.select('ci'),
+      subsidiary: subsidiary => subsidiary.select('name'),
+      commerce: commerce => commerce.select('name')
+    })
+    return order
   }
 
   /**
@@ -191,8 +203,8 @@ class OrderController {
 
   calculateDeliveryDate(distance) {
     Date.prototype.addDays = function(days) {
-      var date = new Date(this.valueOf());
-      date.setDate(date.getDate() + days);
+      var date = new Date(this.valueOf())
+      date.setDate(date.getDate() + days)
       return date;
     }
     let deliveryDate = new Date()

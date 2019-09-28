@@ -6,6 +6,7 @@ export default {
   namespaced: true,
   state: {
     currentOrder: null,
+    currentDetailOrder: null,
     orders: [],
     searching: null,
     selectedItem: null,
@@ -33,6 +34,15 @@ export default {
       .then(({ data }) => {
         commit('setCurrentOrder', data);
         commit('editTimestamps');
+      }).catch(error => {
+        commit('setError', error.response.data.error);
+      });
+    },
+    searchDetailOrder({ commit }, { order }) {
+      commit('setCurrentDetailOrder', null);
+      return HTTPUser().get(`pedido/detalle/${order.id}`)
+      .then(({ data }) => {
+        commit('setCurrentDetailOrder', data);
       }).catch(error => {
         commit('setError', error.response.data.error);
       });
@@ -88,6 +98,7 @@ export default {
       commit('setCurrentOrder', null);
       commit('setSelectedItem', null);
       commit('setOrders', null);
+      commit('setCurrentDetailOrder', null);
     }
   },
   getters: {
@@ -108,6 +119,9 @@ export default {
       state.timestamps[1].timestamp = null;
       state.timestamps[2].timestamp = null;
       state.timestamps[3].timestamp = null;
+    },
+    setCurrentDetailOrder(state, order) {
+      state.currentDetailOrder = order;
     },
     setSelectedItem(state, i) {
       state.selectedItem = i;
