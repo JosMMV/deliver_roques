@@ -11,6 +11,7 @@ export default {
     token: null,
     isAdmin: false,
     commerceID: null,
+    commerceTIR: null,
     commerceName: null,
   },
   actions: {
@@ -43,7 +44,6 @@ export default {
     isAdminUser(state) {
       return state.isAdmin;
     },
-    
   },
   mutations: {
     setToken(state, token) {
@@ -51,10 +51,12 @@ export default {
       state.isAdmin = false;
       state.commerceID = null;
       state.commerceName = null;
+      state.commerceTIR = null;
     },
     setCommerceID(state, data) {
       state.commerceID = data.commerce_id;
       state.commerceName = data.commerce_name;
+      state.commerceTIR = data.commerce_tir;
     },
     setAdminUser(state) {
       if (state.loginEmail.substring(0, 5) === 'admin') state.isAdmin = true;

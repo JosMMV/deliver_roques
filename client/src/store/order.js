@@ -47,14 +47,14 @@ export default {
         commit('setError', error.response.data.error);
       });
     },
-    fetchOrders({ commit }, { isAdminUser, commerceID }) {
+    fetchOrders({ commit }, { isAdminUser, commerceTIR }) {
       if (isAdminUser) {
         return HTTPUser().get('pedido')
         .then(({ data }) => {
           commit('setOrders', data);
         });
       } else {
-        return HTTPUser().get(`pedido/comercio/${commerceID}`)
+        return HTTPUser().get(`pedido/comercio/${commerceTIR}`)
         .then(({ data }) => {
           commit('setOrders', data.orders);
         });

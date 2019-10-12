@@ -87,9 +87,9 @@ class OrderController {
       trx.commit()
 
       return {
-        'nroOrden': order.tracking_id,
-        'tiempoEnvio': deliveryDate,
-        'costoEnvio': amount,
+        'tracking': order.tracking_id,
+        'deliveryDate': deliveryDate,
+        'deliveryAmount': amount,
       };
     } catch (error) {
       console.log(error)
@@ -107,7 +107,10 @@ class OrderController {
       confirmed: true
     })
     order.save()
-    return order; 
+    return {
+      "tracking": order.tracking_id,
+      "confirmed": true
+    }; 
   }
 
   /**
@@ -129,7 +132,7 @@ class OrderController {
    * @param {object} ctx
    */
   async showByCommerce ({ params }) {
-    const commerce = await Commerce.find(params.id)
+    const commerce = await Commerce.findBy('tir', params.id)
     ValidationService.verifyCommerce(commerce)
     await commerce.loadMany({
       orders: order => {
@@ -166,11 +169,6 @@ class OrderController {
     ValidationService.verifyConfirmedOrder(order)
 
     let date = new Date()
-    console.log(tipo)
-    console.log('------------')
-    console.log(!!order.subsidiary)
-    console.log('------------')
-    console.log(!!order.way)
 
     if (tipo === 'packed') order.merge({packed: date})
     else if (tipo === 'charged' && !!order.packed) order.merge({charged: date})

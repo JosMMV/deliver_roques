@@ -92,7 +92,7 @@ export default {
     };
   },
   mounted() {
-    this.fetchOrders({ isAdminUser: this.isAdminUser, commerceID: this.commerceID });
+    this.fetchOrders({ isAdminUser: this.isAdminUser, commerceTIR: this.commerceTIR });
   },
   computed: {
     ...mapState('order', [
@@ -100,7 +100,7 @@ export default {
       'currentDetailOrder',
     ]),
     ...mapState('authentication', [
-      'commerceID',
+      'commerceTIR',
     ]),
     ...mapGetters('authentication', [
       'isAdminUser',

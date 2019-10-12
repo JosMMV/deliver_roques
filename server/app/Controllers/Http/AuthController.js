@@ -13,6 +13,7 @@ class AuthController {
       username: username,
       commerce_id: commerce.id,
       commerce_name: commerce.name,
+      commerce_tir: commerce.tir,
       token: token
     }
   }
