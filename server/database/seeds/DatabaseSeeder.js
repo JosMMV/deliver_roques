@@ -13,17 +13,19 @@
 /** @type {import('@adonisjs/lucid/src/Factory')} */
 const Factory = use('Factory')
 const Subsidiary = use('App/Models/Subsidiary')
+const Product = use('App/Models/Product')
 const subsidiaries = require('./subsidiaries.json')
+const productsCommerce2 = require('./products2.json')
 
 class DatabaseSeeder {
   async run () {
-    const commerceArray = await Factory.model('App/Models/Commerce').createMany(5)
+    // const commerceArray = await Factory.model('App/Models/Commerce').createMany(5)
 
-    const productArray = await Factory.model('App/Models/Product').createMany(15)
+    /*const productArray = */await Product.createMany(productsCommerce2)
 
-    const subsidiaryArray = await Subsidiary.createMany(subsidiaries)
+    /*const subsidiaryArray = */await Subsidiary.createMany(subsidiaries)
 
-    const clientArray = await Factory.model('App/Models/Client').createMany(12)
+    /* const clientArray = await Factory.model('App/Models/Client').createMany(12)
 
     const orderArray = []
 
@@ -38,6 +40,7 @@ class DatabaseSeeder {
       // create list of products
       for (let j = 0; j < amountProducts; j++) {
         let product = productArray[Math.floor(Math.random() * productArray.length)]
+        // console.log('Bulk de: ' + product.id + ' es ' + product.bulk)
         totalBulk += product.bulk
         // console.log('Voy a insertar: ' + product.id)
         products.push(product.id)
@@ -45,12 +48,18 @@ class DatabaseSeeder {
 
       const commerce = commerceArray[Math.floor(Math.random() * commerceArray.length)]
 
+      // console.log('distanceFromCaracas: ' + subsidiaryArray[subsidiary].distanceFromCaracas)
+      // console.log('totalBulk: ' + totalBulk)
+
+      // let sC = (subsidiaryArray[subsidiary].distanceFromCaracas * 0.5) * totalBulk
+      // console.log(sC)
+
       const order = await Factory.model('App/Models/Order').create({
         client_id: clientArray[Math.floor(Math.random() * clientArray.length)].id,
         commerce_id: commerce.id,
         bill_id: null,
         subsidiary_id: subsidiaryArray[subsidiary].id,
-        shippingCost: (subsidiaryArray[subsidiary].distanceFromCaracas * 0.3) * totalBulk
+        shippingCost: (subsidiaryArray[subsidiary].distanceFromCaracas * 20) * totalBulk
       })
 
       await order.products().attach(products, row => {

@@ -11,7 +11,8 @@ const ValidationService = use('App/Services/ServicioValidacion');
  * Resourceful controller for interacting with subsidiaries
  */
 class SubsidiaryController {
-  async index () {
+  async index ({ auth }) {
+    await auth.getUser()
     return await Subsidiary.all();
   }
 
@@ -21,7 +22,9 @@ class SubsidiaryController {
    *
    * @param {Request} ctx.request
    */
-  async create ({ request }) {
+  async create ({ request, auth }) {
+    const user = await auth.getUser()
+    ValidationService.verifyAdmin(user)
     const subsidiariesData = request.raw()
     const subsidiaries = await Subsidiary.createMany(JSON.parse(subsidiariesData))
     return subsidiaries;
@@ -33,7 +36,8 @@ class SubsidiaryController {
    *
    * @param {object} ctx
    */
-  async show ({ params }) {
+  async show ({ params, auth }) {
+    await auth.getUser()
     const subsidiary = await Subsidiary.find(params.id);
     ValidationService.verifySubsidiary(subsidiary);
     return subsidiary;
@@ -46,7 +50,9 @@ class SubsidiaryController {
    * @param {object} ctx
    * @param {Request} ctx.request
    */
-  async update ({ params, request }) {
+  async update ({ params, request, auth }) {
+    const user = await auth.getUser()
+    ValidationService.verifyAdmin(user)
     const subsidiary = await Subsidiary.find(params.id);
     ValidationService.verifySubsidiary(subsidiary);
     subsidiary.merge({
@@ -62,7 +68,9 @@ class SubsidiaryController {
    *
    * @param {object} ctx
    */
-  async destroy ({ params }) {
+  async destroy ({ params, auth }) {
+    const user = await auth.getUser()
+    ValidationService.verifyAdmin(user)
     const subsidiary = await Subsidiary.find(params.id);
     ValidationService.verifySubsidiary(subsidiary);
     await subsidiary.delete();

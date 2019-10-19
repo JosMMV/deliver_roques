@@ -20,7 +20,8 @@ class ProductController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index () {
+  async index ({ auth }) {
+    await auth.getUser()
     return await Product.all();
   }
 
@@ -30,7 +31,8 @@ class ProductController {
    *
    * @param {object} ctx
    */
-  async show ({ params }) {
+  async show ({ params, auth }) {
+    await auth.getUser()
     const product = await Product.find(params.id);
     ValidationService.verifyProduct(product);
     return product;
@@ -44,7 +46,9 @@ class ProductController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async update ({ params, request }) {
+  async update ({ params, request, auth }) {
+    const user = await auth.getUser()
+    ValidationService.verifyAdmin(user)
     const product = await Product.find(params.id);
     ValidationService.verifyProduct(product);
     product.merge({
@@ -61,7 +65,9 @@ class ProductController {
    * @param {object} ctx
    * @param {Request} ctx.request
    */
-  async destroy ({ params }) {
+  async destroy ({ params, auth }) {
+    const user = await auth.getUser()
+    ValidationService.verifyAdmin(user)
     const product = await Product.find(params.id);
     ValidationService.verifyProduct(product);
     await product.delete();

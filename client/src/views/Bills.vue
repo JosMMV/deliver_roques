@@ -35,6 +35,10 @@
           </td>
           <td class="text-xs-center" v-if="isAdminUser">{{ props.item.commerce.name }}</td>
           <td class="text-xs-center" v-else>N/A</td>
+          <td class="text-xs-center cursor" @click="patchBill(props.item)">
+            <v-icon>mdi-file-document-box-check</v-icon>
+            Confirmar
+          </td>
         </template>
         <template v-slot:no-results>
           <v-alert :value="true" color="error" icon="warning">
@@ -43,6 +47,13 @@
         </template>
       </v-data-table>
     </v-card>
+
+    <DialogComfirm
+      @OkClicked="OkClicked"
+      @CancelClicked="dialog = false"
+      :dialog="dialog"
+      :title="'¿Seguro que desea actualizar el estatus de la factura?'"
+    />
   </v-container>
 </template>
 
@@ -54,12 +65,15 @@ import {
   mapActions,
 } from 'vuex';
 
+import DialogComfirm from '../components/DialogConfirm.vue';
+
 export default {
   name: 'Bills',
   data() {
     return {
       search: '',
       text: 'Filas a mostrar',
+      dialog: false,
       headers: [
         {
           text: 'ID',
@@ -72,15 +86,18 @@ export default {
         { text: 'Fecha de cancelación', value: 'dateCancel', align: 'center' },
         { text: 'Estatus', value: 'status', align: 'center' },
         { text: 'Comercio', value: 'commerce', align: 'center' },
+        { text: 'Actualizar factura', value: '', align: 'center' },
       ],
     };
   },
+  components: {
+    DialogComfirm,
+  },
   mounted() {
-    this.fetchBills({ isAdminUser: this.isAdminUser, commerceID: this.commerceID });
+    this.fetchBills({ isAdminUser: this.isAdminUser });
   },
   computed: {
     ...mapState('authentication', [
-      'commerceID',
       'commerceName',
     ]),
     ...mapState('bill', [
@@ -97,7 +114,17 @@ export default {
     ]),
     ...mapActions('bill', [
       'fetchBills',
+      'patchBillStatus',
+      'setBill',
     ]),
+    patchBill(bill) {
+      this.setBill({ bill });
+      this.dialog = true;
+    },
+    OkClicked() {
+      this.dialog = false;
+      this.patchBillStatus();
+    },
   },
 };
 </script>

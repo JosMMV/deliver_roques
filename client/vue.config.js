@@ -1,11 +1,11 @@
 module.exports = {
   devServer: {
     proxy: {
-      '/api': {
+      '/dist': {
         target: 'http://localhost:3333',
       },
-      '/admin': {
-        target: 'http://localhost:3333',
+      '/api': {
+        target: 'http://bankoneapi.16mb.com',
       },
     },
   },

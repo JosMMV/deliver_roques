@@ -6,7 +6,8 @@ const Client = use('App/Models/Client')
 const Subsidiary = use('App/Models/Subsidiary')
 const Commerce = use('App/Models/Commerce')
 const Product = use('App/Models/Product')
-const ValidationService = use('App/Services/ServicioValidacion');
+const ValidationService = use('App/Services/ServicioValidacion')
+const User = use('App/Models/User')
 
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
@@ -20,7 +21,9 @@ class OrderController {
    * Show a list of all orders.
    * GET orders
    */
-  async index () {
+  async index ({ auth }) {
+    const user = await auth.getUser()
+    ValidationService.verifyAdmin(user)
     return await Order.query().with('client').with('subsidiary').with('commerce').fetch()
   }
 
@@ -30,16 +33,18 @@ class OrderController {
    *
    * @param {Request} ctx.request
    */
-  async create ({ request }) {
+  async create ({ request, auth }) {
+    const user = await auth.getUser()
+    const commerce = await user.commerce().fetch()
+
     const trx = await Database.beginTransaction()
 
     try {
-      const { client, tir, subsidiaryName, products } = request.all()
+      const { client, subsidiaryName, products } = request.all()
 
       const subsidiary = await Subsidiary.findBy('name', subsidiaryName)
       ValidationService.verifySubsidiary(subsidiary)
 
-      const commerce = await Commerce.findBy('tir', tir)
       ValidationService.verifyCommerce(commerce)
 
       let clientA = await Client.findBy('ci', client.ci)
@@ -65,10 +70,8 @@ class OrderController {
 
       const deliveryDate = this.calculateDeliveryDate(subsidiary.distanceFromCaracas);
 
-      const d = new Date()
-
       const order = await Order.create({
-        tracking_id: parseInt(d.getTime().toString().substr(4)),
+        tracking_id: Math.floor(Math.random() * 99999999) + 10000000,
         shippingCost: amount,
         shippingTime: deliveryDate,
         confirmed: false,
@@ -100,9 +103,12 @@ class OrderController {
     } 
   }
 
-  async confirm ({ params }) {
+  async confirm ({ params, auth }) {
+    const user = await auth.getUser()
+    const commerce = await user.commerce().fetch()
     const order = await Order.findBy('tracking_id', params.id)
     ValidationService.verifyOrder(order)
+    ValidationService.verifyAccess(commerce, order)
     order.merge({
       confirmed: true
     })
@@ -131,8 +137,9 @@ class OrderController {
    *
    * @param {object} ctx
    */
-  async showByCommerce ({ params }) {
-    const commerce = await Commerce.findBy('tir', params.id)
+  async showByCommerce ({ auth }) {
+    const user = await auth.getUser()
+    const commerce = await user.commerce().fetch()
     ValidationService.verifyCommerce(commerce)
     await commerce.loadMany({
       orders: order => {
@@ -142,8 +149,11 @@ class OrderController {
     return commerce;
   }
 
-  async showDetailOrder({params}) {
+  async showDetailOrder({params, auth }) {
+    const user = await auth.getUser()
+    const commerce = await user.commerce().fetch()
     const order = await Order.find(params.id)
+    ValidationService.verifyAccess(commerce, order)
     ValidationService.verifyOrder(order)
     await order.loadMany({
       products: product => product.select('name', 'price'),
@@ -161,7 +171,9 @@ class OrderController {
    * @param {object} ctx
    * @param {Request} ctx.request
    */
-  async update ({ params, request }) {
+  async update ({ params, request, auth }) {
+    const user = await auth.getUser()
+    ValidationService.verifyAdmin(user)
     const { tipo } = request.all()
     const order = await Order.findBy('tracking_id', params.id)
 
@@ -185,7 +197,9 @@ class OrderController {
    *
    * @param {object} ctx
    */
-  async destroy ({ params }) {
+  async destroy ({ params, auth }) {
+    const user = await auth.getUser()
+    ValidationService.verifyAdmin(user)
     return {
       message: 'Nada por ahora. Luego se eliminará ' + params.id,
     }
@@ -196,7 +210,7 @@ class OrderController {
     for (let i = 0; i < products.length; i++) {
       totalBulk += products[i].bulk * requestProducts[i].quantity
     }
-    return totalBulk * distance * 0.005
+    return totalBulk * distance * 0.8
   }
 
   calculateDeliveryDate(distance) {

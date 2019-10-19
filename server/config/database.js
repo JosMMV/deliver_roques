@@ -5,6 +5,8 @@ const Env = use('Env')
 
 /** @type {import('@adonisjs/ignitor/src/Helpers')} */
 const Helpers = use('Helpers')
+const URL = require('url-parse')
+const DATABASE_URL = new URL(Env.get('DATABASE_URL'))
 
 module.exports = {
   /*
@@ -76,7 +78,7 @@ module.exports = {
       host: Env.get('DB_HOST', 'localhost'),
       port: Env.get('DB_PORT', '5432'),
       user: Env.get('DB_USER', 'postgres'),
-      password: Env.get('DB_PASSWORD', 'postgres'),
+      password: Env.get('DB_PASSWORD', '1234'),
       database: Env.get('DB_DATABASE', 'distribuidor')
     },
     debug: Env.get('DB_DEBUG', false)

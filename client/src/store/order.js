@@ -1,6 +1,5 @@
 /* eslint-disable */
-import HTTPAdmin from '../httpAdmin';
-import HTTPUser from '../httpUser';
+import HTTP from '../http';
 
 export default {
   namespaced: true,
@@ -30,7 +29,7 @@ export default {
     searchOrder({ state, commit }) {
       commit('setError', null);
       commit('setCurrentOrder', null);
-      return HTTPUser().get(`pedido/${state.searching.trim()}`)
+      return HTTP().get(`pedido/${state.searching.trim()}`)
       .then(({ data }) => {
         commit('setCurrentOrder', data);
         commit('editTimestamps');
@@ -40,21 +39,21 @@ export default {
     },
     searchDetailOrder({ commit }, { order }) {
       commit('setCurrentDetailOrder', null);
-      return HTTPUser().get(`pedido/detalle/${order.id}`)
+      return HTTP().get(`pedido/detalle/${order.id}`)
       .then(({ data }) => {
         commit('setCurrentDetailOrder', data);
       }).catch(error => {
         commit('setError', error.response.data.error);
       });
     },
-    fetchOrders({ commit }, { isAdminUser, commerceTIR }) {
+    fetchOrders({ commit }, { isAdminUser }) {
       if (isAdminUser) {
-        return HTTPUser().get('pedido')
+        return HTTP().get('pedido')
         .then(({ data }) => {
           commit('setOrders', data);
         });
       } else {
-        return HTTPUser().get(`pedido/comercio/${commerceTIR}`)
+        return HTTP().get(`orden/comercio`)
         .then(({ data }) => {
           commit('setOrders', data.orders);
         });
@@ -79,11 +78,11 @@ export default {
           tipo = null;
           break;
       }
-      return HTTPAdmin().patch(`pedido/${state.searching.trim()}`, {
+      return HTTP().patch(`pedido/${state.searching.trim()}`, {
         tipo: tipo
       })
       .then(() => {
-        HTTPUser().get(`pedido/${state.searching.trim()}`)
+        HTTP().get(`pedido/${state.searching.trim()}`)
         .then(({ data }) => {
           commit('setCurrentOrder', data);
           commit('editTimestamps');

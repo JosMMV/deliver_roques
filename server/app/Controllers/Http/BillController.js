@@ -24,7 +24,9 @@ class BillController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index () {
+  async index ({ auth }) {
+    const user = await auth.getUser()
+    ValidationService.verifyAdmin(user)
     return await Bill.query().with('commerce').fetch()
   }
 
@@ -34,12 +36,14 @@ class BillController {
    *
    * @param {Request} ctx.request
    */
-  async create ({ request }) {
+  async create ({ request, auth }) {
     Date.prototype.addDays = function(days) {
       var date = new Date(this.valueOf())
       date.setDate(date.getDate() + days)
       return date;
     }
+    const user = await auth.getUser()
+    ValidationService.verifyAdmin(user)
     const { commerce_tir } = request.all()
     const commerce = await Commerce.findBy('tir', commerce_tir)
 
@@ -50,9 +54,8 @@ class BillController {
     const trx = await Database.beginTransaction()
 
     try {
-      let amount = await Database.raw('SELECT SUM(shippingCost) AS amount FROM orders WHERE bill_id IS null AND subsidiary IS NOT null AND commerce_id = ?', commerce.id)
-
-      amount = amount[0][0].amount
+      let amount = await Database.raw('SELECT COALESCE(SUM("orders"."shippingCost"),0) AS amount FROM orders WHERE bill_id IS null AND subsidiary IS NOT null AND commerce_id = ?', commerce.id)
+      amount = amount.rows[0].amount
 
       if (!amount){
         trx.rollback()
@@ -60,6 +63,7 @@ class BillController {
       }
 
       const bill = await Bill.create({
+        id: Math.floor(Math.random() * 99999999) + 10000000,
         commerce_id: commerce.id,
         amount: amount,
         topDate: d.addDays(15),
@@ -81,8 +85,9 @@ class BillController {
         .fetch()
 
       return {
-        'orders': orders,
-        'bill': bill
+        'commerce_tir': commerce.tir,
+        orders,
+        bill
       }
     } catch (error) {
       trx.rollback()
@@ -91,25 +96,14 @@ class BillController {
   }
 
   /**
-   * Display a single bill.
-   * GET bills/:id
-   *
-   * @param {object} ctx
-   */
-  async show ({ params }) {
-    const bill = await Bill.find(params.id)
-    ValidationService.verifyBill(bill)
-    return bill
-  }
-
-  /**
    * Display a all the bills of a commerce
    * GET bills/:id
    *
    * @param {object} ctx
    */
-  async showByCommerce ({ params }) {
-    const commerce = await Commerce.find(params.id)
+  async showByCommerce ({ auth }) {
+    const user = await auth.getUser()
+    const commerce = await user.commerce().fetch()
     ValidationService.verifyCommerce(commerce)
     await commerce.load('bills')
     return commerce;
@@ -121,7 +115,9 @@ class BillController {
    *
    * @param {object} ctx
    */
-  async preBill ({ params }) {
+  async preBill ({ params, auth }) {
+    const user = await auth.getUser()
+    ValidationService.verifyAdmin(user)
     const commerce = await Commerce.findBy('tir',params.id)
     ValidationService.verifyCommerce(commerce)
     await commerce.loadMany({
@@ -140,14 +136,18 @@ class BillController {
    * @param {object} ctx
    * @param {Request} ctx.request
    */
-  async update ({ params }) {
+  async update ({ params, auth }) {
+    const user = await auth.getUser()
+    ValidationService.verifyAdmin(user)
     const bill = await Bill.find(params.id)
     ValidationService.verifyBill(bill)
-    bill.merge({
-      status: 'Pagado',
-      payingDate: new Date()
-    })
-    await bill.save()
+    if (!bill.payingDate){
+      bill.merge({
+        status: 'Pagado',
+        payingDate: new Date()
+      })
+      await bill.save()
+    }
     return bill
   }
 
@@ -157,7 +157,9 @@ class BillController {
    *
    * @param {object} ctx
    */
-  async destroy ({ params }) {
+  async destroy ({ params, auth }) {
+    const user = await auth.getUser()
+    ValidationService.verifyAdmin(user)
     const bill = await Bill.find(params.id)
     ValidationService.verifyBill(bill)
     await bill.delete()

@@ -12,7 +12,7 @@
       @keydown.enter="preBill"
     ></v-text-field>
 
-    <v-alert type="error" :value="searchingRifError">{{ searchingRifError }}.</v-alert>
+    <v-alert type="error" :value="searchingError">{{ searchingError }}.</v-alert>
     <v-alert type="success" :value="successMessage">{{ successMessage }}.</v-alert>
 
     <Panel v-if="issetcurrentCommerce" :title="currentCommerce.name">
@@ -80,7 +80,7 @@ export default {
   computed: {
     ...mapState('bill', [
       'searchingRif',
-      'searchingRifError',
+      'searchingError',
       'currentCommerce',
       'successMessage',
     ]),

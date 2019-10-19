@@ -1,17 +1,15 @@
 /* eslint-disable */
 import router from '../router';
-import HTTP from '../httpUser';
+import HTTP from '../http';
 
 export default {
   namespaced: true,
   state: {
-    loginEmail: 'admin',
-    loginPassword: '1234',
+    loginEmail: '',
+    loginPassword: '',
     loginError: null,
     token: null,
     isAdmin: false,
-    commerceID: null,
-    commerceTIR: null,
     commerceName: null,
   },
   actions: {
@@ -26,8 +24,8 @@ export default {
         password: state.loginPassword,
       })
       .then(({ data }) => {
-        commit('setToken', data.token);
-        commit('setAdminUser');
+        commit('setToken', data.token.token);
+        commit('setAdminUser', data.username);
         commit('setCommerceID', data)
         router.push('/');
       })
@@ -49,17 +47,15 @@ export default {
     setToken(state, token) {
       state.token = token;
       state.isAdmin = false;
-      state.commerceID = null;
       state.commerceName = null;
-      state.commerceTIR = null;
+      state.loginEmail = null;
+      state.loginPassword = null;
     },
     setCommerceID(state, data) {
-      state.commerceID = data.commerce_id;
       state.commerceName = data.commerce_name;
-      state.commerceTIR = data.commerce_tir;
     },
-    setAdminUser(state) {
-      if (state.loginEmail.substring(0, 5) === 'admin') state.isAdmin = true;
+    setAdminUser(state, username) {
+      if (username.substring(0, 5) === 'admin') state.isAdmin = true;
     },
     setLoginError(state, error) {
       state.loginError = error;

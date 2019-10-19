@@ -6,9 +6,10 @@ const Schema = use('Schema')
 class ProductOrderSchema extends Schema {
   up () {
     this.create('order_product', (table) => {
+      table.increments()
       table.integer('order_id').unsigned().references('id').inTable('orders').onDelete('CASCADE')
       table.integer('product_id').unsigned().references('id').inTable('products').onDelete('CASCADE')
-      table.integer('amount').notNullable()
+      table.float('amount').notNullable()
     })
   }
 

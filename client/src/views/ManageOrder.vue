@@ -54,6 +54,7 @@
       @OkClicked="OkClicked"
       @CancelClicked="dialog1 = false"
       :dialog="dialog1"
+      :title="'¿Seguro que desea añadir el timestamp?'"
     />
   </v-container>
 </template>
@@ -94,7 +95,6 @@ export default {
     ],
     dialog1: false,
     dialog2: false,
-    snackbar: true,
   }),
   components: {
     DialogComfirm,

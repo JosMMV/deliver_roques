@@ -6,7 +6,7 @@ const Schema = use('Schema')
 class BillSchema extends Schema {
   up () {
     this.create('bills', (table) => {
-      table.increments()
+      table.integer('id').unsigned().primary()
       table.integer('commerce_id').unsigned().references('id').inTable('commerce').onDelete('CASCADE')
       table.float('amount',20,3).notNullable()
       table.date('topDate').notNullable()

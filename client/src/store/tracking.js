@@ -1,5 +1,5 @@
 /* eslint-disable */
-import HTTP from '../httpUser';
+import HTTP from '../http';
 
 export default {
   namespaced: true,

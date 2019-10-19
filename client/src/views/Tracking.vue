@@ -21,6 +21,32 @@
     <v-timeline
       v-if="isSearching"
     >
+      <v-timeline-item :color="'black'" small v-if="!isPacked">
+        <v-alert type="info">El pedido no ha sido procesado</v-alert>
+        <template v-slot:opposite>
+          <span
+            :class="`headline font-weight-light cyan--text`"
+          >
+            ¡Ya casi!
+          </span>
+           <div>
+            <img :src="'/package.png'" style="width:40%;height:auto;"/>
+          </div>
+          <template>
+            <v-divider></v-divider>
+          </template>
+        </template>
+        <div class="py-3">
+          <h2 :class="`headline font-weight-bold mb-3 cyan--text`">
+            Orden no procesada, aún
+          </h2>
+          <div>
+            Su orden no ha sido empacada por nuestros Oompa Loompa. Ellos trabajan a más no poder.
+            Sé paciente.
+          </div>
+        </div>
+      </v-timeline-item>
+
       <v-timeline-item :color="'cyan'" small v-if="isPacked">
         <template v-slot:opposite>
           <span
@@ -40,8 +66,8 @@
             Empacado
           </h2>
           <div>
-            Empacado en los mejores cartones del mundo, traídos directamente de la india.
-            Adicionalmente se cubrío con esas burbujas de plástico que todo el mundo desea
+            Empacado en los mejores cartones del mundo, traídos directamente de la India.
+            Adicionalmente se cubrió con esas burbujas de plástico que todo el mundo desea
             romper con sus pulgares.
           </div>
         </div>
@@ -66,7 +92,7 @@
             Cargado
           </h2>
           <div>
-            Cargado en los mejores camiones bildados. Para asegurar ese cartón tan especial
+            Cargado en los mejores camiones blindados. Para asegurar ese cartón tan especial
             (y tu paquete, por supuesto).
           </div>
         </div>

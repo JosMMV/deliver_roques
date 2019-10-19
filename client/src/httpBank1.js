@@ -1,0 +1,11 @@
+import axios from 'axios';
+// eslint-disable-next-line
+import store from './store/index';
+
+export default () => axios.create({
+  baseURL: store.state.baseUrlBank1,
+  timeout: 5000,
+  headers: {
+    Authorization: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NzA5ODQ5MjcsImV4cCI6MTYwMjA4ODkyNywiZGF0YSI6eyJpZCI6NSwianVzcl9yaWYiOiJKMjM1NjEyNzc4IiwianVzcl91c2VyIjo4LCJqdXNyX2VtYWlsIjoianNtaWd1ZWwxNzAyQGdtYWlsLmNvbSIsImp1c3JfY29tcGFueSI6IkRlbGl2ZXIgUm9xdWVzIiwianVzcl9hZGRyZXNzIjoiQ2FyYWNhcyIsImp1c3JfcGhvbmUiOiIyMTIxMjM0NTY3IiwicGFzc3dvcmQiOiIkMnkkMTAkdlF0TmJmaVlyOUo0dzQ0ZzFzUTRmT0V2Z3J3emxibVNFXC9WYndUODFEZmhEbFhxRVlkTEdHIiwicV9yZWNvdmVyeSI6Ilx1MDBiZmN1XHUwMGUxbmRvPyIsImFfcmVjb3ZlcnkiOiJzaWVtcHJlIiwiYWN0aXZlIjoxLCJqdXNyX2NyZWF0ZWRfYXQiOiIyMDE5LTEwLTEzIDE1OjE3OjQzIiwianVzcl91cGRhdGVkX2F0IjoiMjAxOS0xMC0xMyAxNToxOToyMCIsImp1c3JfZGVsZXRlZF9hdCI6bnVsbH19.7BRR_2AckuY9pTdSAK4dA0xik73LLbLhTKEJB4pObIg',
+  },
+});

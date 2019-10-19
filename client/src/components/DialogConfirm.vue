@@ -5,7 +5,7 @@
 >
   <v-card>
     <v-card-title class="headline">
-      ¿Seguro que desea añadir el timestamp?
+      {{ title }}
     </v-card-title>
     <v-card-text>
       Esta acción no podrá deshacerse.
@@ -33,6 +33,6 @@
 
 <script>
 export default {
-  props: ['dialog'],
+  props: ['dialog', 'title'],
 };
 </script>

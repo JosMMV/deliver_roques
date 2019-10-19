@@ -25,18 +25,6 @@ class AuthController {
     })
     return user // this.login(...arguments);
   }
-
-  async profile ({ request, response, auth }) {
-    let user = await auth.getUser()
-    const userInput = request.input('user') // const { userInput } = request.all()
-    user.email = userInput['email']         // user.email = userInput.email
-    user.username = userInput['username']   // user.username = userInput.username
-    await user.save()
-
-    const logged = await auth.generate(user, true)
-
-    return response.json(logged)
-  }
 }
 
 module.exports = AuthController

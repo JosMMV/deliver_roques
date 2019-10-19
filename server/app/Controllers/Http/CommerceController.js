@@ -11,7 +11,9 @@ const ValidationService = use('App/Services/ServicioValidacion')
  * Resourceful controller for interacting with commerce
  */
 class CommerceController {
-  async index () {
+  async index ({ auth }) {
+    const user = await auth.getUser()
+    ValidationService.verifyAdmin(user)
     return await Commerce.all()
   }
 
@@ -21,7 +23,9 @@ class CommerceController {
    *
    * @param {object} ctx
    */
-  async show ({ params }) {
+  async show ({ params, auth }) {
+    const user = await auth.getUser()
+    ValidationService.verifyAdmin(user)
     const commerce = await Commerce.findBy('tir', params.rif)
     ValidationService.verifyCommerce(commerce)
     return commerce
@@ -34,11 +38,16 @@ class CommerceController {
    * @param {object} ctx
    * @param {Request} ctx.request
    */
-  async update ({ params, request }) {
+  async update ({ params, request, auth }) {
+    const user = await auth.getUser()
+    ValidationService.verifyAdmin(user)
     const commerce = await Commerce.findBy('tir', params.rif)
     ValidationService.verifyCommerce(commerce);
-    commerce.merge({name: request.only('name').name})
-    commerce.save()
+    commerce.merge({
+      name: request.only('name').name,
+      tir: request.only('tir').tir
+    })
+    await commerce.save()
     return commerce;
   }
 
@@ -50,7 +59,9 @@ class CommerceController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async destroy ({ params }) {
+  async destroy ({ params, auth }) {
+    const user = await auth.getUser()
+    ValidationService.verifyAdmin(user)
     const commerce = await Commerce.find(params.id)
     ValidationService.verifyCommerce(commerce)
     await commerce.delete()

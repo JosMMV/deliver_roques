@@ -12,8 +12,8 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   strict: true,
   state: {
-    baseUrlAdmin: '/admin',
-    baseUrlUser: '/api',
+    baseUrl: '/dist',
+    baseUrlBank1: '/api'
   },
   modules: {
     authentication,

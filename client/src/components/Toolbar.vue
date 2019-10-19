@@ -14,7 +14,7 @@
         <v-list dense>
           <v-list-tile to="/" v-if="isLoggedIn ">
             <v-list-tile-action>
-              <v-icon>receipt</v-icon>
+              <v-icon>mdi-book-variant</v-icon>
             </v-list-tile-action>
             <v-list-tile-content>
               <v-list-tile-title>Facturas</v-list-tile-title>
@@ -22,7 +22,7 @@
           </v-list-tile>
           <v-list-tile to="/crear-factura" v-if="isLoggedIn  && isAdminUser">
             <v-list-tile-action>
-              <v-icon>fiber_new</v-icon>
+              <v-icon>mdi-book-plus</v-icon>
             </v-list-tile-action>
             <v-list-tile-content>
               <v-list-tile-title>Crear factura</v-list-tile-title>
@@ -50,14 +50,6 @@
             </v-list-tile-action>
             <v-list-tile-content>
               <v-list-tile-title>Gestionar Orden</v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
-          <v-list-tile to="/reportes" v-if="isLoggedIn && isAdminUser">
-            <v-list-tile-action>
-              <v-icon>mdi-chart-line</v-icon>
-            </v-list-tile-action>
-            <v-list-tile-content>
-              <v-list-tile-title>Reportes</v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
         </v-list>
